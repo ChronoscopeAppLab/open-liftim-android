@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Liftim</string>
+    <string name="sync_url">Sync URL(e.g. http://example.com/)</string>
+    <string name="ok">OK</string>
 </resources>

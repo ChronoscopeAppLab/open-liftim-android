@@ -21,13 +21,65 @@ android {
             versionNameSuffix '-debug'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
+    aaptOptions {
+        additionalParameters "--no-version-transitions"
+    }
+
+    sourceSets {
+        main.java.srcDirs += '../thirdparty'
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation "com.android.support:appcompat-v7:$SUPPORT_LIB_VERSION"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation "com.android.support:support-annotations:$SUPPORT_LIB_VERSION"
+    implementation "com.android.support:appcompat-v7:$SUPPORT_LIB_VERSION"
+    implementation "com.android.support:design:$SUPPORT_LIB_VERSION"
+    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation "com.android.support:customtabs:$SUPPORT_LIB_VERSION"
+    implementation 'joda-time:joda-time:2.9.9'
+    implementation "com.android.support:cardview-v7:$SUPPORT_LIB_VERSION"
+    implementation 'org.adw.library:discrete-seekbar:1.0.1'
+    implementation "com.android.support:support-v4:$SUPPORT_LIB_VERSION"
+    implementation 'com.github.pavlospt:roundedletterview:1.2'
+    implementation 'com.chronoscoper.library:license-viewer:1.5'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.android.support:multidex:1.0.2'
+    implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
+    implementation 'jp.wasabeef:recyclerview-animators:2.2.7'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta3'
+    implementation 'com.github.bumptech.glide:glide:4.2.0'
+    kapt 'com.github.bumptech.glide:compiler:4.2.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.chronoscoper.library:cameraview:0.1@aar'
+    implementation "com.android.support:palette-v7:$SUPPORT_LIB_VERSION"
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation 'jp.wasabeef:takt:1.0.5'
+    implementation 'com.github.gfx.android.orma:orma:4.2.5'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    compile "com.android.support:transition:$SUPPORT_LIB_VERSION"
 }

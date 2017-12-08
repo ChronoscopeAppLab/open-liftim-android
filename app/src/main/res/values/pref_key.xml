@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="p_setup_completed">setup_completed</string>
+    <string name="p_sync_url">sync_url</string>
+</resources>

@@ -1,0 +1,42 @@
+box: 
+  id: kofuk/android-build:1.2
+  username: $USER_NAME
+  password: $PASSWORD
+build:
+  steps:
+    - script:
+        name: Agree with Licenses
+        code: |
+          cat sdk-licenses/android-sdk-license > "${ANDROID_HOME}/licenses/android-sdk-license"
+          cat sdk-licenses/android-sdk-preview-license > "${ANDROID_HOME}/licenses/android-sdk-preview-license"
+    - script:
+        name: Make gradlew executable
+        code: |
+          chmod +x gradlew
+    - script:
+        name: Assemble Debug
+        code: |
+          ./gradlew assembleDebug
+  after-steps:
+    - wantedly/pretty-slack-notify:
+        webhook-url: $SLACK_WEBHOOK_URL
+testing:
+  steps:
+    - script:
+        name: Agree with Licenses
+        code: |
+          cat sdk-licenses/android-sdk-license > "${ANDROID_HOME}/licenses/android-sdk-license"
+          cat sdk-licenses/android-sdk-preview-license > "${ANDROID_HOME}/licenses/android-sdk-preview-license"
+    - script:
+        name: Run JUit test
+        code: ./gradlew test
+deploy:
+  steps:
+    - script:
+        name: Upload to Dropbox
+        code: |
+          curl -X POST https://content.dropboxapi.com/2/files/upload \
+              --header "Authorization: Bearer $DROPBOX_TOKEN" \
+              --header "Dropbox-API-Arg: {\"path\": \"/liftim.apk\",\"mode\": \"overwrite\",\"autorename\": false,\"mute\": false}" \
+              --header "Content-Type: application/octet-stream" \
+              --data-binary @app/build/outputs/apk/debug/app-debug.apk

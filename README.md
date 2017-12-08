@@ -1,5 +1,7 @@
 # Open Liftim for Android
 
+[![wercker status](https://app.wercker.com/status/c00052419a83c64f42b3e23fc22b9fdb/s/master "wercker status")](https://app.wercker.com/project/byKey/c00052419a83c64f42b3e23fc22b9fdb)
+
 >
 > *L*iftim *i*s *f*unctional *Ti*metable *M*anager
 >

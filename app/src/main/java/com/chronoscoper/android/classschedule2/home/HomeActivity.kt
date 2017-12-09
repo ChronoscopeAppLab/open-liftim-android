@@ -16,10 +16,21 @@
 package com.chronoscoper.android.classschedule2.home
 
 import android.os.Bundle
+import android.support.design.widget.NavigationView
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.widget.Toolbar
+import android.view.MenuItem
+import android.view.View
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
+import kotterknife.bindView
 
-class HomeActivity : BaseActivity() {
+class HomeActivity : BaseActivity(), DrawerLayout.DrawerListener, NavigationView.OnNavigationItemSelectedListener {
+    private val drawer by bindView<DrawerLayout>(R.id.activity_home)
+
+    private val drawerMenu by bindView<NavigationView>(R.id.drawer_menu)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -29,5 +40,29 @@ class HomeActivity : BaseActivity() {
                     .replace(R.id.content, HomeFragment())
                     .commit()
         }
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        val toggle = ActionBarDrawerToggle(this, drawer,
+                toolbar, R.string.open_drawer, R.string.close_drawer)
+        drawer.addDrawerListener(toggle)
+        drawer.addDrawerListener(this)
+        drawerMenu.setNavigationItemSelectedListener(this)
+        toggle.syncState()
     }
+
+    override fun onDrawerStateChanged(newState: Int) {
+    }
+
+    override fun onDrawerSlide(drawerView: View?, slideOffset: Float) {
+    }
+
+    override fun onDrawerClosed(drawerView: View?) {
+    }
+
+    override fun onDrawerOpened(drawerView: View?) {
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean = true
 }

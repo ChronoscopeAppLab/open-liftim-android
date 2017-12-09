@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.chronoscoper.android.classschedule2">
+          package="com.chronoscoper.android.classschedule2">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -14,17 +14,20 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LauncherActivity"
-            android:theme="@style/AppTheme.Splash" />
-        <activity android:name=".sync.SyncConfigurationActivity" />
+            android:theme="@style/AppTheme.Splash"/>
+        <activity android:name=".sync.SyncConfigurationActivity"/>
+        <activity
+            android:name=".home.HomeActivity"
+            android:theme="@style/AppTheme.DrawerActivity"/>
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias
             android:name=".Launcher"
             android:targetActivity=".LauncherActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity-alias>
     </application>

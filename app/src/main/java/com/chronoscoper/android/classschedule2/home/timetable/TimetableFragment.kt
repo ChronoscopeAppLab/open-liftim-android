@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chronoscoper.android.classschedule2.home
+package com.chronoscoper.android.classschedule2.home.timetable
 
 import android.os.Bundle
-import com.chronoscoper.android.classschedule2.BaseActivity
-import com.chronoscoper.android.classschedule2.R
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 
-class HomeActivity : BaseActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
-
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.content, HomeFragment())
-                    .commit()
-        }
+class TimetableFragment : Fragment() {
+    override fun onCreateView(
+            inflater: LayoutInflater?,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?): View? {
+        return View(context)
     }
 }

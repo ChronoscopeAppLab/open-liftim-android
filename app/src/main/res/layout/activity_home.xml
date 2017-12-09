@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
    Copyright 2017 Chronoscope
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -11,8 +10,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -32,12 +30,13 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"/>
+                android:background="@color/colorPrimary"
+                app:title="@string/app_name" />
 
             <FrameLayout
                 android:id="@+id/content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </LinearLayout>
 
     </android.support.design.widget.CoordinatorLayout>
@@ -50,5 +49,5 @@
         app:headerLayout="@layout/drawer_header"
         app:itemIconTint="@color/drawer_item_color"
         app:itemTextColor="@color/drawer_item_color"
-        app:menu="@menu/drawer_menu"/>
+        app:menu="@menu/drawer_menu" />
 </android.support.v4.widget.DrawerLayout>

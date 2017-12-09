@@ -27,10 +27,10 @@
         <activity
             android:name=".LauncherActivity"
             android:theme="@style/AppTheme.Splash"/>
-        <activity android:name=".sync.SyncConfigurationActivity"/>
         <activity
             android:name=".home.HomeActivity"
             android:theme="@style/AppTheme.DrawerActivity"/>
+        <activity android:name=".setup.SetupActivity" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

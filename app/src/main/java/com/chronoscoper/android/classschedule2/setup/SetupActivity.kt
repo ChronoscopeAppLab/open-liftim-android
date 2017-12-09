@@ -13,10 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chronoscoper.android.classschedule2
+package com.chronoscoper.android.classschedule2.setup
 
-import android.annotation.SuppressLint
-import android.support.v7.app.AppCompatActivity
+import android.os.Bundle
+import com.chronoscoper.android.classschedule2.BaseActivity
 
-@SuppressLint("Registered")
-abstract class BaseActivity : AppCompatActivity()
+class SetupActivity : BaseActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                    .replace(android.R.id.content, ServerSettingsFragment())
+                    .commit()
+        }
+    }
+}

@@ -19,7 +19,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import com.chronoscoper.android.classschedule2.home.HomeActivity
-import com.chronoscoper.android.classschedule2.sync.SyncConfigurationActivity
+import com.chronoscoper.android.classschedule2.setup.SetupActivity
 
 class LauncherActivity : BaseActivity() {
 
@@ -31,7 +31,7 @@ class LauncherActivity : BaseActivity() {
         if (setupCompleted) {
             startActivity(Intent(this, HomeActivity::class.java))
         } else {
-            startActivity(Intent(this, SyncConfigurationActivity::class.java))
+            startActivity(Intent(this, SetupActivity::class.java))
         }
         finish()
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

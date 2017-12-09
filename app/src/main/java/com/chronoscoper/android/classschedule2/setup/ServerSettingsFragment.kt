@@ -13,26 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chronoscoper.android.classschedule2.sync
+package com.chronoscoper.android.classschedule2.setup
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import com.chronoscoper.android.classschedule2.R
 import kotterknife.bindView
 
-class SyncConfigurationActivity : AppCompatActivity() {
+class ServerSettingsFragment : Fragment() {
+    override fun onCreateView(
+            inflater: LayoutInflater?,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?): View? {
+        return inflater?.inflate(R.layout.fragment_server_settings, container, false)
+    }
 
     private val urlEditText by bindView<EditText>(R.id.sync_url)
     private val okButton by bindView<Button>(R.id.ok)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sync_configuration)
-
-        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
 
         okButton.setOnClickListener {
             val url = urlEditText.text.toString()
@@ -44,7 +50,6 @@ class SyncConfigurationActivity : AppCompatActivity() {
                     .putString(getString(R.string.p_sync_url), url)
                     .putBoolean(getString(R.string.p_setup_completed), true)
                     .apply()
-            finish()
         }
     }
 }

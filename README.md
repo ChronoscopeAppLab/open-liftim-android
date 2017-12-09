@@ -9,7 +9,7 @@
 ---
 
 Liftim is a place to share information on your class. For example, timetable of
-next class day, assignment, school event and so on.
+nextStep class day, assignment, school event and so on.
 
 ---
 

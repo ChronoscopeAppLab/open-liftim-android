@@ -15,17 +15,55 @@
  */
 package com.chronoscoper.android.classschedule2.setup
 
+import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.support.v4.app.Fragment
 import com.chronoscoper.android.classschedule2.BaseActivity
+import com.chronoscoper.android.classschedule2.LauncherActivity
+import com.chronoscoper.android.classschedule2.R
 
 class SetupActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(android.R.id.content, ServerSettingsFragment())
-                    .commit()
+        if (fragments.isEmpty()) {
+            complete()
         }
+
+        if (savedInstanceState == null) {
+            replaceFragment(fragments.first())
+        }
+    }
+
+    private fun complete() {
+        sharedPrefs.edit()
+                .putBoolean(getString(R.string.p_setup_completed), true)
+                .apply()
+        startActivity(Intent(this, LauncherActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+    }
+
+    private val fragments by lazy {
+        mutableListOf(ServerSettingsFragment(), AddLiftimCodeFragment())
+    }
+
+    private val sharedPrefs by lazy {
+        PreferenceManager.getDefaultSharedPreferences(this)
+    }
+
+    private fun replaceFragment(target: Fragment) {
+        supportFragmentManager.beginTransaction()
+                .replace(android.R.id.content, target)
+                .commit()
+    }
+
+    fun next() {
+        fragments.removeAt(0)
+        if (fragments.isEmpty()) {
+            complete()
+            return
+        }
+        replaceFragment(fragments.first())
     }
 }

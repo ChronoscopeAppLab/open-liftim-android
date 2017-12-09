@@ -17,16 +17,16 @@ package com.chronoscoper.android.classschedule2.setup
 
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 import kotterknife.bindView
 
-class ServerSettingsFragment : Fragment() {
+class ServerSettingsFragment : BaseSetupFragment() {
     override fun onCreateView(
             inflater: LayoutInflater?,
             container: ViewGroup?,
@@ -48,8 +48,11 @@ class ServerSettingsFragment : Fragment() {
             }
             sharedPrefs.edit()
                     .putString(getString(R.string.p_sync_url), url)
-                    .putBoolean(getString(R.string.p_setup_completed), true)
                     .apply()
+
+            LiftimSyncEnvironment.init(context, url)
+
+            nextStep()
         }
     }
 }

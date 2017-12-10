@@ -13,16 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chronoscoper.android.classschedule2.sync;
+package com.chronoscoper.android.classschedule2.view
 
-import retrofit2.Call;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
+import android.support.v7.widget.RecyclerView
+import android.view.View
 
-public interface LiftimService {
-    @GET("api/v1/user_info.json")
-    Call<LiftimCodeInfo> getLiftimCodeInfo(@Query("liftim_code") long liftimCode);
-
-    @GET("api/v1/info.json")
-    Call<InfoRemoteModel> getInfo(@Query("liftim_code") long liftimCode);
-}
+class RecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)

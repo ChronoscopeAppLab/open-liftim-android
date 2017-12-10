@@ -20,12 +20,17 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.chronoscoper.android.classschedule2.R
 
 class InfoFragment : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater?,
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
-        return View(context)
+        return inflater?.inflate(R.layout.fragment_info, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
     }
 }

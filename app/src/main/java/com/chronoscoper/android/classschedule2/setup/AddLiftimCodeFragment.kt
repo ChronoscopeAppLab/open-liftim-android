@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import com.chronoscoper.android.classschedule2.R
-import com.chronoscoper.android.classschedule2.task.LiftimCodeInfoGetter
+import com.chronoscoper.android.classschedule2.task.LiftimCodeInfoLoader
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -62,7 +62,7 @@ class AddLiftimCodeFragment : BaseSetupFragment() {
             it.isEnabled = false
             val liftimCode = liftimCode.text.toString().toLong()
 
-            Flowable.defer { Flowable.just(LiftimCodeInfoGetter(liftimCode).run()) }
+            Flowable.defer { Flowable.just(LiftimCodeInfoLoader(liftimCode).run()) }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(subscriber)

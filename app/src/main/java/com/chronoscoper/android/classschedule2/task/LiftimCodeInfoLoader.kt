@@ -22,7 +22,7 @@ import java.io.IOException
 
 import retrofit2.Response
 
-class LiftimCodeInfoGetter(private val liftimCode: Long) : Runnable {
+class LiftimCodeInfoLoader(private val liftimCode: Long) : Runnable {
 
     override fun run() {
         val response: Response<LiftimCodeInfo>

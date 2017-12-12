@@ -93,6 +93,6 @@ public class Info {
 
     public static final int REMOTE = 1;
     public static final int LOCAL = 2;
-    @Column("addedBy")
+    @Column(value = "addedBy", indexed = true)
     public int addedBy;
 }

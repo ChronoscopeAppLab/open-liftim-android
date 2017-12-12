@@ -15,6 +15,8 @@
  */
 package com.chronoscoper.android.classschedule2.sync;
 
+import android.support.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -42,6 +44,7 @@ public class InfoRemoteModel {
 
         @Expose
         @SerializedName("detail")
+        @Nullable
         public String detail;
 
         @Expose
@@ -50,14 +53,17 @@ public class InfoRemoteModel {
 
         @Expose
         @SerializedName("date")
+        @Nullable
         public String date;
 
         @Expose
         @SerializedName("time")
+        @Nullable
         public String time;
 
         @Expose
         @SerializedName("link")
+        @Nullable
         public String link;
 
         @Expose
@@ -66,6 +72,7 @@ public class InfoRemoteModel {
 
         @Expose
         @SerializedName("timetable")
+        @Nullable
         public Timetable timetable;
 
         @Expose
@@ -82,6 +89,11 @@ public class InfoRemoteModel {
         @Expose
         @SerializedName("subjects")
         public SubjectElement[] subjects;
+
+        @Override
+        public String toString() {
+            return LiftimSyncEnvironment.getGson().toJson(this);
+        }
     }
 
 

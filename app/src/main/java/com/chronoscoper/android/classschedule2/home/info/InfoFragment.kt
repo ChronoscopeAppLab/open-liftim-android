@@ -21,6 +21,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.task.InfoLoader
+import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subscribers.DisposableSubscriber
 
 class InfoFragment : Fragment() {
     override fun onCreateView(
@@ -30,7 +37,32 @@ class InfoFragment : Fragment() {
         return inflater?.inflate(R.layout.fragment_info, container, false)
     }
 
+    private val disposables = CompositeDisposable()
+    private val subscriber = object : DisposableSubscriber<Unit>() {
+        override fun onError(t: Throwable?) {
+            initView()
+        }
+
+        override fun onNext(t: Unit?) {
+        }
+
+        override fun onComplete() {
+            initView()
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val liftimCode = LiftimSyncEnvironment.getLiftimCode()
+        InfoLoader.resetCursor()
+        Flowable.defer { Flowable.just(InfoLoader(liftimCode).run()) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber)
+        disposables.addAll(subscriber)
+    }
+
+    fun initView() {
+
     }
 }

@@ -24,5 +24,7 @@ public interface LiftimService {
     Call<LiftimCodeInfo> getLiftimCodeInfo(@Query("liftim_code") long liftimCode);
 
     @GET("api/v1/info.json")
-    Call<InfoRemoteModel> getInfo(@Query("liftim_code") long liftimCode);
+    Call<InfoRemoteModel> getInfo(
+            @Query("liftim_code") long liftimCode,
+            @Query("cursor") long cursor);
 }

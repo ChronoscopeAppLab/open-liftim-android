@@ -17,6 +17,7 @@ package com.chronoscoper.android.classschedule2.sync;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,7 +33,10 @@ public final class LiftimSyncEnvironment {
     private static Gson sGson;
     private static OrmaDatabase sOrmaDatabase;
 
-    public static void init(@NonNull final Context context, @NonNull final String baseUrl) {
+    public static void init(
+            @NonNull final Context context,
+            @NonNull final String baseUrl,
+            @Nullable final long liftimCode) {
         sGson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
         if (BuildConfig.DEBUG) {
@@ -48,6 +52,7 @@ public final class LiftimSyncEnvironment {
                 .build()
                 .create(LiftimService.class);
         sOrmaDatabase = OrmaDatabase.builder(context).name("liftim_user_data").build();
+        sLiftimCode = liftimCode;
     }
 
     @NonNull
@@ -80,5 +85,12 @@ public final class LiftimSyncEnvironment {
             throw new IllegalStateException("Environment is not initialized");
         }
         return sOrmaDatabase;
+    }
+
+    private static long sLiftimCode;
+
+    @Nullable
+    public static long getLiftimCode() {
+        return sLiftimCode;
     }
 }

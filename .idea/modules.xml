@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/open-liftim-android.iml" filepath="$PROJECT_DIR$/open-liftim-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/sync/sync.iml" filepath="$PROJECT_DIR$/sync/sync.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sync/sync.iml" filepath="$PROJECT_DIR$/sync/sync.iml" />
     </modules>
   </component>
 </project>

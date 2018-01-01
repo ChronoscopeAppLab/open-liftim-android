@@ -14,4 +14,5 @@
 <resources>
     <string name="p_setup_completed">setup_completed</string>
     <string name="p_sync_url">sync_url</string>
+    <string name="p_default_liftim_code">default_liftim_code</string>
 </resources>

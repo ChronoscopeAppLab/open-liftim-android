@@ -36,7 +36,7 @@ public final class LiftimSyncEnvironment {
     public static void init(
             @NonNull final Context context,
             @NonNull final String baseUrl,
-            @Nullable final long liftimCode) {
+            final long liftimCode) {
         sGson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
         if (BuildConfig.DEBUG) {
@@ -89,7 +89,6 @@ public final class LiftimSyncEnvironment {
 
     private static long sLiftimCode;
 
-    @Nullable
     public static long getLiftimCode() {
         return sLiftimCode;
     }

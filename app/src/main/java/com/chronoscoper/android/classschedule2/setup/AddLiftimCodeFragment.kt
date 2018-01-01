@@ -16,6 +16,7 @@
 package com.chronoscoper.android.classschedule2.setup
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,25 +44,27 @@ class AddLiftimCodeFragment : BaseSetupFragment() {
 
     private val disposables = CompositeDisposable()
 
-    private val subscriber = object : DisposableSubscriber<Unit>() {
-        override fun onError(t: Throwable?) {
-        }
-
-        override fun onNext(t: Unit?) {
-        }
-
-        override fun onComplete() {
-            nextStep()
-        }
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         okButton.setOnClickListener {
             it.isEnabled = false
             val liftimCode = liftimCode.text.toString().toLong()
+            val subscriber = object : DisposableSubscriber<Unit>() {
+                override fun onError(t: Throwable?) {
+                }
 
+                override fun onNext(t: Unit?) {
+                }
+
+                override fun onComplete() {
+                    PreferenceManager.getDefaultSharedPreferences(context)
+                            .edit()
+                            .putLong(getString(R.string.p_default_liftim_code), liftimCode)
+                            .apply()
+                    nextStep()
+                }
+            }
             Flowable.defer { Flowable.just(LiftimCodeInfoLoader(liftimCode).run()) }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

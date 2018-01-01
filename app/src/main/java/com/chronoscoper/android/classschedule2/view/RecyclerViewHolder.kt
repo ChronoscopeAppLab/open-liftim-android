@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Chronoscope
+ * Copyright 2017-2018 Chronoscope
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,4 +18,4 @@ package com.chronoscoper.android.classschedule2.view
 import android.support.v7.widget.RecyclerView
 import android.view.View
 
-class RecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+open class RecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
-   Copyright 2017 Chronoscope
+   Copyright 2017-2018 Chronoscope
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -20,4 +20,15 @@
     <string name="tab_info">Info &amp; Event</string>
     <string name="open_drawer">Open navigation drawer</string>
     <string name="close_drawer">Close navigation drawer</string>
+    <string name="more_actions">More actions</string>
+    <string name="delete">Delete</string>
+    <string name="type_unspecified">Unspecified</string>
+    <string name="type_event">Event</string>
+    <string name="type_information">Info</string>
+    <string name="type_submission">Assignment</string>
+    <string name="type_memo">Note</string>
+    <string name="class_schedule">Class schedule</string>
+    <string name="info_title_timetable">Timetable for %1$s</string>
+    <string name="edit">Edit</string>
+    <string name="open">Open</string>
 </resources>

@@ -26,6 +26,7 @@ class LiftimApplication : Application() {
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         LiftimSyncEnvironment.init(
                 this, sharedPrefs.getString(getString(R.string.p_sync_url),
-                "http://example.com/"))
+                "http://example.com/"),
+                sharedPrefs.getLong(getString(R.string.p_default_liftim_code), 0))
     }
 }

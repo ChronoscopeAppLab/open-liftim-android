@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Chronoscope
+ * Copyright 2017-2018 Chronoscope
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.github.gfx.android.orma.AccessThreadConstraint;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -51,7 +52,11 @@ public final class LiftimSyncEnvironment {
                 .client(sOkHttpClient)
                 .build()
                 .create(LiftimService.class);
-        sOrmaDatabase = OrmaDatabase.builder(context).name("liftim_user_data").build();
+        sOrmaDatabase = OrmaDatabase.builder(context)
+                .name("liftim_user_data")
+                .readOnMainThread(AccessThreadConstraint.WARNING)
+                .writeOnMainThread(AccessThreadConstraint.WARNING)
+                .build();
         sLiftimCode = liftimCode;
     }
 

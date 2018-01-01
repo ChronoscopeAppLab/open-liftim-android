@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Chronoscope
+ * Copyright 2017-2018 Chronoscope
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ class ServerSettingsFragment : BaseSetupFragment() {
                     .putString(getString(R.string.p_sync_url), url)
                     .apply()
 
-            LiftimSyncEnvironment.init(context, url)
+            LiftimSyncEnvironment.init(context, url, 0)
 
             nextStep()
         }

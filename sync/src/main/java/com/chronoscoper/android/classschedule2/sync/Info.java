@@ -24,7 +24,6 @@ import com.github.gfx.android.orma.annotation.Table;
 
 @Table("info")
 public class Info {
-    @Setter
     public Info(long liftimCode, @NonNull String id,
                 @NonNull String title, @Nullable String detail,
                 int weight, @Nullable String date,
@@ -50,7 +49,7 @@ public class Info {
     @Column(value = "liftimCode", indexed = true)
     public long liftimCode;
 
-    @Column("id")
+    @Column(value = "id", indexed = true)
     public String id;
 
     @Column("title")
@@ -95,4 +94,7 @@ public class Info {
     public static final int LOCAL = 2;
     @Column(value = "addedBy", indexed = true)
     public int addedBy;
+
+    @Column(value = "deleted", indexed = true)
+    public boolean deleted = false;
 }

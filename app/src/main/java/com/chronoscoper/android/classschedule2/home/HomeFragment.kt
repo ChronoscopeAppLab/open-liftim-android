@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Chronoscope
+ * Copyright 2017-2018 Chronoscope
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import com.chronoscoper.android.classschedule2.home.info.InfoFragment
 import com.chronoscoper.android.classschedule2.home.timetable.TimetableFragment
 import kotterknife.bindView
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), ViewPager.OnPageChangeListener {
     override fun onCreateView(
             inflater: LayoutInflater?,
             container: ViewGroup?,
@@ -49,8 +49,21 @@ class HomeFragment : Fragment() {
                 resources.displayMetrics).toInt()
         pager.setPageMarginDrawable(R.drawable.pager_margin)
         pager.adapter = HomePagerAdapter(context, childFragmentManager)
+        pager.addOnPageChangeListener(this)
 
         tabLayout.setupWithViewPager(pager)
+    }
+
+    var page
+        get() = pager.currentItem
+        set(value) = pager.setCurrentItem(value, true)
+
+    override fun onPageScrollStateChanged(state: Int) {}
+
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+    override fun onPageSelected(position: Int) {
+        (activity as? HomeActivity)?.onHomePageChanged(position)
     }
 
     class HomePagerAdapter(val context: Context, fragmentManager: FragmentManager)

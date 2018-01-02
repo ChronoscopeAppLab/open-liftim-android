@@ -31,4 +31,9 @@
     <string name="info_title_timetable">Timetable for %1$s</string>
     <string name="edit">Edit</string>
     <string name="open">Open</string>
+    <string name="timetable">Timetable</string>
+    <string name="info">Info</string>
+    <string name="weekly">Weekly</string>
+    <string name="misc">Misc</string>
+    <string name="settings">Settings</string>
 </resources>

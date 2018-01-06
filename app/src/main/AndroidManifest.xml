@@ -34,6 +34,18 @@
         <activity
             android:name=".setup.SetupActivity"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".setup.TokenCallbackActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="setup"
+                    android:scheme="liftim" />
+            </intent-filter>
+        </activity>
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

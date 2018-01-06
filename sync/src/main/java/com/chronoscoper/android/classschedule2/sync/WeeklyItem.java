@@ -15,22 +15,28 @@
  */
 package com.chronoscoper.android.classschedule2.sync;
 
-import java.util.HashMap;
+import com.github.gfx.android.orma.annotation.Column;
+import com.github.gfx.android.orma.annotation.Table;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-import retrofit2.Call;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
+@Table("weekly")
+public class WeeklyItem {
+    @Column(value = "liftim_code", indexed = true)
+    public long liftimCode;
 
-public interface LiftimService {
-    @GET("api/v1/user_info.json")
-    Call<LiftimCodeInfo> getLiftimCodeInfo(@Query("liftim_code") long liftimCode);
+    @Column(value = "day_of_week", indexed = true)
+    public int dayOfWeek;
 
-    @GET("api/v1/info.json")
-    Call<InfoRemoteModel> getInfo(
-            @Query("liftim_code") long liftimCode,
-            @Query("cursor") long cursor);
+    @Expose
+    @SerializedName("minIndex")
+    @Column("min_index")
+    public int minIndex;
 
-    @GET("api/v1/weekly.json")
-    Call<HashMap<String, WeeklyItem>> getWeekly(
-            @Query("liftim_code") long liftimCode);
+    @Expose
+    @SerializedName("subjects")
+    public String[] subjects;
+
+    @Column("subjects")
+    public String serializedSubjects;
 }

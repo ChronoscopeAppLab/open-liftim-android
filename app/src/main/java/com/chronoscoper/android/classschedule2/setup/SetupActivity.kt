@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Chronoscope
+ * Copyright 2017-2018 Chronoscope
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 package com.chronoscoper.android.classschedule2.setup
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import com.chronoscoper.android.classschedule2.BaseActivity
-import com.chronoscoper.android.classschedule2.LauncherActivity
 import com.chronoscoper.android.classschedule2.R
 
 class SetupActivity : BaseActivity() {
@@ -40,12 +40,14 @@ class SetupActivity : BaseActivity() {
         sharedPrefs.edit()
                 .putBoolean(getString(R.string.p_setup_completed), true)
                 .apply()
-        startActivity(Intent(this, LauncherActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+        val url = sharedPrefs.getString(getString(R.string.p_sync_url), "")
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("${url}api/v1/auth"))
+        startActivity(intent)
+        finish()
     }
 
     private val fragments by lazy {
-        mutableListOf(ServerSettingsFragment(), AddLiftimCodeFragment())
+        mutableListOf(ServerSettingsFragment())
     }
 
     private val sharedPrefs by lazy {

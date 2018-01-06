@@ -17,7 +17,6 @@ package com.chronoscoper.android.classschedule2.sync;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.github.gfx.android.orma.AccessThreadConstraint;
 import com.google.gson.Gson;
@@ -37,7 +36,8 @@ public final class LiftimSyncEnvironment {
     public static void init(
             @NonNull final Context context,
             @NonNull final String baseUrl,
-            final long liftimCode) {
+            final long liftimCode,
+            final String token) {
         sGson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
         if (BuildConfig.DEBUG) {
@@ -58,6 +58,7 @@ public final class LiftimSyncEnvironment {
                 .writeOnMainThread(AccessThreadConstraint.WARNING)
                 .build();
         sLiftimCode = liftimCode;
+        sToken = token;
     }
 
     @NonNull
@@ -93,8 +94,18 @@ public final class LiftimSyncEnvironment {
     }
 
     private static long sLiftimCode;
+    private static String sToken;
 
     public static long getLiftimCode() {
         return sLiftimCode;
+    }
+
+    @NonNull
+    public static String getToken() {
+        return sToken;
+    }
+
+    public static void setToken(@NonNull String token) {
+        sToken = token;
     }
 }

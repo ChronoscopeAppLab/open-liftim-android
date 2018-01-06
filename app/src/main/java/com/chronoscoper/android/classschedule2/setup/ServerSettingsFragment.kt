@@ -50,7 +50,7 @@ class ServerSettingsFragment : BaseSetupFragment() {
                     .putString(getString(R.string.p_sync_url), url)
                     .apply()
 
-            LiftimSyncEnvironment.init(context, url, 0)
+            LiftimSyncEnvironment.init(context, url, 0, "")
 
             nextStep()
         }

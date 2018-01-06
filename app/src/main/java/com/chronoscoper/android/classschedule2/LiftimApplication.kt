@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Chronoscope
+ * Copyright 2017-2018 Chronoscope
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ class LiftimApplication : Application() {
         LiftimSyncEnvironment.init(
                 this, sharedPrefs.getString(getString(R.string.p_sync_url),
                 "http://example.com/"),
-                sharedPrefs.getLong(getString(R.string.p_default_liftim_code), 0))
+                sharedPrefs.getLong(getString(R.string.p_default_liftim_code), 0),
+                sharedPrefs.getString(getString(R.string.p_account_token), ""))
     }
 }

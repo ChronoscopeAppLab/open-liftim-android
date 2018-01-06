@@ -23,9 +23,9 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.MenuItem
-import android.view.View
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.weekly.WeeklyFragment
 import kotterknife.bindView
 
 class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -90,7 +90,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 fragment.page = 1
             }
             R.id.drawer_weekly -> {
-
+                replaceFragment(WeeklyFragment())
             }
             R.id.drawer_settings -> {
 

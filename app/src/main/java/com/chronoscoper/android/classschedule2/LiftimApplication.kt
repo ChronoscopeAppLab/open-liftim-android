@@ -23,6 +23,10 @@ class LiftimApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        initEnvironment()
+    }
+
+    fun initEnvironment() {
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         LiftimSyncEnvironment.init(
                 this, sharedPrefs.getString(getString(R.string.p_sync_url),

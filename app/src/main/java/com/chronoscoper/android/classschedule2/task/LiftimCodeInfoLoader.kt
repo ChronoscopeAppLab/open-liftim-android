@@ -26,13 +26,9 @@ class LiftimCodeInfoLoader(private val liftimCode: Long, private val token: Stri
 
     override fun run() {
         val response: Response<LiftimCodeInfo>
-        try {
             response = LiftimSyncEnvironment.getLiftimService()
                     .getLiftimCodeInfo(liftimCode, token)
                     .execute()
-        } catch (e: IOException) {
-            return
-        }
         if (!response.isSuccessful) {
             return
         }

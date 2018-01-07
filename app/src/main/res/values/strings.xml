@@ -46,4 +46,5 @@
     <string name="loading_data">Loading data…</string>
     <string name="token_load_failed_description">Failed to certificate app. Please retry again.</string>
     <string name="retry">Retry</string>
+    <string name="initial_sync_failed_description">Failed to load account data. Tap [RETRY] to try sync again.</string>
 </resources>

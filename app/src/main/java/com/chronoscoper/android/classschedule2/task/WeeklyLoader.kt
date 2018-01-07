@@ -20,14 +20,10 @@ import java.io.IOException
 
 class WeeklyLoader(private val liftimCode: Long, private val token: String) : Runnable {
     override fun run() {
-        val data = try {
-            val response = LiftimSyncEnvironment.getLiftimService()
-                    .getWeekly(liftimCode, token).execute()
-            if (!response.isSuccessful) return
-            response.body() ?: return
-        } catch (e: IOException) {
-            return
-        }
+        val response = LiftimSyncEnvironment.getLiftimService()
+                .getWeekly(liftimCode, token).execute()
+        if (!response.isSuccessful) return
+        val data = response.body() ?: return
         LiftimSyncEnvironment.getOrmaDatabase().deleteFromWeeklyItem()
                 .liftimCodeEq(liftimCode)
                 .execute()

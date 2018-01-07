@@ -32,13 +32,9 @@ class InfoLoader(private val liftimCode: Long, private val token: String) : Runn
 
     override fun run() {
         val response: Response<InfoRemoteModel>
-        try {
-            response = LiftimSyncEnvironment.getLiftimService()
-                    .getInfo(liftimCode,token, nextCursor)
-                    .execute()
-        } catch (e: IOException) {
-            return
-        }
+        response = LiftimSyncEnvironment.getLiftimService()
+                .getInfo(liftimCode, token, nextCursor)
+                .execute()
         if (!response.isSuccessful) {
             return
         }

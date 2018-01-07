@@ -18,10 +18,11 @@ package com.chronoscoper.android.classschedule2.task
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 import java.io.IOException
 
-class WeeklyLoader(private val liftimCode: Long) : Runnable {
+class WeeklyLoader(private val liftimCode: Long, private val token: String) : Runnable {
     override fun run() {
         val data = try {
-            val response = LiftimSyncEnvironment.getLiftimService().getWeekly(liftimCode).execute()
+            val response = LiftimSyncEnvironment.getLiftimService()
+                    .getWeekly(liftimCode, token).execute()
             if (!response.isSuccessful) return
             response.body() ?: return
         } catch (e: IOException) {

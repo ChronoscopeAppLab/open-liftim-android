@@ -16,4 +16,8 @@
     <string name="p_sync_url">sync_url</string>
     <string name="p_default_liftim_code">default_liftim_code</string>
     <string name="p_account_token">account_token</string>
+    <string name="p_account_name">account_name</string>
+    <string name="p_account_image_file">account_image_file</string>
+    <string name="p_account_add_date">account_add_date</string>
+    <string name="p_account_is_available">account_is_available</string>
 </resources>

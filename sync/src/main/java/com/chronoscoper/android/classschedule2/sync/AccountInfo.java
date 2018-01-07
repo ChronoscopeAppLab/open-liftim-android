@@ -26,7 +26,7 @@ public class AccountInfo {
 
     public class LiftimCode {
         @Expose
-        @SerializedName("liftim_code")
+        @SerializedName("liftimCode")
         public long liftimCode;
 
         @Expose

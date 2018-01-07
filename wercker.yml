@@ -33,10 +33,6 @@ testing:
 deploy:
   steps:
     - script:
-        name: Upload to Dropbox
+        name: Deploy via DeployGate
         code: |
-          curl -X POST https://content.dropboxapi.com/2/files/upload \
-              --header "Authorization: Bearer $DROPBOX_TOKEN" \
-              --header "Dropbox-API-Arg: {\"path\": \"/liftim.apk\",\"mode\": \"overwrite\",\"autorename\": false,\"mute\": false}" \
-              --header "Content-Type: application/octet-stream" \
-              --data-binary @app/build/outputs/apk/debug/app-debug.apk
+          chmod +x deploy.sh; deploy.sh

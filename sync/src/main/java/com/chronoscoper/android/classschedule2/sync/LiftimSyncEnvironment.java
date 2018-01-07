@@ -32,6 +32,7 @@ public final class LiftimSyncEnvironment {
     private static LiftimService sLiftimService;
     private static Gson sGson;
     private static OrmaDatabase sOrmaDatabase;
+    private static String sBaseUrl;
 
     public static void init(
             @NonNull final Context context,
@@ -59,6 +60,7 @@ public final class LiftimSyncEnvironment {
                 .build();
         sLiftimCode = liftimCode;
         sToken = token;
+        sBaseUrl = baseUrl;
     }
 
     @NonNull
@@ -107,5 +109,10 @@ public final class LiftimSyncEnvironment {
 
     public static void setToken(@NonNull String token) {
         sToken = token;
+    }
+
+    @NonNull
+    public static String getApiUrl(@NonNull String fileName) {
+        return sBaseUrl + "api/v1/" + fileName;
     }
 }

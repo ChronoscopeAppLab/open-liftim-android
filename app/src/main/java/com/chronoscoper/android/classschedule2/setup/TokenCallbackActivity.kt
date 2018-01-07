@@ -117,7 +117,7 @@ class TokenCallbackActivity : BaseActivity() {
             prefEditor.apply()
             accountInfo.liftimCodes.forEach {
                 try {
-                    LiftimCodeInfoLoader(it.liftimCode, token)
+                    LiftimCodeInfoLoader(it.liftimCode, token).run()
                     obtainAllDataFor(it.liftimCode, token)
                 } catch (ignore: IOException) {
                     // Continue anyway

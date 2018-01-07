@@ -47,4 +47,6 @@
     <string name="token_load_failed_description">Failed to certificate app. Please retry again.</string>
     <string name="retry">Retry</string>
     <string name="initial_sync_failed_description">Failed to load account data. Tap [RETRY] to try sync again.</string>
+    <string name="liftim_code_chooser_description">Choose class you want to go or join class</string>
+    <string name="join_class">Join class</string>
 </resources>

@@ -22,6 +22,7 @@ import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.HomeActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimCodeInfo
@@ -62,6 +64,9 @@ class LiftimCodeChooserFragment : Fragment() {
         init {
             data.addAll(LiftimSyncEnvironment.getOrmaDatabase()
                     .selectFromLiftimCodeInfo().toList())
+            data.forEach {
+                Log.d("TAG","code: ${it.liftimCode}, name: ${it.name}")
+            }
         }
 
         override fun onBindViewHolder(holder: RecyclerViewHolder?, position: Int) {
@@ -80,8 +85,10 @@ class LiftimCodeChooserFragment : Fragment() {
             view.setOnClickListener {
                 PreferenceManager.getDefaultSharedPreferences(activity)
                         .edit()
-                        .putLong(activity.getString(R.string.p_default_liftim_code), item.liftimCode)
+                        .putLong(activity.getString(R.string.p_default_liftim_code), data[position].liftimCode)
                         .apply()
+                (activity.application as? LiftimApplication ?: return@setOnClickListener)
+                        .initEnvironment()
                 activity.finish()
                 activity.startActivity(Intent(activity, HomeActivity::class.java)
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))

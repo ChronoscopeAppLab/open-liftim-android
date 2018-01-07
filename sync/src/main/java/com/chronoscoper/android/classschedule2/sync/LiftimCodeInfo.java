@@ -16,7 +16,7 @@ public class LiftimCodeInfo {
         this.addDate = addDate;
     }
 
-    @PrimaryKey
+    @PrimaryKey(auto = false)
     public long liftimCode;
 
     @Column("name")

@@ -22,15 +22,22 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface LiftimService {
-    @GET("api/v1/user_info.json")
-    Call<LiftimCodeInfo> getLiftimCodeInfo(@Query("liftim_code") long liftimCode);
+    @GET("api/v1/liftim_code_info.json")
+    Call<LiftimCodeInfo> getLiftimCodeInfo(
+            @Query("liftim_code") long liftimCode,
+            @Query("token") String token);
 
     @GET("api/v1/info.json")
     Call<InfoRemoteModel> getInfo(
             @Query("liftim_code") long liftimCode,
+            @Query("token") String token,
             @Query("cursor") long cursor);
 
     @GET("api/v1/weekly.json")
     Call<HashMap<String, WeeklyItem>> getWeekly(
-            @Query("liftim_code") long liftimCode);
+            @Query("liftim_code") long liftimCode,
+            @Query("token") String token);
+
+    @GET("api/v1/account_info.json")
+    Call<AccountInfo> getAccountInfo(@Query("token") String token);
 }

@@ -103,7 +103,8 @@ class InfoFragment : Fragment() {
             super.onAttachedToRecyclerView(recyclerView)
             val liftimCode = LiftimSyncEnvironment.getLiftimCode()
             InfoLoader.resetCursor()
-            Flowable.defer { Flowable.just(InfoLoader(liftimCode).run()) }
+            Flowable.defer { Flowable.just(
+                    InfoLoader(liftimCode, LiftimSyncEnvironment.getToken()).run()) }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(subscriber)

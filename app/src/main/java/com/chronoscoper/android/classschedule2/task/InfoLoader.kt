@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Chronoscope
+ * Copyright 2017-2018 Chronoscope
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 import retrofit2.Response
 import java.io.IOException
 
-class InfoLoader(private val liftimCode: Long) : Runnable {
+class InfoLoader(private val liftimCode: Long, private val token: String) : Runnable {
     companion object {
         private var nextCursor = 0L
 
@@ -33,7 +33,8 @@ class InfoLoader(private val liftimCode: Long) : Runnable {
     override fun run() {
         val response: Response<InfoRemoteModel>
         try {
-            response = LiftimSyncEnvironment.getLiftimService().getInfo(liftimCode, nextCursor)
+            response = LiftimSyncEnvironment.getLiftimService()
+                    .getInfo(liftimCode,token, nextCursor)
                     .execute()
         } catch (e: IOException) {
             return

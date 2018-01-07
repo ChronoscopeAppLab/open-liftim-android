@@ -74,7 +74,9 @@ class WeeklyFragment : Fragment() {
             }
 
             Flowable.defer {
-                Flowable.just(WeeklyLoader(LiftimSyncEnvironment.getLiftimCode()).run())
+                Flowable.just(
+                        WeeklyLoader(LiftimSyncEnvironment.getLiftimCode(),
+                                LiftimSyncEnvironment.getToken()).run())
             }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

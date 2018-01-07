@@ -16,14 +16,18 @@
 package com.chronoscoper.android.classschedule2.home
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
 import com.chronoscoper.android.classschedule2.BaseActivity
+import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.weekly.WeeklyFragment
 import kotterknife.bindView
@@ -51,6 +55,8 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         drawer.addDrawerListener(toggle)
         drawerMenu.setNavigationItemSelectedListener(this)
         toggle.syncState()
+
+        initLiftimCodePager()
     }
 
     private var contentFragment: Fragment? = null
@@ -71,6 +77,39 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 drawerMenu.setCheckedItem(R.id.drawer_info)
             }
         }
+    }
+
+    private fun initLiftimCodePager() {
+        val pager = drawerMenu.getHeaderView(0)
+                .findViewById<ViewPager>(R.id.liftim_code_pager)
+        val adapter = LiftimCodePagerAdapter(supportFragmentManager, this)
+        pager.adapter = adapter
+        pager.currentItem = adapter.initialPosition
+        pager.offscreenPageLimit = 0
+        pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) = Unit
+
+            override fun onPageScrolled(position: Int, positionOffset: Float,
+                                        positionOffsetPixels: Int) = Unit
+
+            override fun onPageSelected(position: Int) {
+                val liftimCode = (pager.adapter as LiftimCodePagerAdapter)
+                        .getLiftimCodeInfo(position).liftimCode
+                PreferenceManager.getDefaultSharedPreferences(this@HomeActivity)
+                        .edit()
+                        .putLong(getString(R.string.p_default_liftim_code), liftimCode)
+                        .apply()
+                (application as LiftimApplication).initEnvironment()
+                replaceFragment(HomeFragment())
+                drawer.closeDrawer(Gravity.START)
+                drawerMenu.setCheckedItem(R.id.drawer_timetable)
+            }
+        })
+        pager.setPageTransformer(false,
+                ViewPager.PageTransformer { page, position ->
+                    page ?: return@PageTransformer
+                    page.alpha = 1 - Math.abs(position)
+                })
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

@@ -18,6 +18,7 @@ package com.chronoscoper.android.classschedule2.setup
 import android.os.Bundle
 import android.os.SystemClock
 import android.preference.PreferenceManager
+import android.widget.Toast
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
@@ -55,7 +56,7 @@ class TokenCallbackActivity : BaseActivity() {
                     .commit()
             return
         }
-        val subscriber = object : DisposableSubscriber<Boolean>() {
+        val subscriber = object : DisposableSubscriber<Unit>() {
             override fun onError(t: Throwable?) {
                 supportFragmentManager.beginTransaction()
                         .replace(android.R.id.content, TokenLoadFailedFragment())
@@ -63,7 +64,7 @@ class TokenCallbackActivity : BaseActivity() {
                 return
             }
 
-            override fun onNext(t: Boolean?) {}
+            override fun onNext(t: Unit?) {}
 
             override fun onComplete() {
                 sharedPrefs.edit()
@@ -73,14 +74,14 @@ class TokenCallbackActivity : BaseActivity() {
                 executeInitialSync()
             }
         }
-        Flowable.defer { Flowable.just(isValidToken(token)) }
+        Flowable.defer { Flowable.just(enforceValidToken(token)) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber)
         disposables.add(subscriber)
     }
 
-    private fun executeInitialSync() {
+    fun executeInitialSync() {
         val observer = object : DisposableObserver<Unit>() {
             override fun onComplete() {
                 supportFragmentManager.beginTransaction()
@@ -147,8 +148,8 @@ class TokenCallbackActivity : BaseActivity() {
                 ?.removePrefix("token=")
     }
 
-    private fun isValidToken(token: String): Boolean {
-        return try {
+    private fun enforceValidToken(token: String) {
+        try {
             val url = PreferenceManager.getDefaultSharedPreferences(this)
                     .getString(getString(R.string.p_sync_url), "")
             val response = LiftimSyncEnvironment.getOkHttpClient()
@@ -156,9 +157,13 @@ class TokenCallbackActivity : BaseActivity() {
                             .url("${url}api/v1/token_availability_check?token=$token")
                             .build())
                     .execute()
-            response.isSuccessful
+            if (!response.isSuccessful) {
+                throw InvalidTokenException()
+            }
         } catch (e: IOException) {
-            false
+            throw InvalidTokenException()
         }
     }
+
+    private class InvalidTokenException : Exception()
 }

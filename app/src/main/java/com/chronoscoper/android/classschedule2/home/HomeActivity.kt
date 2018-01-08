@@ -118,17 +118,19 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         when (item.itemId) {
             R.id.drawer_timetable -> {
                 if (contentFragment !is HomeFragment) {
-                    replaceFragment(HomeFragment())
+                    replaceFragment(HomeFragment.obtain(0))
+                } else {
+                    val fragment = contentFragment as? HomeFragment ?: return true
+                    fragment.page = 0
                 }
-                val fragment = contentFragment as? HomeFragment ?: return true
-                fragment.page = 0
             }
             R.id.drawer_info -> {
                 if (contentFragment !is HomeFragment) {
-                    replaceFragment(HomeFragment())
+                    replaceFragment(HomeFragment.obtain(1))
+                } else {
+                    val fragment = contentFragment as? HomeFragment ?: return true
+                    fragment.page = 1
                 }
-                val fragment = contentFragment as? HomeFragment ?: return true
-                fragment.page = 1
             }
             R.id.drawer_weekly -> {
                 replaceFragment(WeeklyFragment())

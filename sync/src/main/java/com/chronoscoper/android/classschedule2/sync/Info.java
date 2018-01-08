@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Chronoscope
+ * Copyright 2017-2018 Chronoscope
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,9 +41,30 @@ public class Info {
         this.timetable = timetable;
         this.removable = removable;
         this.addedBy = addedBy;
+        remoteDeleted = false;
     }
 
     public Info() {
+    }
+
+    public void set(long liftimCode, @NonNull String id,
+                    @NonNull String title, @Nullable String detail,
+                    int weight, @Nullable String date,
+                    @Nullable String time, @Nullable String link,
+                    int type, @Nullable String timetable, boolean removable, int addedBy) {
+        this.liftimCode = liftimCode;
+        this.id = id;
+        this.title = title;
+        this.detail = detail;
+        this.weight = weight;
+        this.date = date;
+        this.time = time;
+        this.link = link;
+        this.type = type;
+        this.timetable = timetable;
+        this.removable = removable;
+        this.addedBy = addedBy;
+        remoteDeleted = false;
     }
 
     @Column(value = "liftimCode", indexed = true)
@@ -97,4 +118,7 @@ public class Info {
 
     @Column(value = "deleted", indexed = true)
     public boolean deleted = false;
+
+    @Column(value = "remote_deleted", indexed = true)
+    public boolean remoteDeleted = false;
 }

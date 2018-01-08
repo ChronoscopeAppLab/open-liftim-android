@@ -31,20 +31,30 @@ class InfoLoader(private val liftimCode: Long, private val token: String) : Runn
     }
 
     override fun run() {
-        val response: Response<InfoRemoteModel>
-        response = LiftimSyncEnvironment.getLiftimService()
+        val response = LiftimSyncEnvironment.getLiftimService()
                 .getInfo(liftimCode, token, nextCursor)
                 .execute()
         if (!response.isSuccessful) {
             return
         }
         val info = response.body() ?: return
-        LiftimSyncEnvironment.getOrmaDatabase().deleteFromInfo().liftimCodeEq(liftimCode).execute()
+        LiftimSyncEnvironment.getOrmaDatabase().updateInfo()
+                .liftimCodeEq(liftimCode).addedByEq(Info.REMOTE)
+                .remoteDeleted(true)
+                .execute()
         nextCursor = info.nextCursor
-        val inserter = LiftimSyncEnvironment.getOrmaDatabase().prepareInsertIntoInfo()
+        val db = LiftimSyncEnvironment.getOrmaDatabase()
+        val inserter = db.prepareInsertIntoInfo()
         info.info?.forEach {
-            inserter.execute(Info(liftimCode, it.id, it.title, it.detail, it.weight, it.date,
-                    it.time, it.link, it.type, it.timetable?.toString(), it.removable, Info.REMOTE))
+            val base = db.selectFromInfo().liftimCodeEq(liftimCode).idEq(it.id).firstOrNull()
+                    ?: Info()
+            base.set(liftimCode, it.id, it.title, it.detail, it.weight, it.date,
+                    it.time, it.link, it.type, it.timetable?.toString(), it.removable, Info.REMOTE)
+            inserter.execute(base)
         }
+        db.deleteFromInfo().liftimCodeEq(liftimCode)
+                .addedByEq(Info.REMOTE)
+                .remoteDeletedEq(true)
+                .execute()
     }
 }

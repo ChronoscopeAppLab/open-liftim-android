@@ -40,4 +40,9 @@ public interface LiftimService {
 
     @GET("api/v1/account_info.json")
     Call<AccountInfo> getAccountInfo(@Query("token") String token);
+
+    @GET("api/v1/subject.json")
+    Call<Subject[]> getSubjects(
+            @Query("liftim_code") long liftimCode, @Query("token") String token);
+
 }

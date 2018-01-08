@@ -29,6 +29,7 @@ import android.view.MenuItem
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.archive.ArchiveFragment
 import com.chronoscoper.android.classschedule2.setting.SettingsActivity
 import com.chronoscoper.android.classschedule2.weekly.WeeklyFragment
 import kotterknife.bindView
@@ -131,6 +132,9 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
             R.id.drawer_weekly -> {
                 replaceFragment(WeeklyFragment())
+            }
+            R.id.drawer_archive -> {
+                replaceFragment(ArchiveFragment())
             }
             R.id.drawer_settings -> {
                 startActivity(Intent(this, SettingsActivity::class.java))

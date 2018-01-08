@@ -70,8 +70,8 @@ class HomeFragment : Fragment(), ViewPager.OnPageChangeListener {
         : FragmentPagerAdapter(fragmentManager) {
         override fun getPageTitle(position: Int): CharSequence {
             return when (position) {
-                0 -> context.getString(R.string.tab_timetable)
-                1 -> context.getString(R.string.tab_info)
+                0 -> context.getString(R.string.timetable)
+                1 -> context.getString(R.string.info)
                 else -> ""
             }
         }

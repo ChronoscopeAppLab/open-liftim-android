@@ -49,4 +49,5 @@
     <string name="join_class">Join class</string>
     <string name="timetable_placehoder_message">There is no timetable</string>
     <string name="done">Done</string>
+    <string name="archive">Archive</string>
 </resources>

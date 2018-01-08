@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
    Copyright 2017-2018 Chronoscope
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -25,6 +24,10 @@
             android:id="@+id/drawer_weekly"
             android:icon="@drawable/ic_weekly"
             android:title="@string/weekly" />
+        <item
+            android:id="@+id/drawer_archive"
+            android:icon="@drawable/ic_archive"
+            android:title="@string/archive" />
         <item android:title="@string/misc">
             <menu>
                 <item

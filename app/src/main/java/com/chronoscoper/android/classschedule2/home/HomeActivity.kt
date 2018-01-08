@@ -15,6 +15,7 @@
  */
 package com.chronoscoper.android.classschedule2.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.design.widget.NavigationView
@@ -25,10 +26,10 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.MenuItem
-import android.view.View
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.setting.SettingsActivity
 import com.chronoscoper.android.classschedule2.weekly.WeeklyFragment
 import kotterknife.bindView
 
@@ -132,7 +133,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 replaceFragment(WeeklyFragment())
             }
             R.id.drawer_settings -> {
-
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
         }
         drawer.closeDrawer(Gravity.START)

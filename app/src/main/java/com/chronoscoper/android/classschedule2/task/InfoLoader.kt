@@ -39,7 +39,7 @@ class InfoLoader(private val liftimCode: Long, private val token: String) : Runn
             return
         }
         val info = response.body() ?: return
-        LiftimSyncEnvironment.getOrmaDatabase().deleteFromInfo().execute()
+        LiftimSyncEnvironment.getOrmaDatabase().deleteFromInfo().liftimCodeEq(liftimCode).execute()
         nextCursor = info.nextCursor
         val inserter = LiftimSyncEnvironment.getOrmaDatabase().prepareInsertIntoInfo()
         info.info?.forEach {

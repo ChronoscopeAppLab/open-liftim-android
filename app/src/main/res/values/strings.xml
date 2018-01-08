@@ -49,4 +49,6 @@
     <string name="initial_sync_failed_description">Failed to load account data. Tap [RETRY] to try sync again.</string>
     <string name="liftim_code_chooser_description">Choose class you want to go or join class</string>
     <string name="join_class">Join class</string>
+    <string name="timetable_placehoder_message">There is no timetable</string>
+    <string name="done">Done</string>
 </resources>

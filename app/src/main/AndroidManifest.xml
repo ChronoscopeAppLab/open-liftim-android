@@ -46,6 +46,7 @@
                     android:scheme="liftim" />
             </intent-filter>
         </activity>
+        <activity android:name=".setting.SettingsActivity" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

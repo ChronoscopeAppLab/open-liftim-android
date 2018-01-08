@@ -3,6 +3,7 @@ package com.chronoscoper.android.classschedule2.archive
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ class ArchiveFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         list.adapter = Adapter(context)
+        list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }
 
     private class Adapter(context: Context) : InfoRecyclerViewAdapter(context) {

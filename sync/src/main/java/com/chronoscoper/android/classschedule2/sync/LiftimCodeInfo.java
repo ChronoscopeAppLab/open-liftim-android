@@ -25,10 +25,11 @@ import com.google.gson.annotations.SerializedName;
 @Table("liftim_code_info")
 public class LiftimCodeInfo {
     @Setter
-    public LiftimCodeInfo(long liftimCode, String name, String addDate) {
+    public LiftimCodeInfo(long liftimCode, String name, String addDate, boolean isManager) {
         this.liftimCode = liftimCode;
         this.name = name;
         this.addDate = addDate;
+        this.isManager = isManager;
     }
 
     @PrimaryKey(auto = false)
@@ -43,4 +44,7 @@ public class LiftimCodeInfo {
     @Expose
     @SerializedName("addDate")
     public String addDate;
+
+    @Column("is_manager")
+    public boolean isManager;
 }

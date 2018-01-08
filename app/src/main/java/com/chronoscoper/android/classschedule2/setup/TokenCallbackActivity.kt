@@ -104,6 +104,7 @@ class TokenCallbackActivity : BaseActivity() {
                 it.onError(Exception())
                 return@create
             }
+            ColorPaletteLoader().run()
             val prefEditor = sharedPrefs.edit()
             prefEditor.apply {
                 putString(getString(R.string.p_account_name), accountInfo.userName)

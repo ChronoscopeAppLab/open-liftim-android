@@ -16,6 +16,7 @@
 package com.chronoscoper.android.classschedule2.home.timetable
 
 import android.content.Context
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
@@ -97,6 +98,8 @@ class TimetableFragment : Fragment() {
                 val subject = view.findViewById<TextView>(R.id.subject)
                 val detail = view.findViewById<TextView>(R.id.detail)
                 index.text = (timetable!!.subjectMinIndex + position).toString()
+                index.background.setColorFilter(
+                        obtainColorCorrespondsTo(item.subject), PorterDuff.Mode.SRC_IN)
                 subject.text = item.subject
                 if (item.detail.isNullOrEmpty()) {
                     detail.visibility = View.GONE

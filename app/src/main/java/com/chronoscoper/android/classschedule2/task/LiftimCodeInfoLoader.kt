@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Chronoscope
+ * Copyright 2017-2018 Chronoscope
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,22 @@
  */
 package com.chronoscoper.android.classschedule2.task
 
-import com.chronoscoper.android.classschedule2.sync.LiftimCodeInfo
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 
-import java.io.IOException
-
-import retrofit2.Response
-
-class LiftimCodeInfoLoader(private val liftimCode: Long, private val token: String) : Runnable {
+class LiftimCodeInfoLoader(private val liftimCode: Long,
+                           private val token: String,
+                           private val isManager: Boolean) : Runnable {
 
     override fun run() {
-        val response: Response<LiftimCodeInfo>
-            response = LiftimSyncEnvironment.getLiftimService()
-                    .getLiftimCodeInfo(liftimCode, token)
-                    .execute()
+        val response = LiftimSyncEnvironment.getLiftimService()
+                .getLiftimCodeInfo(liftimCode, token)
+                .execute()
         if (!response.isSuccessful) {
             return
         }
         val liftimCodeInfo = response.body() ?: return
         liftimCodeInfo.liftimCode = liftimCode
+        liftimCodeInfo.isManager = isManager
 
         LiftimSyncEnvironment.getOrmaDatabase().insertIntoLiftimCodeInfo(liftimCodeInfo)
     }

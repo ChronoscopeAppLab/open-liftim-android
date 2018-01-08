@@ -22,10 +22,7 @@ import android.widget.Toast
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
-import com.chronoscoper.android.classschedule2.task.AccountInfoLoader
-import com.chronoscoper.android.classschedule2.task.InfoLoader
-import com.chronoscoper.android.classschedule2.task.LiftimCodeInfoLoader
-import com.chronoscoper.android.classschedule2.task.WeeklyLoader
+import com.chronoscoper.android.classschedule2.task.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -134,6 +131,7 @@ class TokenCallbackActivity : BaseActivity() {
     private fun obtainAllDataFor(liftimCode: Long, token: String) {
         InfoLoader(liftimCode, token).run()
         WeeklyLoader(liftimCode, token).run()
+        SubjectLoader(liftimCode, token).run()
     }
 
     override fun onDestroy() {

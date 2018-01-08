@@ -32,6 +32,16 @@ import com.chronoscoper.android.classschedule2.home.timetable.TimetableFragment
 import kotterknife.bindView
 
 class HomeFragment : Fragment(), ViewPager.OnPageChangeListener {
+    companion object {
+        private const val EXTRA_PAGE = "page";
+
+        fun obtain(page: Int): HomeFragment {
+            val result = HomeFragment()
+            result.arguments = Bundle().apply { putInt(EXTRA_PAGE, page) }
+            return result
+        }
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater?,
             container: ViewGroup?,
@@ -45,11 +55,14 @@ class HomeFragment : Fragment(), ViewPager.OnPageChangeListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        val page = arguments?.getInt(EXTRA_PAGE) ?: 0
+
         pager.pageMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f,
                 resources.displayMetrics).toInt()
         pager.setPageMarginDrawable(R.drawable.pager_margin)
         pager.adapter = HomePagerAdapter(context, childFragmentManager)
         pager.addOnPageChangeListener(this)
+        pager.currentItem = page
 
         tabLayout.setupWithViewPager(pager)
     }

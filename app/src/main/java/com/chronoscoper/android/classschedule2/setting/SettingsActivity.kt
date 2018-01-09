@@ -1,6 +1,56 @@
+/*
+ * Copyright 2018 Chronoscope
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.chronoscoper.android.classschedule2.setting
 
+import android.content.Intent
+import android.os.Bundle
+import android.preference.PreferenceFragment
 import com.chronoscoper.android.classschedule2.BaseActivity
+import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.library.licenseviewer.LicenseViewer
 
 class SettingsActivity : BaseActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        fragmentManager.beginTransaction()
+                .replace(android.R.id.content, SettingsFragment())
+                .commit()
+    }
+
+    class SettingsFragment : PreferenceFragment() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            addPreferencesFromResource(R.xml.preference)
+
+            findPreference(getString(R.string.p_manage_account))
+                    .setOnPreferenceClickListener {
+                        startActivity(Intent(activity, ManageAccountActivity::class.java))
+                        false
+                    }
+            findPreference(getString(R.string.p_manage_liftim_code))
+                    .setOnPreferenceClickListener {
+                        startActivity(Intent(activity, ManageLiftimCodeActivity::class.java))
+                        false
+                    }
+            findPreference(getString(R.string.p_oss_license))
+                    .setOnPreferenceClickListener {
+                        LicenseViewer.open(activity, getString(R.string.open_source_license))
+                        false
+                    }
+        }
+    }
 }

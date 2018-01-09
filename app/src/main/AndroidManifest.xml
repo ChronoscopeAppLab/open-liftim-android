@@ -11,7 +11,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.chronoscoper.android.classschedule2">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -34,7 +35,7 @@
         <activity
             android:name=".setup.SetupActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".setup.TokenCallbackActivity" >
+        <activity android:name=".setup.TokenCallbackActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -46,7 +47,19 @@
                     android:scheme="liftim" />
             </intent-filter>
         </activity>
-        <activity android:name=".setting.SettingsActivity" />
+        <activity
+            android:name=".setting.SettingsActivity"
+            android:label="@string/settings">
+            <intent-filter>
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".setting.ManageAccountActivity"
+            android:label="@string/manage_account" />
+        <activity
+            android:name=".setting.ManageLiftimCodeActivity"
+            android:label="@string/manage_liftim_code" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

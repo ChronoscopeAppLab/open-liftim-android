@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   Copyright 2018 Chronoscope
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/account">
+        <Preference
+            android:key="@string/p_manage_account"
+            android:title="@string/manage_account" />
+        <Preference
+            android:key="@string/p_manage_liftim_code"
+            android:title="@string/manage_liftim_code" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/misc">
+        <Preference
+            android:key="@string/p_oss_license"
+            android:title="@string/open_source_license" />
+        <Preference
+            android:key="@string/p_app_info"
+            android:title="@string/app_info" />
+    </PreferenceCategory>
+</PreferenceScreen>

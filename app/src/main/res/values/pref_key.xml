@@ -20,4 +20,8 @@
     <string name="p_account_image_file">account_image_file</string>
     <string name="p_account_add_date">account_add_date</string>
     <string name="p_account_is_available">account_is_available</string>
+    <string name="p_manage_account">manager_account</string>
+    <string name="p_manage_liftim_code">manage_liftim_code</string>
+    <string name="p_app_info">app_info</string>
+    <string name="p_oss_license">oss_license</string>
 </resources>

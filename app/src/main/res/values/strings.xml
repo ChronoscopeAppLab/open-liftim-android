@@ -50,4 +50,10 @@
     <string name="timetable_placehoder_message">There is no timetable</string>
     <string name="done">Done</string>
     <string name="archive">Archive</string>
+    <string name="account">Account</string>
+    <string name="manage_account">Manage account</string>
+    <string name="manage_liftim_code">Manage classes</string>
+    <string name="app_info">App info</string>
+    <string name="open_source_license">Open source licenses</string>
+    <string name="general">General</string>
 </resources>

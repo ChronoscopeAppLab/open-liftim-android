@@ -56,4 +56,8 @@
     <string name="app_info">App info</string>
     <string name="open_source_license">Open source licenses</string>
     <string name="general">General</string>
+    <string name="join_class_description">Join class with invitation number</string>
+    <string name="invitation_number">Invitation number</string>
+    <string name="incorrect_invitation_number">Invitation number is incorrect</string>
+    <string name="join_progress">Requesting to join the class…</string>
 </resources>

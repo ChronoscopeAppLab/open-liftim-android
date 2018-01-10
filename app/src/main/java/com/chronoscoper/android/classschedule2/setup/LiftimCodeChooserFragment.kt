@@ -48,12 +48,12 @@ class LiftimCodeChooserFragment : Fragment() {
     private val list by bindView<RecyclerView>(R.id.list)
     private val joinButton by bindView<Button>(R.id.join)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
         list.adapter = LiftimCodeAdapter(activity)
         list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         joinButton.setOnClickListener {
-            //TODO
+            startActivity(Intent(context, JoinLiftimCodeActivity::class.java))
         }
     }
 
@@ -64,9 +64,6 @@ class LiftimCodeChooserFragment : Fragment() {
         init {
             data.addAll(LiftimSyncEnvironment.getOrmaDatabase()
                     .selectFromLiftimCodeInfo().toList())
-            data.forEach {
-                Log.d("TAG","code: ${it.liftimCode}, name: ${it.name}")
-            }
         }
 
         override fun onBindViewHolder(holder: RecyclerViewHolder?, position: Int) {

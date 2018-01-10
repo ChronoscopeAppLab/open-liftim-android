@@ -68,6 +68,18 @@
             android:name=".setup.CreateLiftimCodeActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".home.info.AddInfoActivity"
+            android:label="@string/add_info"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".home.timetable.EditTimetableActivity"
+            android:label="@string/edit_timetable"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".weekly.EditWeeklyActivity"
+            android:label="@string/edit_weekly"
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

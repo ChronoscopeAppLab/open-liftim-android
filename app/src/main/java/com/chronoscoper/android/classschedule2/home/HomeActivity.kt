@@ -31,7 +31,10 @@ import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.archive.ArchiveFragment
+import com.chronoscoper.android.classschedule2.home.info.AddInfoActivity
+import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
 import com.chronoscoper.android.classschedule2.setting.SettingsActivity
+import com.chronoscoper.android.classschedule2.weekly.EditWeeklyActivity
 import com.chronoscoper.android.classschedule2.weekly.WeeklyFragment
 import kotterknife.bindView
 
@@ -63,6 +66,9 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         initLiftimCodePager()
 
+        fabAction = Runnable {
+            startActivity(Intent(this, EditTimetableActivity::class.java))
+        }
         fab.setOnClickListener {
             fabAction?.run()
         }
@@ -81,9 +87,15 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         when (page) {
             0 -> {
                 drawerMenu.setCheckedItem(R.id.drawer_timetable)
+                fabAction = Runnable {
+                    startActivity(Intent(this, EditTimetableActivity::class.java))
+                }
             }
             1 -> {
                 drawerMenu.setCheckedItem(R.id.drawer_info)
+                fabAction = Runnable {
+                    startActivity(Intent(this, AddInfoActivity::class.java))
+                }
             }
         }
     }
@@ -130,6 +142,9 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     val fragment = contentFragment as? HomeFragment ?: return true
                     fragment.page = 0
                 }
+                fabAction = Runnable {
+                    startActivity(Intent(this, EditTimetableActivity::class.java))
+                }
             }
             R.id.drawer_info -> {
                 if (contentFragment !is HomeFragment) {
@@ -138,9 +153,15 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     val fragment = contentFragment as? HomeFragment ?: return true
                     fragment.page = 1
                 }
+                fabAction = Runnable {
+                    startActivity(Intent(this, AddInfoActivity::class.java))
+                }
             }
             R.id.drawer_weekly -> {
                 replaceFragment(WeeklyFragment())
+                fabAction = Runnable {
+                    startActivity(Intent(this, EditWeeklyActivity::class.java))
+                }
             }
             R.id.drawer_archive -> {
                 replaceFragment(ArchiveFragment())

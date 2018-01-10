@@ -18,6 +18,7 @@ package com.chronoscoper.android.classschedule2.home
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
@@ -36,8 +37,10 @@ import kotterknife.bindView
 
 class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     private val drawer by bindView<DrawerLayout>(R.id.activity_home)
-
     private val drawerMenu by bindView<NavigationView>(R.id.drawer_menu)
+    private val fab by bindView<FloatingActionButton>(R.id.add)
+
+    private var fabAction: Runnable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +62,10 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         toggle.syncState()
 
         initLiftimCodePager()
+
+        fab.setOnClickListener {
+            fabAction?.run()
+        }
     }
 
     private var contentFragment: Fragment? = null

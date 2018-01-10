@@ -64,6 +64,10 @@
             android:name=".setup.JoinLiftimCodeActivity"
             android:label="@string/join_class"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".setup.CreateLiftimCodeActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

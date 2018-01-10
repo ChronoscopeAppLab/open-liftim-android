@@ -19,13 +19,13 @@ import android.content.Context
 import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.app.FragmentStatePagerAdapter
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimCodeInfo
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 
 class LiftimCodePagerAdapter(fm: FragmentManager, private val context: Context) :
-        FragmentPagerAdapter(fm) {
+        FragmentStatePagerAdapter(fm) {
     val data = mutableListOf<LiftimCodeInfo>()
 
     init {
@@ -39,10 +39,18 @@ class LiftimCodePagerAdapter(fm: FragmentManager, private val context: Context) 
 
     fun getLiftimCodeInfo(page: Int) = data[page % data.size]
 
-    override fun getCount(): Int = Int.MAX_VALUE
+    override fun getCount(): Int =
+            if (data.size <= 1) {
+                1
+            } else {
+                Int.MAX_VALUE
+            }
 
     val initialPosition: Int
         get() {
+            if (data.size <= 1) {
+                return 1
+            }
             val liftimCode = PreferenceManager.getDefaultSharedPreferences(context)
                     .getLong(context.getString(R.string.p_default_liftim_code), 0)
             var pos = 0

@@ -61,4 +61,7 @@
     <string name="incorrect_invitation_number">Invitation number is incorrect</string>
     <string name="join_progress">Requesting to join the class…</string>
     <string name="create_liftim_code">Create class</string>
+    <string name="add_info">Add info or event</string>
+    <string name="edit_timetable">Edit timetable</string>
+    <string name="edit_weekly">Edit weekly timetable</string>
 </resources>

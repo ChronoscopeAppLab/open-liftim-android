@@ -47,6 +47,7 @@ class LiftimCodeChooserFragment : Fragment() {
 
     private val list by bindView<RecyclerView>(R.id.list)
     private val joinButton by bindView<Button>(R.id.join)
+    private val createButton by bindView<Button>(R.id.create)
 
     override fun onResume() {
         super.onResume()
@@ -54,6 +55,9 @@ class LiftimCodeChooserFragment : Fragment() {
         list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         joinButton.setOnClickListener {
             startActivity(Intent(context, JoinLiftimCodeActivity::class.java))
+        }
+        createButton.setOnClickListener {
+            startActivity(Intent(context, CreateLiftimCodeActivity::class.java))
         }
     }
 

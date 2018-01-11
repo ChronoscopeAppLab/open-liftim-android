@@ -18,6 +18,7 @@ package com.chronoscoper.android.classschedule2
 import android.app.Application
 import android.preference.PreferenceManager
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.squareup.leakcanary.LeakCanary
 
 class LiftimApplication : Application() {
     override fun onCreate() {
@@ -33,5 +34,8 @@ class LiftimApplication : Application() {
                 "http://example.com/"),
                 sharedPrefs.getLong(getString(R.string.p_default_liftim_code), 0),
                 sharedPrefs.getString(getString(R.string.p_account_token), ""))
+        if (!LeakCanary.isInAnalyzerProcess(this)) {
+            LeakCanary.install(this)
+        }
     }
 }

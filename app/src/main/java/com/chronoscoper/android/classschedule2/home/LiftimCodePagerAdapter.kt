@@ -19,13 +19,13 @@ import android.content.Context
 import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.app.FragmentPagerAdapter
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimCodeInfo
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 
 class LiftimCodePagerAdapter(fm: FragmentManager, private val context: Context) :
-        FragmentStatePagerAdapter(fm) {
+        FragmentPagerAdapter(fm) {
     val data = mutableListOf<LiftimCodeInfo>()
 
     init {

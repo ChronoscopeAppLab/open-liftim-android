@@ -16,24 +16,23 @@
 package com.chronoscoper.android.classschedule2.weekly
 
 import android.content.Context
-import android.support.v4.app.Fragment
+import android.graphics.PorterDuff
 import android.os.Bundle
+import android.support.design.widget.TabLayout
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.view.ViewPager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridLayout
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 import com.chronoscoper.android.classschedule2.sync.WeeklyItem
-import com.chronoscoper.android.classschedule2.task.WeeklyLoader
+import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
-import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subscribers.DisposableSubscriber
 import kotterknife.bindView
 
 class WeeklyFragment : Fragment() {
@@ -43,185 +42,103 @@ class WeeklyFragment : Fragment() {
             savedInstanceState: Bundle?): View? =
             inflater?.inflate(R.layout.fragment_weekly, container, false)
 
-    private val list by bindView<RecyclerView>(R.id.list)
+    private val tabs by bindView<TabLayout>(R.id.tab)
+    private val pager by bindView<ViewPager>(R.id.pager)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        list.adapter = Adapter(context)
+        pager.adapter = Adapter(context, childFragmentManager)
+        tabs.setupWithViewPager(pager)
     }
 
-    private class Adapter(val context: Context) : RecyclerView.Adapter<RecyclerViewHolder>() {
+    class Adapter(private val context: Context,
+                  fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
         private val data = mutableListOf<WeeklyItem>()
-        private var rangeStart = Int.MAX_VALUE
-        private var rangeEnd = Int.MIN_VALUE
-        private val disposables = CompositeDisposable()
 
-        override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
-            super.onAttachedToRecyclerView(recyclerView)
-
-            val subscriber = object : DisposableSubscriber<Unit>() {
-                override fun onNext(t: Unit?) {
-                }
-
-                override fun onComplete() {
-                    initView(recyclerView ?: return)
-                }
-
-                override fun onError(t: Throwable?) {
-                    initView(recyclerView ?: return)
-                }
-            }
-
-            Flowable.defer {
-                Flowable.just(
-                        WeeklyLoader(LiftimSyncEnvironment.getLiftimCode(),
-                                LiftimSyncEnvironment.getToken()).run())
-            }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(subscriber)
-
-            disposables.add(subscriber)
-        }
-
-        private fun initView(recyclerView: RecyclerView) {
-            data.clear()
-            LiftimSyncEnvironment.getOrmaDatabase().selectFromWeeklyItem()
+        init {
+            data.addAll(LiftimSyncEnvironment.getOrmaDatabase()
+                    .selectFromWeeklyItem()
                     .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
-                    .orderByDayOfWeekAsc().forEach {
-                it.subjects = LiftimSyncEnvironment.getGson()
-                        .fromJson(it.serializedSubjects, Array<String>::class.java)
-                if (it.minIndex < rangeStart) {
-                    rangeStart = it.minIndex
-                }
-                if (it.minIndex + it.subjects.size - 1 > rangeEnd) {
-                    rangeEnd = it.minIndex + it.subjects.size - 1
-                }
-                data.add(it)
-            }
-            weeklyItemPositionsInitializer.run()
-            (recyclerView.layoutManager as GridLayout)
-            notifyDataSetChanged()
+                    .orderByDayOfWeekAsc())
         }
 
-        private val inflater by lazy { LayoutInflater.from(context) }
-
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerViewHolder? =
-                when (viewType) {
-                    ViewType.SQUARE.type -> {
-                        RecyclerViewHolder(inflater.inflate(
-                                R.layout.weekly_square, parent, false))
-                    }
-                    ViewType.LEFT_INDEX.type -> {
-                        RecyclerViewHolder(inflater.inflate(
-                                R.layout.weekly_left_index, parent, false))
-                    }
-                    ViewType.TOP_INDEX.type -> {
-                        RecyclerViewHolder(inflater.inflate(
-                                R.layout.weekly_top_index, parent, false))
-                    }
-                    ViewType.ITEM.type -> {
-                        RecyclerViewHolder(inflater.inflate(
-                                R.layout.weekly_cell, parent, false))
-                    }
-                    else -> {
-                        null
-                    }
-                }
-
-
-        override fun onBindViewHolder(holder: RecyclerViewHolder?, position: Int) {
-            holder ?: return
-            when (holder.itemViewType) {
-                ViewType.LEFT_INDEX.type -> {
-                    (holder.itemView as TextView).text = (position + rangeStart).toString()
-                }
-                ViewType.TOP_INDEX.type -> {
-                    val dayOfWeek = weeklyItemPositions
-                            .filter { it.value.start - 1 == position }.keys
-                            .firstOrNull() ?: 0
-                    val label = when (dayOfWeek) {
-                        1 -> context.getString(R.string.day_of_week_sunday)
-                        2 -> context.getString(R.string.day_of_week_monday)
-                        3 -> context.getString(R.string.day_of_week_tuesday)
-                        4 -> context.getString(R.string.day_of_week_wednesday)
-                        5 -> context.getString(R.string.day_of_week_thursday)
-                        6 -> context.getString(R.string.day_of_week_friday)
-                        7 -> context.getString(R.string.day_of_week_saturday)
-                        else -> return
-                    }
-                    (holder.itemView as TextView).text = label
-                }
-                ViewType.ITEM.type -> {
-                    val dayOfWeek = weeklyItemPositions
-                            .filter { position in it.value }.keys
-                            .firstOrNull() ?: return
-                    val index = position - (weeklyItemPositions[dayOfWeek] ?: return).start
-                    val items = data.find { it.dayOfWeek == dayOfWeek } ?: return
-                    (holder.itemView as TextView).text = items.subjects[index]
-                }
+        override fun getPageTitle(position: Int): CharSequence? {
+            val dayOfWeek = data[position].dayOfWeek
+            return when (dayOfWeek) {
+                1 -> context.getString(R.string.day_of_week_sunday)
+                2 -> context.getString(R.string.day_of_week_monday)
+                3 -> context.getString(R.string.day_of_week_tuesday)
+                4 -> context.getString(R.string.day_of_week_wednesday)
+                5 -> context.getString(R.string.day_of_week_thursday)
+                6 -> context.getString(R.string.day_of_week_friday)
+                7 -> context.getString(R.string.day_of_week_saturday)
+                else -> null
             }
         }
 
-        private val weeklyItemPositions = hashMapOf<Int, IntRange>()
+        override fun getItem(position: Int): Fragment = DayFragment.obtain(data[position].dayOfWeek)
 
-        private val weeklyItemPositionsInitializer = Runnable {
-            val result = hashMapOf<Int, IntRange>()
-            var lastInsertedDayOfWeek = 0
-            data.forEachIndexed { index, item ->
-                if (index == 0) {
-                    val start = rangeEnd - rangeStart + 3
-                    result.put(item.dayOfWeek, start..start + item.subjects.size)
-                    lastInsertedDayOfWeek = item.dayOfWeek
-                } else {
-                    val start = result[lastInsertedDayOfWeek]!!.endInclusive + 1
-                    result.put(item.dayOfWeek, start..start + item.subjects.size)
-                    lastInsertedDayOfWeek = item.dayOfWeek
+        override fun getCount(): Int = data.size
+
+        class DayFragment : Fragment() {
+            companion object {
+                private const val DAY_OF_WEEK = "day_of_week"
+                fun obtain(dayOfWeek: Int): DayFragment {
+                    val f = DayFragment()
+                    f.arguments = Bundle().apply {
+                        putInt(DAY_OF_WEEK, dayOfWeek)
+                    }
+                    return f
                 }
             }
-            weeklyItemPositions.clear()
-            weeklyItemPositions.putAll(result)
+
+            override fun onCreateView(
+                    inflater: LayoutInflater?,
+                    container: ViewGroup?,
+                    savedInstanceState: Bundle?): View? =
+                    inflater?.inflate(R.layout.fragment_day, container, false)
+
+            private val list by bindView<RecyclerView>(R.id.list)
+
+            override fun onActivityCreated(savedInstanceState: Bundle?) {
+                super.onActivityCreated(savedInstanceState)
+
+                list.adapter = DayAdapter(context, arguments.getInt(DAY_OF_WEEK))
+            }
+
+            class DayAdapter(context: Context, dayOfWeek: Int)
+                : RecyclerView.Adapter<RecyclerViewHolder>() {
+                private val data = LiftimSyncEnvironment.getOrmaDatabase()
+                        .selectFromWeeklyItem()
+                        .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                        .dayOfWeekEq(dayOfWeek)
+                        .firstOrNull()
+                        ?.apply {
+                            subjects = LiftimSyncEnvironment.getGson()
+                                    .fromJson(serializedSubjects, Array<String>::class.java)
+                        } ?: WeeklyItem().apply { subjects = arrayOf() }
+
+                private val inflater by lazy { LayoutInflater.from(context) }
+
+                override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int):
+                        RecyclerViewHolder = RecyclerViewHolder(
+                        inflater.inflate(R.layout.weekly_day_item, parent, false))
+
+
+                override fun onBindViewHolder(holder: RecyclerViewHolder?, position: Int) {
+                    val view = holder?.itemView ?: return
+                    val subjectName = data.subjects[position]
+
+                    val subject = view.findViewById<TextView>(R.id.subject)
+                    subject.text = subjectName
+                    val index = view.findViewById<TextView>(R.id.index)
+                    index.text = (position + data.minIndex).toString()
+                    index.background.setColorFilter(
+                            obtainColorCorrespondsTo(subjectName), PorterDuff.Mode.SRC_IN)
+                }
+
+                override fun getItemCount(): Int = data.subjects.size
+            }
         }
-
-        override fun getItemViewType(position: Int): Int {
-            if (position == 0) {
-                return ViewType.SQUARE.type
-            }
-            if (position in 1..(rangeEnd - rangeStart + 1)) {
-                return ViewType.LEFT_INDEX.type
-            }
-            val topIndexes = mutableListOf<Int>()
-            topIndexes.add(rangeEnd - rangeStart + 2)
-            data.filterIndexed { index, _ -> index < data.size - 1 }.forEach {
-                topIndexes.add(topIndexes.last() + it.subjects.size + 1)
-            }
-            if (position in topIndexes) {
-                return ViewType.TOP_INDEX.type
-            }
-            return ViewType.ITEM.type
-        }
-
-        override fun getItemCount(): Int {
-            var subjectCount = 0
-            data.forEach {
-                subjectCount += it.subjects.size
-            }
-            return if (data.isEmpty()) {
-                0
-            } else {
-                1 /*Square*/ + rangeEnd - rangeStart + 1/*Left index*/ +
-                        subjectCount/*Inner item*/ +
-                        data.size/*Top index*/
-            }
-        }
-
-    }
-
-    enum class ViewType(val type: Int) {
-        SQUARE(1),
-        LEFT_INDEX(2),
-        TOP_INDEX(3),
-        ITEM(4)
     }
 }

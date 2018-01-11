@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chronoscoper.android.classschedule2.home.timetable
+package com.chronoscoper.android.classschedule2.util
 
 import android.graphics.Color
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment

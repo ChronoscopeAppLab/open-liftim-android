@@ -91,5 +91,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
+        <service android:name=".task.RegisterInfoService" />
     </application>
 </manifest>

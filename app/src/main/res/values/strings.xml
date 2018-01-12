@@ -66,4 +66,7 @@
     <string name="edit_weekly">Edit weekly timetable</string>
     <string name="timetable_info">Info</string>
     <string name="move_item">Move item</string>
+    <string name="register_local">Register locally</string>
+    <string name="share_class">Share with classmate</string>
+    <string name="register_progress">Registering…</string>
 </resources>

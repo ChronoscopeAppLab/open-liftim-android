@@ -22,10 +22,7 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -36,6 +33,7 @@ import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.task.RegisterInfoService
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import kotterknife.bindView
@@ -58,6 +56,8 @@ class EditTimetableActivity : BaseActivity() {
     }
 
     private var date: DateTime? = null
+    private var isManager = false
+    private var id: String? = null
 
     private fun initialize() {
         val liftimCode = LiftimSyncEnvironment.getLiftimCode()
@@ -72,6 +72,7 @@ class EditTimetableActivity : BaseActivity() {
                 .firstOrNull()
                 ?: kotlin.run { finish(); return }
         liftimCodeLabel.text = liftimCodeInfo.name
+        isManager = liftimCodeInfo.isManager
         val latest = LiftimSyncEnvironment.getOrmaDatabase().selectFromInfo()
                 .liftimCodeEq(liftimCode)
                 .typeEq(Info.TYPE_TIMETABLE)
@@ -85,6 +86,7 @@ class EditTimetableActivity : BaseActivity() {
                 info.setText(latest.detail)
             }
         }
+        id = latest?.id
         dateLabel.text = date!!.toString(DateTimeFormat.fullDate())
         dateLabel.setOnClickListener {
             DatePickerDialog(this,
@@ -101,6 +103,75 @@ class EditTimetableActivity : BaseActivity() {
         }
         classList.addItemDecoration(
                 DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        if (isManager) {
+            menuInflater.inflate(R.menu.options_edit_timetable_manager, menu)
+        } else {
+            menuInflater.inflate(R.menu.options_edit_timetable, menu)
+        }
+        return true
+    }
+
+    private fun createElementFromCurrentState(): Info {
+        return Info()
+                .apply {
+                    liftimCode = LiftimSyncEnvironment.getLiftimCode()
+                    id = this@EditTimetableActivity.id
+                    title = ""
+                    detail = info.text.toString()
+                    weight = 1
+                    date = this@EditTimetableActivity.date?.toString("yyyy/MM/dd")
+                    type = Info.TYPE_TIMETABLE
+                    timetable = (classList.adapter as ClassAdapter).generateCurrentStateJson()
+                    removable = true
+                    addedBy = Info.LOCAL
+                }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        item ?: return true
+        when (item.itemId) {
+            R.id.options_register_local -> {
+                registerLocal(createElementFromCurrentState())
+                finish()
+            }
+            R.id.options_register_remote -> {
+                registerRemote(createElementFromCurrentState())
+                finish()
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
+    }
+
+    private fun registerLocal(info: Info) {
+        if (info.id == null) {
+            info.id = DateTime.now().toString(DateTimeFormat.fullDateTime())
+        } else {
+            LiftimSyncEnvironment.getOrmaDatabase().deleteFromInfo()
+                    .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                    .idEq(info.id)
+                    .execute()
+        }
+        LiftimSyncEnvironment.getOrmaDatabase().insertIntoInfo(info)
+    }
+
+    private fun registerRemote(info: Info) {
+        val content = InfoRemoteModel.InfoBody()
+        content.apply {
+            id = info.id
+            title = info.title
+            detail = info.detail
+            weight = info.weight
+            date = info.date
+            type = info.type
+            timetable = LiftimSyncEnvironment.getGson()
+                    .fromJson(info.timetable, InfoRemoteModel.Timetable::class.java)
+            removable = info.removable
+        }
+        RegisterInfoService.start(this, LiftimSyncEnvironment.getGson().toJson(content))
     }
 
     class ClassAdapter(private val context: Context, initialItem: InfoRemoteModel.Timetable?)
@@ -183,7 +254,10 @@ class EditTimetableActivity : BaseActivity() {
         }
 
         fun generateCurrentStateJson(): String {
-            TODO()
+            return InfoRemoteModel.Timetable().apply {
+                subjectMinIndex = minIndex
+                subjects = data.toTypedArray();
+            }.toString()
         }
     }
 }

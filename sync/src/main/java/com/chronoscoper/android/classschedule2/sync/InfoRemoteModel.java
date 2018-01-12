@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Chronoscope
+ * Copyright 2017-2018 Chronoscope
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public class InfoRemoteModel {
     @SerializedName("info")
     public InfoBody[] info;
 
-    public class InfoBody {
+    public static class InfoBody {
         @Expose
         @SerializedName("id")
         public String id;
@@ -80,10 +80,9 @@ public class InfoRemoteModel {
         public boolean removable;
     }
 
-    public class Timetable {
+    public static class Timetable {
         @Expose
         @SerializedName("subjectMinIndex")
-
         public int subjectMinIndex;
 
         @Expose
@@ -97,7 +96,7 @@ public class InfoRemoteModel {
     }
 
 
-    public class SubjectElement {
+    public static class SubjectElement {
         @Expose
         @SerializedName("subject")
         public String subject;

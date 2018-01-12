@@ -42,6 +42,13 @@ public interface LiftimService {
             @Query("token") String token,
             @Query("cursor") long cursor);
 
+    @FormUrlEncoded
+    @POST("api/v1/info.json")
+    Call<Void> registerInfo(
+            @Field("liftim_code") long liftimCode,
+            @Field("token") String token,
+            @Field(value = "content", encoded = true) String content);
+
     @GET("api/v1/weekly.json")
     Call<HashMap<String, WeeklyItem>> getWeekly(
             @Query("liftim_code") long liftimCode,

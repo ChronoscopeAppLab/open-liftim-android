@@ -16,13 +16,15 @@
 package com.chronoscoper.android.classschedule2.home.timetable
 
 import android.app.DatePickerDialog
-import android.content.Context
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
+import android.support.v4.app.DialogFragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -47,6 +49,7 @@ class EditTimetableActivity : BaseActivity() {
     private val dateLabel by bindView<TextView>(R.id.date)
     private val info by bindView<EditText>(R.id.info)
     private val classList by bindView<RecyclerView>(R.id.list)
+    private val fab by bindView<FloatingActionButton>(R.id.fab)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,6 +106,9 @@ class EditTimetableActivity : BaseActivity() {
         }
         classList.addItemDecoration(
                 DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        fab.setOnClickListener {
+            ClassEditorDialog().show(supportFragmentManager, null)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -174,9 +180,11 @@ class EditTimetableActivity : BaseActivity() {
         RegisterInfoService.start(this, LiftimSyncEnvironment.getGson().toJson(content))
     }
 
-    class ClassAdapter(private val context: Context, initialItem: InfoRemoteModel.Timetable?)
+    class ClassAdapter(
+            private val activity: EditTimetableActivity,
+            initialItem: InfoRemoteModel.Timetable?)
         : RecyclerView.Adapter<ClassAdapter.DragViewHolder>() {
-        private val data = mutableListOf<InfoRemoteModel.SubjectElement>()
+        val data = mutableListOf<InfoRemoteModel.SubjectElement>()
         private var minIndex = 1
 
         init {
@@ -213,7 +221,7 @@ class EditTimetableActivity : BaseActivity() {
             itemTouchHelper.attachToRecyclerView(recyclerView)
         }
 
-        private val inflater by lazy { LayoutInflater.from(context) }
+        private val inflater by lazy { LayoutInflater.from(activity) }
 
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): DragViewHolder =
                 DragViewHolder(
@@ -239,6 +247,9 @@ class EditTimetableActivity : BaseActivity() {
                 data.removeAt(holder.adapterPosition)
                 notifyItemRemoved(holder.adapterPosition)
             }
+            view.setOnClickListener {
+                showClassEditorDialog(position, item.subject, item.detail ?: "")
+            }
         }
 
         inner class DragViewHolder(itemView: View) : RecyclerViewHolder(itemView) {
@@ -258,6 +269,66 @@ class EditTimetableActivity : BaseActivity() {
                 subjectMinIndex = minIndex
                 subjects = data.toTypedArray();
             }.toString()
+        }
+
+        private fun showClassEditorDialog(index: Int, subject: String, detail: String) {
+            ClassEditorDialog.newInstance(index, subject, detail)
+                    .show(activity.supportFragmentManager, null)
+        }
+    }
+
+    class ClassEditorDialog : DialogFragment() {
+        companion object {
+            private const val INDEX = "index"
+            private const val SUBJECT = "subject"
+            private const val DETAIL = "detail"
+            fun newInstance(index: Int, subject: String, detail: String): ClassEditorDialog {
+                return ClassEditorDialog().apply {
+                    isCancelable = false
+                    arguments = Bundle().apply {
+                        putInt(INDEX, index)
+                        putString(SUBJECT, subject)
+                        putString(DETAIL, detail)
+                    }
+                }
+            }
+        }
+
+        override fun onCreateView(
+                inflater: LayoutInflater?,
+                container: ViewGroup?,
+                savedInstanceState: Bundle?): View? =
+                inflater?.inflate(R.layout.fragment_class_editor, container, false)
+
+        private val subjectInput by bindView<EditText>(R.id.subject)
+        private val detailInput by bindView<EditText>(R.id.detail)
+        private val okButton by bindView<Button>(R.id.ok)
+        private val cancelButton by bindView<Button>(R.id.cancel)
+
+        override fun onActivityCreated(savedInstanceState: Bundle?) {
+            super.onActivityCreated(savedInstanceState)
+            subjectInput.setText(arguments?.getString(SUBJECT) ?: "")
+            detailInput.setText(arguments?.getString(DETAIL) ?: "")
+            okButton.setOnClickListener {
+                val adapter = ((activity as? EditTimetableActivity ?: return@setOnClickListener)
+                        .classList.adapter as? ClassAdapter ?: return@setOnClickListener)
+                val element = InfoRemoteModel.SubjectElement().apply {
+                    subject = subjectInput.text.toString()
+                    detail = detailInput.text.toString()
+                }
+                val position = arguments?.getInt(INDEX, -1) ?: -1
+                if (position < 0) {
+                    adapter.data.add(element)
+                    adapter.notifyItemInserted(adapter.itemCount - 1)
+                } else {
+                    adapter.data[position] = element
+                    adapter.notifyItemChanged(position)
+                }
+                dismiss()
+            }
+            cancelButton.setOnClickListener {
+                dismiss()
+            }
         }
     }
 }

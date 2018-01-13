@@ -31,7 +31,7 @@ import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.archive.ArchiveFragment
-import com.chronoscoper.android.classschedule2.home.info.AddInfoActivity
+import com.chronoscoper.android.classschedule2.home.info.EditInfoActivity
 import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
 import com.chronoscoper.android.classschedule2.setting.SettingsActivity
 import com.chronoscoper.android.classschedule2.weekly.EditWeeklyActivity
@@ -94,7 +94,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             1 -> {
                 drawerMenu.setCheckedItem(R.id.drawer_info)
                 fabAction = Runnable {
-                    startActivity(Intent(this, AddInfoActivity::class.java))
+                    startActivity(Intent(this, EditInfoActivity::class.java))
                 }
             }
         }
@@ -154,7 +154,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     fragment.page = 1
                 }
                 fabAction = Runnable {
-                    startActivity(Intent(this, AddInfoActivity::class.java))
+                    startActivity(Intent(this, EditInfoActivity::class.java))
                 }
             }
             R.id.drawer_weekly -> {

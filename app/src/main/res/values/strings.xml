@@ -72,4 +72,9 @@
     <string name="subject">Subject</string>
     <string name="detail">Detail</string>
     <string name="cancel">Cancel</string>
+    <string name="title">Title</string>
+    <string name="specify_date">Specify date</string>
+    <string name="specify_time">Specify time</string>
+    <string name="allow_hide_info">Allow user to hide</string>
+    <string name="importance">Importance</string>
 </resources>

@@ -69,7 +69,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".home.info.AddInfoActivity"
+            android:name=".home.info.EditInfoActivity"
             android:label="@string/add_info"
             android:windowSoftInputMode="adjustResize" />
         <activity

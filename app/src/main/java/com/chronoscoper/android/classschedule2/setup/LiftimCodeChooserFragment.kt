@@ -49,10 +49,14 @@ class LiftimCodeChooserFragment : Fragment() {
     private val joinButton by bindView<Button>(R.id.join)
     private val createButton by bindView<Button>(R.id.create)
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+    }
+
     override fun onResume() {
         super.onResume()
         list.adapter = LiftimCodeAdapter(activity)
-        list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         joinButton.setOnClickListener {
             startActivity(Intent(context, JoinLiftimCodeActivity::class.java))
         }

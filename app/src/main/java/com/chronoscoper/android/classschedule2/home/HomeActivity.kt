@@ -100,6 +100,24 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
+    override fun onBackPressed() {
+        if (drawer.isDrawerOpen(drawerMenu)) {
+            drawer.closeDrawer(Gravity.START)
+        } else {
+            if (contentFragment !is HomeFragment) {
+                drawerMenu.setCheckedItem(R.id.drawer_timetable)
+                replaceFragment(HomeFragment())
+            } else {
+                val homeFragment = contentFragment as? HomeFragment ?: return
+                if (homeFragment.page != 0) {
+                    homeFragment.page = 0
+                } else {
+                    super.onBackPressed()
+                }
+            }
+        }
+    }
+
     private fun initLiftimCodePager() {
         val pager = drawerMenu.getHeaderView(0)
                 .findViewById<ViewPager>(R.id.liftim_code_pager)

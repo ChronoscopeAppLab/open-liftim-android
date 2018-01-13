@@ -110,7 +110,7 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
     override fun getItemCount(): Int = data.size
 
     override fun getItemViewType(position: Int): Int =
-            if (data[position].type in 0..3) {
+            if (data[position].type in -1..3) {
                 VIEW_TYPE_INFO
             } else {
                 VIEW_TYPE_TIMETABLE

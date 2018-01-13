@@ -77,4 +77,5 @@
     <string name="specify_time">Specify time</string>
     <string name="allow_hide_info">Allow user to hide</string>
     <string name="importance">Importance</string>
+    <string name="form_error_info">Please specify title</string>
 </resources>

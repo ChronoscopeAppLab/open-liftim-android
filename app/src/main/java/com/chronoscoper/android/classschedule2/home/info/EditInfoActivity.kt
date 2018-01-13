@@ -19,6 +19,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v7.app.AlertDialog
 import android.view.*
 import android.widget.*
 import com.bumptech.glide.Glide
@@ -100,10 +101,22 @@ class EditInfoActivity : BaseActivity() {
         item ?: return super.onOptionsItemSelected(item)
         when (item.itemId) {
             R.id.options_register_local -> {
-                registerLocal()
+                if (titleInput.text.isNullOrEmpty()) {
+                    AlertDialog.Builder(this)
+                            .setMessage(R.string.form_error_info)
+                            .setPositiveButton(R.string.ok, null).show()
+                } else {
+                    registerLocal()
+                }
             }
             R.id.options_register_remote -> {
-                RemoteAdditionalFieldFragment().show(supportFragmentManager, null)
+                if (titleInput.text.isNullOrEmpty()) {
+                    AlertDialog.Builder(this)
+                            .setMessage(R.string.form_error_info)
+                            .setPositiveButton(R.string.ok, null).show()
+                } else {
+                    RemoteAdditionalFieldFragment().show(supportFragmentManager, null)
+                }
             }
         }
         return super.onOptionsItemSelected(item)

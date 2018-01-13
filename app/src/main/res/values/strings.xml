@@ -78,4 +78,7 @@
     <string name="allow_hide_info">Allow user to hide</string>
     <string name="importance">Importance</string>
     <string name="form_error_info">Please specify title</string>
+    <string name="liftim_acronym" translatable="false">Liftim is functional timetable manager</string>
+    <string name="open_source_statement" translatable="false">We ❤ Open Source. Liftim is developed in public.</string>
+    <string name="open_project_page" translatable="false">Open project page</string>
 </resources>

@@ -16,11 +16,19 @@
 package com.chronoscoper.android.classschedule2.setting
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceFragment
+import android.support.design.widget.BottomSheetDialogFragment
+import android.support.v7.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.library.licenseviewer.LicenseViewer
+import kotterknife.bindView
 
 class SettingsActivity : BaseActivity() {
 
@@ -51,6 +59,32 @@ class SettingsActivity : BaseActivity() {
                         LicenseViewer.open(activity, getString(R.string.open_source_license))
                         false
                     }
+            findPreference(getString(R.string.p_app_info))
+                    .setOnPreferenceClickListener {
+                        val a = activity as? AppCompatActivity
+                                ?: return@setOnPreferenceClickListener false
+                        AppInfoDialog().show(a.supportFragmentManager, null)
+                        false
+                    }
+        }
+    }
+
+    class AppInfoDialog : BottomSheetDialogFragment() {
+        override fun onCreateView(
+                inflater: LayoutInflater?,
+                container: ViewGroup?,
+                savedInstanceState: Bundle?): View? =
+                inflater?.inflate(R.layout.fragment_app_info, container, false)
+
+        private val openProjectPageButton by bindView<Button>(R.id.open_project_page)
+
+        override fun onActivityCreated(savedInstanceState: Bundle?) {
+            super.onActivityCreated(savedInstanceState)
+            openProjectPageButton.setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/ChronoscopeAppLab/open-liftim-android")))
+                dismiss()
+            }
         }
     }
 }

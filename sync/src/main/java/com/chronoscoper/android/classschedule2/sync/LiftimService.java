@@ -63,4 +63,7 @@ public interface LiftimService {
 
     @GET("api/v1/color_palette.json")
     Call<ColorPalette[]> getColorPalette();
+
+    @GET("api/v1/token.json")
+    Call<Token> getToken(@Query("token") String token);
 }

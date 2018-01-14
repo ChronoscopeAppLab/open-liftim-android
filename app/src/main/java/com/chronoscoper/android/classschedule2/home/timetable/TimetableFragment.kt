@@ -44,6 +44,7 @@ class TimetableFragment : Fragment() {
     private val timetableList by bindView<RecyclerView>(R.id.timetable_list)
     private val dateLabel by bindView<TextView>(R.id.date)
     private val doneButton by bindView<View>(R.id.done)
+    private val infoLabel by bindView<TextView>(R.id.info)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -74,9 +75,16 @@ class TimetableFragment : Fragment() {
             currentItemId = timetable.id
             doneButton.visibility = View.VISIBLE
             dateLabel.visibility = View.VISIBLE
+            if (!timetable.detail.isNullOrEmpty()) {
+                infoLabel.visibility = View.VISIBLE
+                infoLabel.text = timetable.detail
+            }else{
+                infoLabel.visibility = View.GONE
+            }
         } else {
             doneButton.visibility = View.GONE
             dateLabel.visibility = View.GONE
+            infoLabel.visibility = View.GONE
         }
     }
 

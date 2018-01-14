@@ -18,23 +18,30 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:padding="10dp"
     tools:ignore="UseCompoundDrawables">
 
     <ImageView
         android:id="@+id/image"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:contentDescription="@null" />
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="@null"
+        android:layout_marginLeft="10dp" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#7effffff"
         android:ellipsize="end"
         android:maxLines="1"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        android:paddingEnd="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         tools:text="Liftim code" />
 </LinearLayout>

@@ -140,7 +140,9 @@ class EditInfoActivity : BaseActivity() {
 
     fun createElementFromCurrentState(): Info {
         var linkUrl = linkUrlInput.text.toString()
-        if (!linkUrl.startsWith("http://") || !linkUrl.startsWith("https://")) {
+        if (linkUrl.isNotEmpty()
+                && !linkUrl.startsWith("http://")
+                && !linkUrl.startsWith("https://")) {
             linkUrl = "http://$linkUrl"
         }
         val result = Info()
@@ -152,7 +154,12 @@ class EditInfoActivity : BaseActivity() {
             weight = 0
             date = this@EditInfoActivity.date?.toString("yyyy/MM/dd")
             time = this@EditInfoActivity.time?.toString("HH:mm")
-            link = linkUrl
+            link =
+                    if (linkUrl.isBlank()) {
+                        null
+                    } else {
+                        linkUrl
+                    }
             removable = true
             type = Info.TYPE_LOCAL_MEMO
             this.addedBy = Info.LOCAL

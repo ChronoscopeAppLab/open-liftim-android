@@ -109,6 +109,21 @@
             android:background="@android:color/darker_gray" />
 
         <EditText
+            android:id="@+id/link_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:hint="@string/link_url"
+            android:inputType="textUri"
+            android:maxLines="1"
+            android:padding="8dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <EditText
             android:id="@+id/detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

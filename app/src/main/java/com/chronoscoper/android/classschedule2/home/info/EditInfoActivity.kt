@@ -39,6 +39,7 @@ class EditInfoActivity : BaseActivity() {
     private val liftimCodeImage by bindView<ImageView>(R.id.liftim_code_image)
     private val liftimCodeLabel by bindView<TextView>(R.id.liftim_code)
     private val titleInput by bindView<EditText>(R.id.title)
+    private val linkUrlInput by bindView<EditText>(R.id.link_url)
     private val detailInput by bindView<EditText>(R.id.detail)
     private val dateLabel by bindView<TextView>(R.id.date)
     private val timeLabel by bindView<TextView>(R.id.time)
@@ -138,6 +139,10 @@ class EditInfoActivity : BaseActivity() {
     }
 
     fun createElementFromCurrentState(): Info {
+        var linkUrl = linkUrlInput.text.toString()
+        if (!linkUrl.startsWith("http://") || !linkUrl.startsWith("https://")) {
+            linkUrl = "http://$linkUrl"
+        }
         val result = Info()
         result.apply {
             liftimCode = LiftimSyncEnvironment.getLiftimCode()
@@ -147,6 +152,7 @@ class EditInfoActivity : BaseActivity() {
             weight = 0
             date = this@EditInfoActivity.date?.toString("yyyy/MM/dd")
             time = this@EditInfoActivity.time?.toString("HH:mm")
+            link = linkUrl
             removable = true
             type = Info.TYPE_LOCAL_MEMO
             this.addedBy = Info.LOCAL

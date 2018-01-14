@@ -17,20 +17,16 @@ package com.chronoscoper.android.classschedule2.task
 
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 import okhttp3.Request
-import java.io.IOException
 
 fun enforceValidToken(token: String) {
-    try {
-        val response = LiftimSyncEnvironment.getOkHttpClient()
-                .newCall(Request.Builder()
-                        .url(LiftimSyncEnvironment.getApiUrl(
-                                "token_availability_check?token=$token"))
-                        .build())
-                .execute()
-        if (!response.isSuccessful) {
-            throw InvalidTokenException()
-        }
-    } catch (e: IOException) {
+    val response = LiftimSyncEnvironment.getOkHttpClient()
+            .newCall(Request.Builder()
+                    .url(LiftimSyncEnvironment.getApiUrl(
+                            "token_availability_check?token=$token"))
+                    .build())
+            .execute()
+    println("code: ${response.code()}")
+    if (!response.isSuccessful) {
         throw InvalidTokenException()
     }
 }

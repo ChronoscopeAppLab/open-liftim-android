@@ -32,6 +32,7 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
+import com.chronoscoper.android.classschedule2.home.timetable.ViewTimetableActivity
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 import com.chronoscoper.android.classschedule2.task.InfoLoader
@@ -250,7 +251,7 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
                     setOnMenuItemClickListener {
                         when (it.itemId) {
                             R.id.item_open -> {
-                                //TODO
+                                ViewInfoActivity.open(context, infoData.id)
                             }
                             R.id.item_open_link -> {
                                 openInCustomTab(context, infoData.link!!)
@@ -329,7 +330,7 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
                     setOnMenuItemClickListener {
                         when (it.itemId) {
                             R.id.item_open -> {
-                                //TODO
+                                ViewTimetableActivity.open(context, infoData.id)
                             }
                             R.id.item_edit -> {
                                 EditTimetableActivity.open(context, infoData.id)

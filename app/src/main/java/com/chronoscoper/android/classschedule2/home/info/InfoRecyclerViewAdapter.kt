@@ -31,6 +31,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 import com.chronoscoper.android.classschedule2.task.InfoLoader
@@ -307,6 +308,38 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
             val typeView = parent.findViewById<TextView>(R.id.type)
             typeView.background.setColorFilter(-0xff6978, PorterDuff.Mode.SRC_IN)
             typeView.text = context.getString(R.string.class_schedule)
+            val deleteButton = parent.findViewById<View>(R.id.delete)
+            deleteButton.setOnClickListener {
+                LiftimSyncEnvironment.getOrmaDatabase().updateInfo()
+                        .deleted(true)
+                        .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                        .idEq(infoData.id)
+                        .execute()
+                data.remove(infoData)
+                notifyItemRemoved(adapterPosition)
+            }
+            val moreButton = parent.findViewById<View>(R.id.more)
+            moreButton.setOnClickListener {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    PopupMenu(context, it, Gravity.TOP or Gravity.END)
+                } else {
+                    PopupMenu(context, it)
+                }.apply {
+                    inflate(R.menu.info_item_action_no_link)
+                    setOnMenuItemClickListener {
+                        when (it.itemId) {
+                            R.id.item_open -> {
+                                //TODO
+                            }
+                            R.id.item_edit -> {
+                                EditTimetableActivity.open(context, infoData.id)
+                            }
+                        }
+                        true
+                    }
+                    show()
+                }
+            }
         }
     }
 }

@@ -16,6 +16,8 @@
 package com.chronoscoper.android.classschedule2.home.timetable
 
 import android.app.DatePickerDialog
+import android.content.Context
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -44,6 +46,14 @@ import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
 
 class EditTimetableActivity : BaseActivity() {
+    companion object {
+        private const val ID = "source_id"
+        fun open(context: Context, id: String) {
+            context.startActivity(Intent(context, EditTimetableActivity::class.java)
+                    .putExtra(ID, id))
+        }
+    }
+
     private val liftimCodeImage by bindView<ImageView>(R.id.liftim_code_image)
     private val liftimCodeLabel by bindView<TextView>(R.id.liftim_code)
     private val dateLabel by bindView<TextView>(R.id.date)
@@ -76,20 +86,15 @@ class EditTimetableActivity : BaseActivity() {
                 ?: kotlin.run { finish(); return }
         liftimCodeLabel.text = liftimCodeInfo.name
         isManager = liftimCodeInfo.isManager
-        val latest = LiftimSyncEnvironment.getOrmaDatabase().selectFromInfo()
-                .liftimCodeEq(liftimCode)
-                .typeEq(Info.TYPE_TIMETABLE)
-                .orderByDateAsc()
-                .firstOrNull()
-        if (latest == null) {
+        val target = obtainTargetElement()
+        if (target == null) {
             date = DateTime.now(DateTimeZone.getDefault()).plusDays(1)
         } else {
-            date = DateTime.parse(latest.date, DateTimeFormat.forPattern("yyyy/MM/dd"))
-            if (latest.detail != null) {
-                info.setText(latest.detail)
+            date = DateTime.parse(target.date, DateTimeFormat.forPattern("yyyy/MM/dd"))
+            if (target.detail != null) {
+                info.setText(target.detail)
             }
         }
-        id = latest?.id
         dateLabel.text = date!!.toString(DateTimeFormat.fullDate())
         dateLabel.setOnClickListener {
             DatePickerDialog(this,
@@ -98,9 +103,9 @@ class EditTimetableActivity : BaseActivity() {
                         dateLabel.text = date!!.toString(DateTimeFormat.fullDate())
                     }, date!!.year, date!!.monthOfYear - 1, date!!.dayOfMonth).show()
         }
-        if (latest?.timetable != null) {
+        if (target?.timetable != null) {
             classList.adapter = ClassAdapter(this, LiftimSyncEnvironment.getGson()
-                    .fromJson(latest.timetable, InfoRemoteModel.Timetable::class.java))
+                    .fromJson(target.timetable, InfoRemoteModel.Timetable::class.java))
         } else {
             classList.adapter = ClassAdapter(this, null)
         }
@@ -108,6 +113,26 @@ class EditTimetableActivity : BaseActivity() {
                 DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         fab.setOnClickListener {
             ClassEditorDialog().show(supportFragmentManager, null)
+        }
+    }
+
+    private fun obtainTargetElement(): Info? {
+        val specified = intent.getStringExtra(ID)
+        if (specified == null) {
+            return LiftimSyncEnvironment.getOrmaDatabase().selectFromInfo()
+                    .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                    .typeEq(Info.TYPE_TIMETABLE)
+                    .orderByDateAsc()
+                    .firstOrNull()
+        } else {
+            return LiftimSyncEnvironment.getOrmaDatabase().selectFromInfo()
+                    .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                    .typeEq(Info.TYPE_TIMETABLE)
+                    .idEq(specified)
+                    .firstOrNull()
+                    ?.apply {
+                        this@EditTimetableActivity.id = id
+                    }
         }
     }
 

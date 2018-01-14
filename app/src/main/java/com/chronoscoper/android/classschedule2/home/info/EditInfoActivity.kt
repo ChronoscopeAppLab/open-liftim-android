@@ -17,6 +17,8 @@ package com.chronoscoper.android.classschedule2.home.info
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
@@ -36,6 +38,14 @@ import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
 class EditInfoActivity : BaseActivity() {
+    companion object {
+        private const val ID = "source_id"
+        fun open(context: Context, sourceId: String) {
+            context.startActivity(Intent(context, EditInfoActivity::class.java)
+                    .putExtra(ID, sourceId))
+        }
+    }
+
     private val liftimCodeImage by bindView<ImageView>(R.id.liftim_code_image)
     private val liftimCodeLabel by bindView<TextView>(R.id.liftim_code)
     private val titleInput by bindView<EditText>(R.id.title)
@@ -54,6 +64,12 @@ class EditInfoActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_info)
+
+        val id = intent.getStringExtra(ID)
+        if (id != null) {
+            sourceId = id
+            initWithSpecifiedId(id)
+        }
 
         val liftimCode = LiftimSyncEnvironment.getLiftimCode()
         Glide.with(this)
@@ -86,6 +102,32 @@ class EditInfoActivity : BaseActivity() {
                         this.time = selectedTime
                         timeLabel.text = selectedTime.toString(DateTimeFormat.shortTime())
                     }, time.hourOfDay, time.minuteOfHour, true).show()
+        }
+    }
+
+    private fun initWithSpecifiedId(id: String) {
+        val item = LiftimSyncEnvironment.getOrmaDatabase().selectFromInfo()
+                .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                .idEq(id)
+                .firstOrNull() ?: kotlin.run { finish(); return }
+        titleInput.setText(item.title ?: "")
+        detailInput.setText(item.detail ?: "")
+        linkUrlInput.setText(item.link ?: "")
+        val date = item.date
+        if (date != null) {
+            try {
+                this.date = DateTime.parse(date, DateTimeFormat.forPattern("yyyy/MM/dd"))
+                dateLabel.text = this.date!!.toString(DateTimeFormat.fullDate())
+            } catch (ignore: Exception) {
+            }
+        }
+        val time = item.time
+        if (time != null) {
+            try {
+                this.time = DateTime.parse(time, DateTimeFormat.forPattern("HH:mm"))
+                timeLabel.text = this.time!!.toString(DateTimeFormat.shortTime())
+            } catch (ignore: Exception) {
+            }
         }
     }
 

@@ -255,7 +255,7 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
                                 openInCustomTab(context, infoData.link!!)
                             }
                             R.id.item_edit -> {
-                                //TODO
+                                EditInfoActivity.open(context, infoData.id)
                             }
                         }
                         true

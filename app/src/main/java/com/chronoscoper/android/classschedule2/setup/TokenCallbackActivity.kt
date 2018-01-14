@@ -15,12 +15,12 @@
  */
 package com.chronoscoper.android.classschedule2.setup
 
+import android.content.Intent
 import android.os.Bundle
-import android.os.SystemClock
 import android.preference.PreferenceManager
-import android.widget.Toast
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.home.HomeActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 import com.chronoscoper.android.classschedule2.task.*
 import io.reactivex.Flowable
@@ -30,7 +30,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subscribers.DisposableSubscriber
-import okhttp3.Request
 import java.io.IOException
 
 class TokenCallbackActivity : BaseActivity() {
@@ -68,7 +67,14 @@ class TokenCallbackActivity : BaseActivity() {
                         .putString(getString(R.string.p_account_token), token)
                         .apply()
                 LiftimSyncEnvironment.setToken(token)
-                executeInitialSync()
+                if (sharedPrefs.getString(getString(R.string.p_account_name), null) == null) {
+                    executeInitialSync()
+                } else {
+                    finish()
+                    startActivity(Intent(this@TokenCallbackActivity,
+                            HomeActivity::class.java)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+                }
             }
         }
         Flowable.defer { Flowable.just(enforceValidToken(token)) }
@@ -146,23 +152,4 @@ class TokenCallbackActivity : BaseActivity() {
                 .find { it.startsWith("token=") }
                 ?.removePrefix("token=")
     }
-
-    private fun enforceValidToken(token: String) {
-        try {
-            val url = PreferenceManager.getDefaultSharedPreferences(this)
-                    .getString(getString(R.string.p_sync_url), "")
-            val response = LiftimSyncEnvironment.getOkHttpClient()
-                    .newCall(Request.Builder()
-                            .url("${url}api/v1/token_availability_check?token=$token")
-                            .build())
-                    .execute()
-            if (!response.isSuccessful) {
-                throw InvalidTokenException()
-            }
-        } catch (e: IOException) {
-            throw InvalidTokenException()
-        }
-    }
-
-    private class InvalidTokenException : Exception()
 }

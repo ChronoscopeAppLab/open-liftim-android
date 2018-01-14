@@ -35,6 +35,7 @@ import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 import com.chronoscoper.android.classschedule2.task.InfoLoader
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
+import com.chronoscoper.android.classschedule2.util.openInCustomTab
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -239,11 +240,19 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
                 } else {
                     PopupMenu(context, it)
                 }.apply {
-                    inflate(R.menu.info_item_action)
+                    inflate(
+                            if (!infoData.link.isNullOrEmpty()) {
+                                R.menu.info_item_action
+                            } else {
+                                R.menu.info_item_action_no_link
+                            })
                     setOnMenuItemClickListener {
                         when (it.itemId) {
                             R.id.item_open -> {
                                 //TODO
+                            }
+                            R.id.item_open_link -> {
+                                openInCustomTab(context, infoData.link!!)
                             }
                             R.id.item_edit -> {
                                 //TODO

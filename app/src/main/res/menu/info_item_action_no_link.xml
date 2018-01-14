@@ -16,9 +16,6 @@
         android:id="@+id/item_open"
         android:title="@string/open" />
     <item
-        android:id="@+id/item_open_link"
-        android:title="@string/open_link" />
-    <item
         android:id="@+id/item_edit"
         android:title="@string/edit" />
 </menu>

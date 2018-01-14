@@ -35,7 +35,7 @@
         app:layout_constraintEnd_toEndOf="@+id/barrier"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Title"/>
+        tools:text="Title" />
 
     <TextView
         android:id="@+id/detail"
@@ -52,22 +52,7 @@
         app:layout_constraintEnd_toEndOf="@+id/barrier"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"
-        tools:text="Detail"/>
-
-    <View
-        android:id="@+id/timetable"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/type"
-        app:layout_constraintEnd_toEndOf="@+id/barrier"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail"
-        app:layout_constraintVertical_bias="1.0"/>
+        tools:text="Detail" />
 
     <TextView
         android:id="@+id/type"
@@ -76,6 +61,7 @@
         android:layout_margin="2dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/tag_background"
         android:paddingEnd="5dp"
         android:paddingLeft="10dp"
@@ -86,7 +72,8 @@
         app:layout_constraintEnd_toEndOf="@+id/barrier"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="Category"/>
+        app:layout_constraintTop_toBottomOf="@+id/detail"
+        tools:text="Category" />
 
     <ImageButton
         android:id="@+id/delete"
@@ -101,7 +88,7 @@
         app:layout_constraintEnd_toStartOf="@+id/more"
         app:layout_constraintStart_toEndOf="@+id/barrier"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_delete"/>
+        app:srcCompat="@drawable/ic_delete" />
 
     <ImageButton
         android:id="@+id/more"
@@ -115,7 +102,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_more_vert"/>
+        app:srcCompat="@drawable/ic_more_vert" />
 
     <android.support.constraint.Barrier
         android:id="@+id/barrier"
@@ -126,6 +113,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

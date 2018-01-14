@@ -299,9 +299,5 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
             typeView.background.setColorFilter(-0xff6978, PorterDuff.Mode.SRC_IN)
             typeView.text = context.getString(R.string.class_schedule)
         }
-
-        private fun buildClassScheduleText(json: String) {
-
-        }
     }
 }

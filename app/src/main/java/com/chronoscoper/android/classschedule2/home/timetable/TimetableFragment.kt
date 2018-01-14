@@ -35,6 +35,17 @@ import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import kotterknife.bindView
 
 class TimetableFragment : Fragment() {
+    companion object {
+        private const val ID = "target_id"
+        fun obtain(id: String): TimetableFragment {
+            val result = TimetableFragment()
+            result.arguments = Bundle().apply {
+                putString(ID, id)
+            }
+            return result
+        }
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater?,
             container: ViewGroup?,
@@ -61,12 +72,7 @@ class TimetableFragment : Fragment() {
     private var currentItemId = ""
 
     private fun initTimetable() {
-        val timetable = LiftimSyncEnvironment.getOrmaDatabase()
-                .selectFromInfo().typeEq(Info.TYPE_TIMETABLE)
-                .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
-                .deletedEq(false)
-                .orderByDateAsc()
-                .firstOrNull()
+        val timetable = obtainTargetElement()
         timetableList.adapter = TimetableAdapter(context, timetable)
         timetableList.addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
@@ -78,13 +84,31 @@ class TimetableFragment : Fragment() {
             if (!timetable.detail.isNullOrEmpty()) {
                 infoLabel.visibility = View.VISIBLE
                 infoLabel.text = timetable.detail
-            }else{
+            } else {
                 infoLabel.visibility = View.GONE
             }
         } else {
             doneButton.visibility = View.GONE
             dateLabel.visibility = View.GONE
             infoLabel.visibility = View.GONE
+        }
+    }
+
+    private fun obtainTargetElement(): Info? {
+        val specified = arguments?.getString(ID)
+        return if (specified == null) {
+            LiftimSyncEnvironment.getOrmaDatabase()
+                    .selectFromInfo().typeEq(Info.TYPE_TIMETABLE)
+                    .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                    .deletedEq(false)
+                    .orderByDateAsc()
+                    .firstOrNull()
+        } else {
+            LiftimSyncEnvironment.getOrmaDatabase()
+                    .selectFromInfo().typeEq(Info.TYPE_TIMETABLE)
+                    .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                    .idEq(specified)
+                    .firstOrNull()
         }
     }
 

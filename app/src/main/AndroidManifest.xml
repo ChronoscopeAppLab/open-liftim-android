@@ -81,6 +81,12 @@
             android:label="@string/edit_weekly"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".LoginAgainActivity" />
+        <activity
+            android:name=".home.timetable.ViewTimetableActivity"
+            android:label="@string/timetable" />
+        <activity
+            android:name=".home.info.ViewInfoActivity"
+            android:label="@string/info" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

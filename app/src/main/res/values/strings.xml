@@ -90,4 +90,5 @@
     <string name="change_min_index">Change class start time</string>
     <string name="accessibility_increase">Increase</string>
     <string name="accessibility_decrease">Decrease</string>
+    <string name="not_implemented_message">Sorry. This function is currently not unavailable  Please wait until next version released</string>
 </resources>

@@ -15,6 +15,13 @@
  */
 package com.chronoscoper.android.classschedule2.weekly
 
+import android.os.Bundle
 import com.chronoscoper.android.classschedule2.BaseActivity
+import com.chronoscoper.android.classschedule2.R
 
-class EditWeeklyActivity : BaseActivity()
+class EditWeeklyActivity : BaseActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_edit_weekly)
+    }
+}

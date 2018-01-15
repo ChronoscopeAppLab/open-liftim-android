@@ -16,10 +16,7 @@
 package com.chronoscoper.android.classschedule2.task
 
 import com.chronoscoper.android.classschedule2.sync.Info
-import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
-import retrofit2.Response
-import java.io.IOException
 
 class InfoLoader(private val liftimCode: Long, private val token: String) : Runnable {
     companion object {

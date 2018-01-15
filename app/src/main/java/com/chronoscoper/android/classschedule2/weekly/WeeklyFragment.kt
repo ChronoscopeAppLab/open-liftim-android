@@ -106,7 +106,7 @@ class WeeklyFragment : Fragment() {
                 super.onActivityCreated(savedInstanceState)
 
                 list.adapter = DayAdapter(context, arguments.getInt(DAY_OF_WEEK))
-                list.addItemDecoration(DividerItemDecoration(context,DividerItemDecoration.VERTICAL))
+                list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
                 list.addItemDecoration(BottomMarginItemDecoration())
             }
 

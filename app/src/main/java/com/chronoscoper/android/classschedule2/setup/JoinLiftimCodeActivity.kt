@@ -22,7 +22,11 @@ import android.widget.TextView
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
-import com.chronoscoper.android.classschedule2.task.*
+import com.chronoscoper.android.classschedule2.task.InfoLoader
+import com.chronoscoper.android.classschedule2.task.JoinLiftimCodeTask
+import com.chronoscoper.android.classschedule2.task.LiftimCodeInfoLoader
+import com.chronoscoper.android.classschedule2.task.SubjectLoader
+import com.chronoscoper.android.classschedule2.task.WeeklyLoader
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

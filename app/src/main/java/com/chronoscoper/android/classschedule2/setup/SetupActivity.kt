@@ -15,13 +15,9 @@
  */
 package com.chronoscoper.android.classschedule2.setup
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import com.chronoscoper.android.classschedule2.BaseActivity
-import com.chronoscoper.android.classschedule2.R
 
 class SetupActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

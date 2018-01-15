@@ -17,9 +17,9 @@ class ViewTimetableActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            val id=intent.getStringExtra(ID)?:kotlin.run { finish(); return }
+            val id = intent.getStringExtra(ID) ?: kotlin.run { finish(); return }
             supportFragmentManager.beginTransaction()
-                    .replace(android.R.id.content,TimetableFragment.obtain(id))
+                    .replace(android.R.id.content, TimetableFragment.obtain(id))
                     .commit()
         }
     }

@@ -18,7 +18,7 @@ package com.chronoscoper.android.classschedule2.util
 import com.chronoscoper.android.classschedule2.BuildConfig
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
-import java.util.*
+import java.util.StringTokenizer
 
 object DateTimeUtils {
     fun getParsedDateExpression(date: String?): String {

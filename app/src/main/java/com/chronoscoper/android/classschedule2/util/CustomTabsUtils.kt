@@ -23,8 +23,8 @@ import com.chronoscoper.android.classschedule2.R
 
 fun openInCustomTab(context: Context, url: String) {
     CustomTabsIntent.Builder()
-            .setToolbarColor(ContextCompat.getColor(context,R.color.colorPrimary))
-            .setSecondaryToolbarColor(ContextCompat.getColor(context,R.color.colorPrimaryDark))
+            .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
+            .setSecondaryToolbarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
             .build()
             .launchUrl(context, Uri.parse(url))
 }

@@ -87,4 +87,7 @@
     <string name="open_link">Open link</string>
     <string name="login_message">To use Liftim, please login,  By logging in, you can get a space to share timetable or information with your classmates.</string>
     <string name="login_message_extra">If you don\'t have account, we\'ll create account for you automatically.</string>
+    <string name="change_min_index">Change class start time</string>
+    <string name="accessibility_increase">Increase</string>
+    <string name="accessibility_decrease">Decrease</string>
 </resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:minWidth="150dp"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:id="@+id/increase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/clickable_background_black"
+        android:contentDescription="@string/accessibility_increase"
+        android:padding="5dp"
+        app:srcCompat="@drawable/ic_increase"/>
+
+    <EditText
+        android:id="@+id/start_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="numberSigned"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+    <ImageButton
+        android:id="@+id/decrease"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/clickable_background_black"
+        android:contentDescription="@string/accessibility_decrease"
+        android:padding="5dp"
+        app:srcCompat="@drawable/ic_decrease"/>
+</LinearLayout>

@@ -23,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.view.BottomMarginItemDecoration
 import kotterknife.bindView
 
 class InfoFragment : Fragment() {
@@ -40,6 +41,7 @@ class InfoFragment : Fragment() {
 
         list.apply {
             adapter = InfoRecyclerViewAdapter(context)
+            addItemDecoration(BottomMarginItemDecoration())
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
     }

@@ -31,6 +31,7 @@ import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
+import com.chronoscoper.android.classschedule2.view.BottomMarginItemDecoration
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import kotterknife.bindView
 
@@ -76,6 +77,7 @@ class TimetableFragment : Fragment() {
         timetableList.adapter = TimetableAdapter(context, timetable)
         timetableList.addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        timetableList.addItemDecoration(BottomMarginItemDecoration())
         if (timetable != null) {
             dateLabel.text = DateTimeUtils.getParsedDateExpression(timetable.date)
             currentItemId = timetable.id

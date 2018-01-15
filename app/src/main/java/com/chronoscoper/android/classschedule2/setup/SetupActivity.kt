@@ -28,7 +28,8 @@ class SetupActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (fragments.isEmpty()) {
-            complete()
+            finish()
+            return
         }
 
         if (savedInstanceState == null) {
@@ -36,22 +37,10 @@ class SetupActivity : BaseActivity() {
         }
     }
 
-    private fun complete() {
-        sharedPrefs.edit()
-                .putBoolean(getString(R.string.p_setup_completed), true)
-                .apply()
-        val url = sharedPrefs.getString(getString(R.string.p_sync_url), "")
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("${url}api/v1/auth"))
-        startActivity(intent)
-        finish()
-    }
-
     private val fragments by lazy {
-        mutableListOf(ServerSettingsFragment())
-    }
-
-    private val sharedPrefs by lazy {
-        PreferenceManager.getDefaultSharedPreferences(this)
+        mutableListOf(
+                ServerSettingsFragment(),
+                LoginFragment())
     }
 
     private fun replaceFragment(target: Fragment) {
@@ -63,7 +52,6 @@ class SetupActivity : BaseActivity() {
     fun next() {
         fragments.removeAt(0)
         if (fragments.isEmpty()) {
-            complete()
             return
         }
         replaceFragment(fragments.first())

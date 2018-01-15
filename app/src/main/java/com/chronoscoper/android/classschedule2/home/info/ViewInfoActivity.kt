@@ -28,8 +28,6 @@ import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 import com.chronoscoper.android.classschedule2.util.openInCustomTab
 import kotterknife.bindView
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
 
 class ViewInfoActivity : BaseActivity() {
     companion object {

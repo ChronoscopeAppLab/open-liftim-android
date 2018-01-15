@@ -16,7 +16,6 @@
 package com.chronoscoper.android.classschedule2.task
 
 import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
-import java.io.IOException
 
 class WeeklyLoader(private val liftimCode: Long, private val token: String) : Runnable {
     override fun run() {

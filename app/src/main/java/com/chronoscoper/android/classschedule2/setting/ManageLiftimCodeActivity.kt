@@ -19,12 +19,12 @@ import android.os.Bundle
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.setup.LiftimCodeChooserFragment
 
-class ManageLiftimCodeActivity :BaseActivity() {
+class ManageLiftimCodeActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(android.R.id.content,LiftimCodeChooserFragment())
+                    .replace(android.R.id.content, LiftimCodeChooserFragment())
                     .commit()
         }
     }

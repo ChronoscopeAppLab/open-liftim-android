@@ -25,11 +25,10 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.chronoscoper.android.classschedule2.BaseActivity
@@ -174,6 +173,9 @@ class EditTimetableActivity : BaseActivity() {
                 registerRemote(createElementFromCurrentState())
                 finish()
             }
+            R.id.options_change_min_indx -> {
+                ChangeMinIndexDialog().show(supportFragmentManager, null)
+            }
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -212,7 +214,11 @@ class EditTimetableActivity : BaseActivity() {
             initialItem: InfoRemoteModel.Timetable?)
         : RecyclerView.Adapter<ClassAdapter.DragViewHolder>() {
         val data = mutableListOf<InfoRemoteModel.SubjectElement>()
-        private var minIndex = 1
+        var minIndex = 1
+            set (value) {
+                field = value
+                notifyDataSetChanged()
+            }
 
         init {
             if (initialItem != null) {
@@ -357,5 +363,57 @@ class EditTimetableActivity : BaseActivity() {
                 dismiss()
             }
         }
+    }
+
+    class ChangeMinIndexDialog : DialogFragment() {
+        override fun onCreateView(
+                inflater: LayoutInflater?,
+                container: ViewGroup?,
+                savedInstanceState: Bundle?): View? =
+                inflater?.inflate(R.layout.fragment_change_min_index, container, false)
+
+        private val startTime by bindView<EditText>(R.id.start_time)
+
+        private val increase by bindView<ImageButton>(R.id.increase)
+        private val decrease by bindView<ImageButton>(R.id.decrease)
+
+        private val adapter by lazy {
+            (activity as EditTimetableActivity)
+                    .classList.adapter as ClassAdapter
+        }
+
+        override fun onActivityCreated(savedInstanceState: Bundle?) {
+            super.onActivityCreated(savedInstanceState)
+            notifyStartTimeChanged()
+
+            increase.setOnClickListener {
+                adapter.minIndex += 1
+                notifyStartTimeChanged()
+            }
+
+            decrease.setOnClickListener {
+                adapter.minIndex -= 1
+                notifyStartTimeChanged()
+            }
+
+            startTime.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) = Unit
+
+                override fun beforeTextChanged(s: CharSequence?,
+                                               start: Int, count: Int, after: Int) = Unit
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (s != null) {
+                        try {
+                            adapter.minIndex = Integer.parseInt(s.toString())
+                        } catch (ignore: NumberFormatException) {
+                        }
+                    }
+                }
+            })
+        }
+
+        private fun notifyStartTimeChanged() =
+                startTime.setText(adapter.minIndex.toString())
     }
 }

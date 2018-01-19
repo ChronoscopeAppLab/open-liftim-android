@@ -21,7 +21,7 @@ import android.widget.EditText
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.InfoLoader
 import com.chronoscoper.android.classschedule2.task.JoinLiftimCodeTask
 import com.chronoscoper.android.classschedule2.task.LiftimCodeInfoLoader
@@ -71,7 +71,7 @@ class JoinLiftimCodeActivity : BaseActivity() {
                 }
             }
             Observable.create<Long> {
-                val liftimCode = JoinLiftimCodeTask(LiftimSyncEnvironment.getToken())
+                val liftimCode = JoinLiftimCodeTask(LiftimContext.getToken())
                         .joinAndObtainLiftimCode(invitationNumber)
                 if (liftimCode == null) {
                     it.onError(InvalidInvitationNumException())
@@ -79,7 +79,7 @@ class JoinLiftimCodeActivity : BaseActivity() {
                 } else {
                     it.onNext(liftimCode)
                 }
-                val token = LiftimSyncEnvironment.getToken()
+                val token = LiftimContext.getToken()
                 try {
                     LiftimCodeInfoLoader(liftimCode, token, false).run()
                     obtainAllDataFor(liftimCode, token)

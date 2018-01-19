@@ -23,7 +23,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import com.chronoscoper.android.classschedule2.R
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import kotterknife.bindView
 
 class ServerSettingsFragment : BaseSetupFragment() {
@@ -50,7 +50,7 @@ class ServerSettingsFragment : BaseSetupFragment() {
                     .putString(getString(R.string.p_sync_url), url)
                     .apply()
 
-            LiftimSyncEnvironment.init(context, url, 0, "")
+            LiftimContext.init(context, url, 0, "")
 
             nextStep()
         }

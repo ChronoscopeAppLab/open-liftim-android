@@ -15,14 +15,14 @@
  */
 package com.chronoscoper.android.classschedule2.task
 
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 
 class LiftimCodeInfoLoader(private val liftimCode: Long,
                            private val token: String,
                            private val isManager: Boolean) : Runnable {
 
     override fun run() {
-        val response = LiftimSyncEnvironment.getLiftimService()
+        val response = LiftimContext.getLiftimService()
                 .getLiftimCodeInfo(liftimCode, token)
                 .execute()
         if (!response.isSuccessful) {
@@ -32,6 +32,6 @@ class LiftimCodeInfoLoader(private val liftimCode: Long,
         liftimCodeInfo.liftimCode = liftimCode
         liftimCodeInfo.isManager = isManager
 
-        LiftimSyncEnvironment.getOrmaDatabase().insertIntoLiftimCodeInfo(liftimCodeInfo)
+        LiftimContext.getOrmaDatabase().insertIntoLiftimCodeInfo(liftimCodeInfo)
     }
 }

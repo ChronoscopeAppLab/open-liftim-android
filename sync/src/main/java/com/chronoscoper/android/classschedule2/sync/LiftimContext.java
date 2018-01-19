@@ -27,7 +27,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public final class LiftimSyncEnvironment {
+public final class LiftimContext {
     private static OkHttpClient sOkHttpClient;
     private static LiftimService sLiftimService;
     private static Gson sGson;

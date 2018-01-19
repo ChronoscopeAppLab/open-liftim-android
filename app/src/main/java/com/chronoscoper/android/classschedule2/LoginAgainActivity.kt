@@ -19,7 +19,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import kotterknife.bindView
 
 class LoginAgainActivity : BaseActivity() {
@@ -30,7 +30,7 @@ class LoginAgainActivity : BaseActivity() {
         setContentView(R.layout.activity_login_again)
         loginButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW,
-                    Uri.parse(LiftimSyncEnvironment.getApiUrl("auth")))
+                    Uri.parse(LiftimContext.getApiUrl("auth")))
             startActivity(intent)
             finish()
         }

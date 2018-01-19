@@ -16,7 +16,7 @@
 package com.chronoscoper.android.classschedule2.task
 
 import com.chronoscoper.android.classschedule2.sync.Info
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 
 class InfoLoader(private val liftimCode: Long, private val token: String) : Runnable {
     companion object {
@@ -28,19 +28,19 @@ class InfoLoader(private val liftimCode: Long, private val token: String) : Runn
     }
 
     override fun run() {
-        val response = LiftimSyncEnvironment.getLiftimService()
+        val response = LiftimContext.getLiftimService()
                 .getInfo(liftimCode, token, nextCursor)
                 .execute()
         if (!response.isSuccessful) {
             return
         }
         val info = response.body() ?: return
-        LiftimSyncEnvironment.getOrmaDatabase().updateInfo()
+        LiftimContext.getOrmaDatabase().updateInfo()
                 .liftimCodeEq(liftimCode).addedByEq(Info.REMOTE)
                 .remoteDeleted(true)
                 .execute()
         nextCursor = info.nextCursor
-        val db = LiftimSyncEnvironment.getOrmaDatabase()
+        val db = LiftimContext.getOrmaDatabase()
         val inserter = db.prepareInsertIntoInfo()
         info.info?.forEach {
             val base = db.selectFromInfo().liftimCodeEq(liftimCode).idEq(it.id).firstOrNull()

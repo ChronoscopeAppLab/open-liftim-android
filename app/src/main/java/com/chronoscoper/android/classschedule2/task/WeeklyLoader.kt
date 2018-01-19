@@ -15,23 +15,23 @@
  */
 package com.chronoscoper.android.classschedule2.task
 
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 
 class WeeklyLoader(private val liftimCode: Long, private val token: String) : Runnable {
     override fun run() {
-        val response = LiftimSyncEnvironment.getLiftimService()
+        val response = LiftimContext.getLiftimService()
                 .getWeekly(liftimCode, token).execute()
         if (!response.isSuccessful) return
         val data = response.body() ?: return
-        LiftimSyncEnvironment.getOrmaDatabase().deleteFromWeeklyItem()
+        LiftimContext.getOrmaDatabase().deleteFromWeeklyItem()
                 .liftimCodeEq(liftimCode)
                 .execute()
-        val inserter = LiftimSyncEnvironment.getOrmaDatabase().prepareInsertIntoWeeklyItem()
+        val inserter = LiftimContext.getOrmaDatabase().prepareInsertIntoWeeklyItem()
         data.forEach { item ->
             item.value.apply {
                 liftimCode = this@WeeklyLoader.liftimCode
                 dayOfWeek = item.key.toIntOrNull() ?: 0
-                serializedSubjects = LiftimSyncEnvironment.getGson().toJson(subjects)
+                serializedSubjects = LiftimContext.getGson().toJson(subjects)
             }
             if (item.value.dayOfWeek in 1..7) {
                 inserter.execute(item.value)

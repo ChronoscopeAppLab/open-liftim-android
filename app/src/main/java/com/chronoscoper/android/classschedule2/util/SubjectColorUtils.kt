@@ -16,13 +16,13 @@
 package com.chronoscoper.android.classschedule2.util
 
 import android.graphics.Color
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 
 fun obtainColorCorrespondsTo(subjectName: String): Int {
-    val colorName = LiftimSyncEnvironment.getOrmaDatabase().selectFromSubject()
-            .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+    val colorName = LiftimContext.getOrmaDatabase().selectFromSubject()
+            .liftimCodeEq(LiftimContext.getLiftimCode())
             .subjectEq(subjectName).firstOrNull()?.color ?: return 0xff999999.toInt()
-    val colorRRGGBB = LiftimSyncEnvironment.getOrmaDatabase().selectFromColorPalette()
+    val colorRRGGBB = LiftimContext.getOrmaDatabase().selectFromColorPalette()
             .nameEq(colorName)
             .firstOrNull()?.color ?: return 0xff999999.toInt()
     return try {

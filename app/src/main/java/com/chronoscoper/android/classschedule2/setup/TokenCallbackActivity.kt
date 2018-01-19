@@ -21,7 +21,7 @@ import android.preference.PreferenceManager
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.HomeActivity
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.AccountInfoLoader
 import com.chronoscoper.android.classschedule2.task.ColorPaletteLoader
 import com.chronoscoper.android.classschedule2.task.InfoLoader
@@ -72,7 +72,7 @@ class TokenCallbackActivity : BaseActivity() {
                 sharedPrefs.edit()
                         .putString(getString(R.string.p_account_token), token)
                         .apply()
-                LiftimSyncEnvironment.setToken(token)
+                LiftimContext.setToken(token)
                 if (sharedPrefs.getString(getString(R.string.p_account_name), null) == null) {
                     executeInitialSync()
                 } else {
@@ -109,7 +109,7 @@ class TokenCallbackActivity : BaseActivity() {
         }
 
         Observable.create<Unit> {
-            val token = LiftimSyncEnvironment.getToken()
+            val token = LiftimContext.getToken()
             val accountInfo = AccountInfoLoader(token)
                     .load()
                     ?: kotlin.run {

@@ -17,7 +17,7 @@ package com.chronoscoper.android.classschedule2
 
 import android.app.Application
 import android.preference.PreferenceManager
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.squareup.leakcanary.LeakCanary
 
 class LiftimApplication : Application() {
@@ -29,7 +29,7 @@ class LiftimApplication : Application() {
 
     fun initEnvironment() {
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
-        LiftimSyncEnvironment.init(
+        LiftimContext.init(
                 this, sharedPrefs.getString(getString(R.string.p_sync_url),
                 "http://example.com/"),
                 sharedPrefs.getLong(getString(R.string.p_default_liftim_code), 0),

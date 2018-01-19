@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import com.chronoscoper.android.classschedule2.home.HomeActivity
 import com.chronoscoper.android.classschedule2.setup.SetupActivity
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.InvalidTokenException
 import com.chronoscoper.android.classschedule2.task.TokenReloadTask
 import com.chronoscoper.android.classschedule2.task.enforceValidToken
@@ -73,7 +73,7 @@ class LauncherActivity : BaseActivity() {
         }
 
         Observable.create<Unit> {
-            enforceValidToken(LiftimSyncEnvironment.getToken())
+            enforceValidToken(LiftimContext.getToken())
             TokenReloadTask(this).run()
             it.onComplete()
         }

@@ -22,14 +22,14 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimCodeInfo
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 
 class LiftimCodePagerAdapter(fm: FragmentManager, private val context: Context) :
         FragmentPagerAdapter(fm) {
     val data = mutableListOf<LiftimCodeInfo>()
 
     init {
-        data.addAll(LiftimSyncEnvironment.getOrmaDatabase().selectFromLiftimCodeInfo())
+        data.addAll(LiftimContext.getOrmaDatabase().selectFromLiftimCodeInfo())
     }
 
     override fun getItem(position: Int): Fragment {

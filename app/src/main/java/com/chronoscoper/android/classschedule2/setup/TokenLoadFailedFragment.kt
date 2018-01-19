@@ -18,13 +18,13 @@ package com.chronoscoper.android.classschedule2.setup
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
 import kotterknife.bindView
 
 class TokenLoadFailedFragment : Fragment() {
@@ -38,9 +38,8 @@ class TokenLoadFailedFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         retryButton.setOnClickListener {
-            val url = PreferenceManager.getDefaultSharedPreferences(context)
-                    .getString(getString(R.string.p_sync_url), "")
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("${url}api/v1/auth"))
+            val intent = Intent(Intent.ACTION_VIEW,
+                    Uri.parse(LiftimSyncEnvironment.getApiUrl("auth")))
             startActivity(intent)
             activity.finish()
         }

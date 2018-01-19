@@ -24,7 +24,7 @@ import android.widget.TextView
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.Info
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 import com.chronoscoper.android.classschedule2.util.openInCustomTab
 import kotterknife.bindView
@@ -88,9 +88,9 @@ class ViewInfoActivity : BaseActivity() {
 
     private fun obtainSpecifiedElement(): Info? {
         val id = intent.getStringExtra(ID) ?: return null
-        return LiftimSyncEnvironment.getOrmaDatabase()
+        return LiftimContext.getOrmaDatabase()
                 .selectFromInfo()
-                .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                .liftimCodeEq(LiftimContext.getLiftimCode())
                 .idEq(id)
                 .firstOrNull()
     }

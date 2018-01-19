@@ -22,7 +22,7 @@ import android.os.IBinder
 import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
 import com.chronoscoper.android.classschedule2.R
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 
 class RegisterInfoService : Service() {
     companion object {
@@ -48,9 +48,9 @@ class RegisterInfoService : Service() {
                 }.build()
                 startForeground(1, notification)
                 try {
-                    LiftimSyncEnvironment.getLiftimService()
-                            .registerInfo(LiftimSyncEnvironment.getLiftimCode(),
-                                    LiftimSyncEnvironment.getToken(), content)
+                    LiftimContext.getLiftimService()
+                            .registerInfo(LiftimContext.getLiftimCode(),
+                                    LiftimContext.getToken(), content)
                             .execute()
                 } catch (e: Exception) {
                     e.printStackTrace()

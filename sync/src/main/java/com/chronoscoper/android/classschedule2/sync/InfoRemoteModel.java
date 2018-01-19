@@ -91,7 +91,7 @@ public class InfoRemoteModel {
 
         @Override
         public String toString() {
-            return LiftimSyncEnvironment.getGson().toJson(this);
+            return LiftimContext.getGson().toJson(this);
         }
     }
 

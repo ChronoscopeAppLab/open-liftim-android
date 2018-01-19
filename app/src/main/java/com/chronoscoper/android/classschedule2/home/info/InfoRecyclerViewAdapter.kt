@@ -34,7 +34,7 @@ import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
 import com.chronoscoper.android.classschedule2.home.timetable.ViewTimetableActivity
 import com.chronoscoper.android.classschedule2.sync.Info
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.InfoLoader
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 import com.chronoscoper.android.classschedule2.util.openInCustomTab
@@ -75,18 +75,18 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
     }
 
     open fun loadData(): Iterable<Info> =
-            LiftimSyncEnvironment.getOrmaDatabase().selectFromInfo()
-                    .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+            LiftimContext.getOrmaDatabase().selectFromInfo()
+                    .liftimCodeEq(LiftimContext.getLiftimCode())
                     .deletedEq(false)
 
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)
-        val liftimCode = LiftimSyncEnvironment.getLiftimCode()
+        val liftimCode = LiftimContext.getLiftimCode()
         InfoLoader.resetCursor()
         Flowable.defer {
             Flowable.just(
-                    InfoLoader(liftimCode, LiftimSyncEnvironment.getToken()).run())
+                    InfoLoader(liftimCode, LiftimContext.getToken()).run())
         }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -216,9 +216,9 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
                 removeButton.apply {
                     visibility = View.VISIBLE
                     setOnClickListener {
-                        LiftimSyncEnvironment.getOrmaDatabase().updateInfo()
+                        LiftimContext.getOrmaDatabase().updateInfo()
                                 .deleted(true)
-                                .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                                .liftimCodeEq(LiftimContext.getLiftimCode())
                                 .idEq(infoData.id)
                                 .execute()
                         data.remove(infoData)
@@ -311,9 +311,9 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
             typeView.text = context.getString(R.string.class_schedule)
             val deleteButton = parent.findViewById<View>(R.id.delete)
             deleteButton.setOnClickListener {
-                LiftimSyncEnvironment.getOrmaDatabase().updateInfo()
+                LiftimContext.getOrmaDatabase().updateInfo()
                         .deleted(true)
-                        .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                        .liftimCodeEq(LiftimContext.getLiftimCode())
                         .idEq(infoData.id)
                         .execute()
                 data.remove(infoData)

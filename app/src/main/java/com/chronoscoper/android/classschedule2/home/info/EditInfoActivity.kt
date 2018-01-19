@@ -39,7 +39,7 @@ import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.RegisterInfoService
 import kotterknife.bindView
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
@@ -80,14 +80,14 @@ class EditInfoActivity : BaseActivity() {
             initWithSpecifiedId(id)
         }
 
-        val liftimCode = LiftimSyncEnvironment.getLiftimCode()
+        val liftimCode = LiftimContext.getLiftimCode()
         Glide.with(this)
-                .load(LiftimSyncEnvironment.getApiUrl("liftim_code_image.png" +
+                .load(LiftimContext.getApiUrl("liftim_code_image.png" +
                         "?liftim_code=$liftimCode" +
-                        "&token=${LiftimSyncEnvironment.getToken()}"))
+                        "&token=${LiftimContext.getToken()}"))
                 .apply(RequestOptions.circleCropTransform())
                 .into(liftimCodeImage)
-        val liftimCodeInfo = LiftimSyncEnvironment.getOrmaDatabase()
+        val liftimCodeInfo = LiftimContext.getOrmaDatabase()
                 .selectFromLiftimCodeInfo().liftimCodeEq(liftimCode)
                 .firstOrNull()
                 ?: kotlin.run { finish(); return }
@@ -115,8 +115,8 @@ class EditInfoActivity : BaseActivity() {
     }
 
     private fun initWithSpecifiedId(id: String) {
-        val item = LiftimSyncEnvironment.getOrmaDatabase().selectFromInfo()
-                .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+        val item = LiftimContext.getOrmaDatabase().selectFromInfo()
+                .liftimCodeEq(LiftimContext.getLiftimCode())
                 .idEq(id)
                 .firstOrNull() ?: kotlin.run { finish(); return }
         titleInput.setText(item.title ?: "")
@@ -175,11 +175,11 @@ class EditInfoActivity : BaseActivity() {
     }
 
     private fun registerLocal() {
-        val db = LiftimSyncEnvironment.getOrmaDatabase()
+        val db = LiftimContext.getOrmaDatabase()
         val element = createElementFromCurrentState()
         val id = sourceId
         if (id != null) {
-            db.deleteFromInfo().liftimCodeEq(LiftimSyncEnvironment.getLiftimCode()).idEq(id)
+            db.deleteFromInfo().liftimCodeEq(LiftimContext.getLiftimCode()).idEq(id)
                     .execute()
             element.id = id
         } else {
@@ -198,7 +198,7 @@ class EditInfoActivity : BaseActivity() {
         }
         val result = Info()
         result.apply {
-            liftimCode = LiftimSyncEnvironment.getLiftimCode()
+            liftimCode = LiftimContext.getLiftimCode()
             id = sourceId
             title = titleInput.text.toString()
             detail = detailInput.text.toString()
@@ -252,7 +252,7 @@ class EditInfoActivity : BaseActivity() {
                     link = element.link
                     type = typeSpinner.selectedItemPosition
                     removable = removableSwitch.isChecked
-                    RegisterInfoService.start(context, LiftimSyncEnvironment.getGson()
+                    RegisterInfoService.start(context, LiftimContext.getGson()
                             .toJson(remoteFormatElement))
                 }
             }

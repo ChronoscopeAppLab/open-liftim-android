@@ -1,15 +1,15 @@
 package com.chronoscoper.android.classschedule2.task
 
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 
 class ColorPaletteLoader : Runnable {
     override fun run() {
-        val response = LiftimSyncEnvironment.getLiftimService().colorPalette.execute()
+        val response = LiftimContext.getLiftimService().colorPalette.execute()
         if (!response.isSuccessful) {
             return
         }
-        LiftimSyncEnvironment.getOrmaDatabase().deleteFromColorPalette().execute()
-        val inserter = LiftimSyncEnvironment.getOrmaDatabase().prepareInsertIntoColorPalette()
+        LiftimContext.getOrmaDatabase().deleteFromColorPalette().execute()
+        val inserter = LiftimContext.getOrmaDatabase().prepareInsertIntoColorPalette()
         response.body()?.forEach {
             inserter.execute(it)
         }

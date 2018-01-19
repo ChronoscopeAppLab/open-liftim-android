@@ -24,7 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.chronoscoper.android.classschedule2.R
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import kotterknife.bindView
 
 class LoginFragment : BaseSetupFragment() {
@@ -46,7 +46,7 @@ class LoginFragment : BaseSetupFragment() {
                     .putBoolean(getString(R.string.p_setup_completed), true)
                     .apply()
             val intent = Intent(Intent.ACTION_VIEW,
-                    Uri.parse(LiftimSyncEnvironment.getApiUrl("auth")))
+                    Uri.parse(LiftimContext.getApiUrl("auth")))
             startActivity(intent)
             activity.finish()
         }

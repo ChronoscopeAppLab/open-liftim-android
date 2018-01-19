@@ -15,11 +15,11 @@
  */
 package com.chronoscoper.android.classschedule2.task
 
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 
 class JoinLiftimCodeTask(private val token: String) {
     fun joinAndObtainLiftimCode(invitationNum: Int): Long? {
-        val response = LiftimSyncEnvironment.getLiftimService()
+        val response = LiftimContext.getLiftimService()
                 .joinLiftimCode(token, invitationNum).execute()
         if (!response.isSuccessful) {
             return null

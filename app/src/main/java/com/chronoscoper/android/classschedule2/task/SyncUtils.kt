@@ -15,13 +15,13 @@
  */
 package com.chronoscoper.android.classschedule2.task
 
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import okhttp3.Request
 
 fun enforceValidToken(token: String) {
-    val response = LiftimSyncEnvironment.getOkHttpClient()
+    val response = LiftimContext.getOkHttpClient()
             .newCall(Request.Builder()
-                    .url(LiftimSyncEnvironment.getApiUrl(
+                    .url(LiftimContext.getApiUrl(
                             "token_availability_check?token=$token"))
                     .build())
             .execute()

@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.info.InfoRecyclerViewAdapter
 import com.chronoscoper.android.classschedule2.sync.Info
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import kotterknife.bindView
 
 class ArchiveFragment : Fragment() {
@@ -31,8 +31,8 @@ class ArchiveFragment : Fragment() {
 
     private class Adapter(context: Context) : InfoRecyclerViewAdapter(context) {
         override fun loadData(): Iterable<Info> =
-                LiftimSyncEnvironment.getOrmaDatabase().selectFromInfo()
-                        .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                LiftimContext.getOrmaDatabase().selectFromInfo()
+                        .liftimCodeEq(LiftimContext.getLiftimCode())
                         .deletedEq(true)
     }
 }

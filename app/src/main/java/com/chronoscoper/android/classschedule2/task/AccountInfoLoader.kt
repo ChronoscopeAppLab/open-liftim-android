@@ -16,13 +16,13 @@
 package com.chronoscoper.android.classschedule2.task
 
 import com.chronoscoper.android.classschedule2.sync.AccountInfo
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import java.io.IOException
 
 class AccountInfoLoader(private val token: String) {
     fun load(): AccountInfo? {
         try {
-            val response = LiftimSyncEnvironment.getLiftimService()
+            val response = LiftimContext.getLiftimService()
                     .getAccountInfo(token).execute()
             if (response.isSuccessful) {
                 return response.body()

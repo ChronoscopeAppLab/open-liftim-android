@@ -44,7 +44,7 @@ import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.RegisterInfoService
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.view.BottomMarginItemDecoration
@@ -82,14 +82,14 @@ class EditTimetableActivity : BaseActivity() {
     private var id: String? = null
 
     private fun initialize() {
-        val liftimCode = LiftimSyncEnvironment.getLiftimCode()
+        val liftimCode = LiftimContext.getLiftimCode()
         Glide.with(this)
-                .load(LiftimSyncEnvironment.getApiUrl("liftim_code_image.png" +
+                .load(LiftimContext.getApiUrl("liftim_code_image.png" +
                         "?liftim_code=$liftimCode" +
-                        "&token=${LiftimSyncEnvironment.getToken()}"))
+                        "&token=${LiftimContext.getToken()}"))
                 .apply(RequestOptions.circleCropTransform())
                 .into(liftimCodeImage)
-        val liftimCodeInfo = LiftimSyncEnvironment.getOrmaDatabase()
+        val liftimCodeInfo = LiftimContext.getOrmaDatabase()
                 .selectFromLiftimCodeInfo().liftimCodeEq(liftimCode)
                 .firstOrNull()
                 ?: kotlin.run { finish(); return }
@@ -113,7 +113,7 @@ class EditTimetableActivity : BaseActivity() {
                     }, date!!.year, date!!.monthOfYear - 1, date!!.dayOfMonth).show()
         }
         if (target?.timetable != null) {
-            classList.adapter = ClassAdapter(this, LiftimSyncEnvironment.getGson()
+            classList.adapter = ClassAdapter(this, LiftimContext.getGson()
                     .fromJson(target.timetable, InfoRemoteModel.Timetable::class.java))
         } else {
             classList.adapter = ClassAdapter(this, null)
@@ -129,14 +129,14 @@ class EditTimetableActivity : BaseActivity() {
     private fun obtainTargetElement(): Info? {
         val specified = intent.getStringExtra(ID)
         if (specified == null) {
-            return LiftimSyncEnvironment.getOrmaDatabase().selectFromInfo()
-                    .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+            return LiftimContext.getOrmaDatabase().selectFromInfo()
+                    .liftimCodeEq(LiftimContext.getLiftimCode())
                     .typeEq(Info.TYPE_TIMETABLE)
                     .orderByDateAsc()
                     .firstOrNull()
         } else {
-            return LiftimSyncEnvironment.getOrmaDatabase().selectFromInfo()
-                    .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+            return LiftimContext.getOrmaDatabase().selectFromInfo()
+                    .liftimCodeEq(LiftimContext.getLiftimCode())
                     .typeEq(Info.TYPE_TIMETABLE)
                     .idEq(specified)
                     .firstOrNull()
@@ -158,7 +158,7 @@ class EditTimetableActivity : BaseActivity() {
     private fun createElementFromCurrentState(): Info {
         return Info()
                 .apply {
-                    liftimCode = LiftimSyncEnvironment.getLiftimCode()
+                    liftimCode = LiftimContext.getLiftimCode()
                     id = this@EditTimetableActivity.id
                     title = ""
                     detail = info.text.toString()
@@ -194,12 +194,12 @@ class EditTimetableActivity : BaseActivity() {
         if (info.id == null) {
             info.id = DateTime.now().toString(DateTimeFormat.fullDateTime())
         } else {
-            LiftimSyncEnvironment.getOrmaDatabase().deleteFromInfo()
-                    .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+            LiftimContext.getOrmaDatabase().deleteFromInfo()
+                    .liftimCodeEq(LiftimContext.getLiftimCode())
                     .idEq(info.id)
                     .execute()
         }
-        LiftimSyncEnvironment.getOrmaDatabase().insertIntoInfo(info)
+        LiftimContext.getOrmaDatabase().insertIntoInfo(info)
     }
 
     private fun registerRemote(info: Info) {
@@ -211,11 +211,11 @@ class EditTimetableActivity : BaseActivity() {
             weight = info.weight
             date = info.date
             type = info.type
-            timetable = LiftimSyncEnvironment.getGson()
+            timetable = LiftimContext.getGson()
                     .fromJson(info.timetable, InfoRemoteModel.Timetable::class.java)
             removable = info.removable
         }
-        RegisterInfoService.start(this, LiftimSyncEnvironment.getGson().toJson(content))
+        RegisterInfoService.start(this, LiftimContext.getGson().toJson(content))
     }
 
     class ClassAdapter(

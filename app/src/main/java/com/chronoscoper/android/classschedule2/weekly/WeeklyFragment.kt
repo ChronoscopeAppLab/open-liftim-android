@@ -30,7 +30,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.R
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.sync.WeeklyItem
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.view.BottomMarginItemDecoration
@@ -58,9 +58,9 @@ class WeeklyFragment : Fragment() {
         private val data = mutableListOf<WeeklyItem>()
 
         init {
-            data.addAll(LiftimSyncEnvironment.getOrmaDatabase()
+            data.addAll(LiftimContext.getOrmaDatabase()
                     .selectFromWeeklyItem()
-                    .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                    .liftimCodeEq(LiftimContext.getLiftimCode())
                     .orderByDayOfWeekAsc())
         }
 
@@ -112,13 +112,13 @@ class WeeklyFragment : Fragment() {
 
             class DayAdapter(context: Context, dayOfWeek: Int)
                 : RecyclerView.Adapter<RecyclerViewHolder>() {
-                private val data = LiftimSyncEnvironment.getOrmaDatabase()
+                private val data = LiftimContext.getOrmaDatabase()
                         .selectFromWeeklyItem()
-                        .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                        .liftimCodeEq(LiftimContext.getLiftimCode())
                         .dayOfWeekEq(dayOfWeek)
                         .firstOrNull()
                         ?.apply {
-                            subjects = LiftimSyncEnvironment.getGson()
+                            subjects = LiftimContext.getGson()
                                     .fromJson(serializedSubjects, Array<String>::class.java)
                         } ?: WeeklyItem().apply { subjects = arrayOf() }
 

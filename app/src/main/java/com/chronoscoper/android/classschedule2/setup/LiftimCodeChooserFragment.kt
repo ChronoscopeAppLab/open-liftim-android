@@ -34,7 +34,7 @@ import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.HomeActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimCodeInfo
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import kotterknife.bindView
 
@@ -69,7 +69,7 @@ class LiftimCodeChooserFragment : Fragment() {
         private val data = mutableListOf<LiftimCodeInfo>()
 
         init {
-            data.addAll(LiftimSyncEnvironment.getOrmaDatabase()
+            data.addAll(LiftimContext.getOrmaDatabase()
                     .selectFromLiftimCodeInfo().toList())
         }
 
@@ -79,10 +79,10 @@ class LiftimCodeChooserFragment : Fragment() {
             val image = view.findViewById<ImageView>(R.id.image)
             val name = view.findViewById<TextView>(R.id.liftim_code_name)
             Glide.with(activity)
-                    .load(LiftimSyncEnvironment
+                    .load(LiftimContext
                             .getApiUrl("liftim_code_image.png?" +
                                     "liftim_code=${item.liftimCode}&" +
-                                    "token=${LiftimSyncEnvironment.getToken()}"))
+                                    "token=${LiftimContext.getToken()}"))
                     .apply(RequestOptions.circleCropTransform())
                     .into(image)
             name.text = item.name

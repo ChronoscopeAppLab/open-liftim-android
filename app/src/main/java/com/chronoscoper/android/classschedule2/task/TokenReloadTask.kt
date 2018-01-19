@@ -18,12 +18,12 @@ package com.chronoscoper.android.classschedule2.task
 import android.content.Context
 import android.preference.PreferenceManager
 import com.chronoscoper.android.classschedule2.R
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 
 class TokenReloadTask(val context: Context) : Runnable {
     override fun run() {
-        val response = LiftimSyncEnvironment.getLiftimService()
-                .getToken(LiftimSyncEnvironment.getToken())
+        val response = LiftimContext.getLiftimService()
+                .getToken(LiftimContext.getToken())
                 .execute()
         if (!response.isSuccessful) {
             return
@@ -32,6 +32,6 @@ class TokenReloadTask(val context: Context) : Runnable {
         PreferenceManager.getDefaultSharedPreferences(context).edit()
                 .putString(context.getString(R.string.p_account_token), body.token)
                 .apply()
-        LiftimSyncEnvironment.setToken(body.token)
+        LiftimContext.setToken(body.token)
     }
 }

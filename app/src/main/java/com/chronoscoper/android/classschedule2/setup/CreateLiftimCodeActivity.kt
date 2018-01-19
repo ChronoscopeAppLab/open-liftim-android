@@ -27,7 +27,7 @@ import android.webkit.WebViewClient
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimCodeInfo
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import kotterknife.bindView
 
 class CreateLiftimCodeActivity : BaseActivity() {
@@ -40,7 +40,7 @@ class CreateLiftimCodeActivity : BaseActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             initCookie()
         }
-        webView.loadUrl(LiftimSyncEnvironment.getApiUrl("pages/create_liftim_code"))
+        webView.loadUrl(LiftimContext.getApiUrl("pages/create_liftim_code"))
         webView.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
@@ -64,8 +64,8 @@ class CreateLiftimCodeActivity : BaseActivity() {
             cookieManager.removeAllCookie()
         }
         cookieManager.setAcceptCookie(true)
-        cookieManager.setCookie(LiftimSyncEnvironment.getApiUrl(""),
-                "token=${LiftimSyncEnvironment.getToken()}")
+        cookieManager.setCookie(LiftimContext.getApiUrl(""),
+                "token=${LiftimContext.getToken()}")
     }
 
     private inner class JSIAndroidNative {
@@ -73,10 +73,10 @@ class CreateLiftimCodeActivity : BaseActivity() {
         fun finish(liftimCode: Long, liftimCodeInfo: String?) {
             if (liftimCode > 0 && liftimCodeInfo != null) {
                 try {
-                    val info = LiftimSyncEnvironment.getGson()
+                    val info = LiftimContext.getGson()
                             .fromJson(liftimCodeInfo, LiftimCodeInfo::class.java)
                     info.liftimCode = liftimCode
-                    LiftimSyncEnvironment.getOrmaDatabase().insertIntoLiftimCodeInfo(info)
+                    LiftimContext.getOrmaDatabase().insertIntoLiftimCodeInfo(info)
                 } catch (ignore: Exception) {
                 }
             }

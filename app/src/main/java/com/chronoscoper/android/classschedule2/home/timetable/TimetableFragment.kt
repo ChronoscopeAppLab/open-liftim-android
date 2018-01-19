@@ -28,7 +28,7 @@ import android.widget.TextView
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.view.BottomMarginItemDecoration
@@ -64,7 +64,7 @@ class TimetableFragment : Fragment() {
         initTimetable()
 
         doneButton.setOnClickListener {
-            LiftimSyncEnvironment.getOrmaDatabase()
+            LiftimContext.getOrmaDatabase()
                     .updateInfo().deleted(true).idEq(currentItemId).execute()
             initTimetable()
         }
@@ -99,16 +99,16 @@ class TimetableFragment : Fragment() {
     private fun obtainTargetElement(): Info? {
         val specified = arguments?.getString(ID)
         return if (specified == null) {
-            LiftimSyncEnvironment.getOrmaDatabase()
+            LiftimContext.getOrmaDatabase()
                     .selectFromInfo().typeEq(Info.TYPE_TIMETABLE)
-                    .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                    .liftimCodeEq(LiftimContext.getLiftimCode())
                     .deletedEq(false)
                     .orderByDateAsc()
                     .firstOrNull()
         } else {
-            LiftimSyncEnvironment.getOrmaDatabase()
+            LiftimContext.getOrmaDatabase()
                     .selectFromInfo().typeEq(Info.TYPE_TIMETABLE)
-                    .liftimCodeEq(LiftimSyncEnvironment.getLiftimCode())
+                    .liftimCodeEq(LiftimContext.getLiftimCode())
                     .idEq(specified)
                     .firstOrNull()
         }
@@ -118,7 +118,7 @@ class TimetableFragment : Fragment() {
             RecyclerView.Adapter<RecyclerViewHolder>() {
         private val timetable by lazy {
             val timetableJson = timetableInfoElement?.timetable ?: return@lazy null
-            LiftimSyncEnvironment.getGson()
+            LiftimContext.getGson()
                     .fromJson(timetableJson, InfoRemoteModel.Timetable::class.java)
         }
 

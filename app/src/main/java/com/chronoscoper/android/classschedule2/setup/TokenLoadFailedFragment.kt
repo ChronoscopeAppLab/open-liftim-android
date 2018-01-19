@@ -24,7 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.chronoscoper.android.classschedule2.R
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import kotterknife.bindView
 
 class TokenLoadFailedFragment : Fragment() {
@@ -39,7 +39,7 @@ class TokenLoadFailedFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         retryButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW,
-                    Uri.parse(LiftimSyncEnvironment.getApiUrl("auth")))
+                    Uri.parse(LiftimContext.getApiUrl("auth")))
             startActivity(intent)
             activity.finish()
         }

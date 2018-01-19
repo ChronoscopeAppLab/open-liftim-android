@@ -26,7 +26,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimCodeInfo
-import com.chronoscoper.android.classschedule2.sync.LiftimSyncEnvironment
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import kotterknife.bindView
 
 class LiftimCodeFragment : Fragment() {
@@ -64,7 +64,7 @@ class LiftimCodeFragment : Fragment() {
         }
         val name = args.getString(EXTRA_NAME) ?: return
 
-        Glide.with(context).load(LiftimSyncEnvironment.getApiUrl("liftim_code_image.png?" +
+        Glide.with(context).load(LiftimContext.getApiUrl("liftim_code_image.png?" +
                 "liftim_code=$liftimCode"))
                 .apply(RequestOptions.circleCropTransform())
                 .into(image)

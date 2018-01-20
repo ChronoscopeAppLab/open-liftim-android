@@ -19,6 +19,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.BaseActivity
@@ -27,18 +28,20 @@ import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 import com.chronoscoper.android.classschedule2.util.openInCustomTab
+import com.chronoscoper.android.classschedule2.view.SwipeDismissFrameLayout
 import kotterknife.bindView
 
 class ViewInfoActivity : BaseActivity() {
     companion object {
         private const val ID = "target_id"
-        fun open(context: Context, id: String) {
+        fun open(context: Context, id: String, options: Bundle?) {
             context.startActivity(Intent(context, ViewInfoActivity::class.java)
-                    .putExtra(ID, id))
+                    .putExtra(ID, id), options)
         }
     }
 
-    private val title by bindView<TextView>(R.id.title)
+    private val dismissFrame by bindView<SwipeDismissFrameLayout>(R.id.dismiss_frame)
+    private val toolbar by bindView<Toolbar>(R.id.toolbar)
     private val detail by bindView<TextView>(R.id.detail)
     private val date by bindView<TextView>(R.id.date)
     private val linkUrl by bindView<TextView>(R.id.link_url)
@@ -47,9 +50,16 @@ class ViewInfoActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_info)
-
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val item = obtainSpecifiedElement() ?: kotlin.run { finish(); return }
-        title.text = item.title
+        title = item.title
+        dismissFrame.swipeDismissCallback =
+                object : SwipeDismissFrameLayout.SwipeDismissCallback() {
+            override fun onDismiss() {
+                animateFinishCompat()
+            }
+        }
         detail.text = item.detail
         if (!item.date.isNullOrEmpty()) {
             date.visibility = View.VISIBLE

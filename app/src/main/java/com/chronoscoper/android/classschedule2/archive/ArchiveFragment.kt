@@ -1,6 +1,6 @@
 package com.chronoscoper.android.classschedule2.archive
 
-import android.content.Context
+import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
@@ -25,11 +25,11 @@ class ArchiveFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        list.adapter = Adapter(context)
+        list.adapter = Adapter(activity)
         list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }
 
-    private class Adapter(context: Context) : InfoRecyclerViewAdapter(context) {
+    private class Adapter(activity: Activity) : InfoRecyclerViewAdapter(activity) {
         override fun loadData(): Iterable<Info> =
                 LiftimContext.getOrmaDatabase().selectFromInfo()
                         .liftimCodeEq(LiftimContext.getLiftimCode())

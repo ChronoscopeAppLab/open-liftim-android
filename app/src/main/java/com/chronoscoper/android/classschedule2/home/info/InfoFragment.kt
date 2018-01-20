@@ -40,7 +40,7 @@ class InfoFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         list.apply {
-            adapter = InfoRecyclerViewAdapter(context)
+            adapter = InfoRecyclerViewAdapter(activity)
             addItemDecoration(BottomMarginItemDecoration())
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }

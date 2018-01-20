@@ -16,7 +16,8 @@
 package com.chronoscoper.android.classschedule2.home.info
 
 import android.annotation.SuppressLint
-import android.content.Context
+import android.app.Activity
+import android.app.ActivityOptions
 import android.graphics.PorterDuff
 import android.os.Build
 import android.support.constraint.ConstraintLayout
@@ -24,6 +25,7 @@ import android.support.constraint.ConstraintSet
 import android.support.transition.AutoTransition
 import android.support.transition.TransitionManager
 import android.support.v7.widget.RecyclerView
+import android.util.Pair
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -45,7 +47,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subscribers.DisposableSubscriber
 
-open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerViewHolder>() {
+open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapter<RecyclerViewHolder>() {
     companion object {
         private const val VIEW_TYPE_INFO = 1
         private const val VIEW_TYPE_TIMETABLE = 2
@@ -99,7 +101,7 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
         disposables.clear()
     }
 
-    val inflater: LayoutInflater by lazy { LayoutInflater.from(context) }
+    val inflater: LayoutInflater by lazy { LayoutInflater.from(activity) }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerViewHolder =
             if (viewType == VIEW_TYPE_INFO) {
@@ -137,8 +139,8 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
         private val collapsedConstraints = ConstraintSet()
 
         init {
-            expandedConstraints.clone(context, R.layout.info_item_expanded)
-            collapsedConstraints.clone(context, R.layout.info_item_collapsed)
+            expandedConstraints.clone(activity, R.layout.info_item_expanded)
+            collapsedConstraints.clone(activity, R.layout.info_item_collapsed)
         }
 
         fun bindContent(infoData: Info) {
@@ -161,7 +163,8 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
                 expanded = !expanded
                 bindContent(parent, infoData)
             }
-            (parent.findViewById<TextView>(R.id.title)).text = infoData.title
+            val titleView = parent.findViewById<TextView>(R.id.title)
+            titleView.text = infoData.title
             val detailView = parent.findViewById<TextView>(R.id.detail)
             if (!infoData.detail.isNullOrEmpty()) {
                 detailView.visibility = View.VISIBLE
@@ -192,23 +195,23 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
             when (infoData.type) {
                 Info.TYPE_UNSPECIFIED -> {
                     typeView.background.setColorFilter(-0x777778, PorterDuff.Mode.SRC_IN)
-                    typeView.text = context.getString(R.string.type_unspecified)
+                    typeView.text = activity.getString(R.string.type_unspecified)
                 }
                 Info.TYPE_EVENT -> {
                     typeView.background.setColorFilter(-0x6800, PorterDuff.Mode.SRC_IN)
-                    typeView.text = context.getString(R.string.type_event)
+                    typeView.text = activity.getString(R.string.type_event)
                 }
                 Info.TYPE_INFORMATION -> {
                     typeView.background.setColorFilter(-0xde690d, PorterDuff.Mode.SRC_IN)
-                    typeView.text = context.getString(R.string.type_information)
+                    typeView.text = activity.getString(R.string.type_information)
                 }
                 Info.TYPE_SUBMISSION -> {
                     typeView.background.setColorFilter(-0xb350b0, PorterDuff.Mode.SRC_IN)
-                    typeView.text = context.getString(R.string.type_submission)
+                    typeView.text = activity.getString(R.string.type_submission)
                 }
                 Info.TYPE_LOCAL_MEMO -> {
                     typeView.background.setColorFilter(-0x98c549, PorterDuff.Mode.SRC_IN)
-                    typeView.text = context.getString(R.string.type_memo)
+                    typeView.text = activity.getString(R.string.type_memo)
                 }
             }
             val removeButton = parent.findViewById<View>(R.id.delete)
@@ -238,9 +241,9 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
             val moreButton = parent.findViewById<View>(R.id.more)
             moreButton.setOnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    PopupMenu(context, it, Gravity.TOP or Gravity.END)
+                    PopupMenu(activity, it, Gravity.TOP or Gravity.END)
                 } else {
-                    PopupMenu(context, it)
+                    PopupMenu(activity, it)
                 }.apply {
                     inflate(
                             if (!infoData.link.isNullOrEmpty()) {
@@ -251,13 +254,21 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
                     setOnMenuItemClickListener {
                         when (it.itemId) {
                             R.id.item_open -> {
-                                ViewInfoActivity.open(context, infoData.id)
+                                val options = if (Build.VERSION.SDK_INT
+                                        >= Build.VERSION_CODES.LOLLIPOP) {
+                                    ActivityOptions.makeSceneTransitionAnimation(activity,
+                                            Pair(parent, activity.getString(R.string.t_background))
+                                    ).toBundle()
+                                } else {
+                                    null
+                                }
+                                ViewInfoActivity.open(activity, infoData.id, options)
                             }
                             R.id.item_open_link -> {
-                                openInCustomTab(context, infoData.link!!)
+                                openInCustomTab(activity, infoData.link!!)
                             }
                             R.id.item_edit -> {
-                                EditInfoActivity.open(context, infoData.id)
+                                EditInfoActivity.open(activity, infoData.id)
                             }
                         }
                         true
@@ -274,8 +285,8 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
         private val collapsedConstraints = ConstraintSet()
 
         init {
-            expandedConstraints.clone(context, R.layout.info_timetable_item_expanded)
-            collapsedConstraints.clone(context, R.layout.info_timetable_item_collapsed)
+            expandedConstraints.clone(activity, R.layout.info_timetable_item_expanded)
+            collapsedConstraints.clone(activity, R.layout.info_timetable_item_collapsed)
         }
 
         fun bindContent(infoData: Info) {
@@ -297,7 +308,7 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
                 expanded = !expanded
             }
             val titleView = parent.findViewById<TextView>(R.id.title)
-            titleView.text = context.getString(R.string.info_title_timetable, DateTimeUtils.getParsedDateExpression(infoData.date))
+            titleView.text = activity.getString(R.string.info_title_timetable, DateTimeUtils.getParsedDateExpression(infoData.date))
             val infoView = parent.findViewById<TextView>(R.id.detail)
             if (!infoData.detail.isNullOrEmpty()) {
                 infoView.visibility = View.VISIBLE
@@ -308,7 +319,7 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
 
             val typeView = parent.findViewById<TextView>(R.id.type)
             typeView.background.setColorFilter(-0xff6978, PorterDuff.Mode.SRC_IN)
-            typeView.text = context.getString(R.string.class_schedule)
+            typeView.text = activity.getString(R.string.class_schedule)
             val deleteButton = parent.findViewById<View>(R.id.delete)
             deleteButton.setOnClickListener {
                 LiftimContext.getOrmaDatabase().updateInfo()
@@ -322,18 +333,18 @@ open class InfoRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<
             val moreButton = parent.findViewById<View>(R.id.more)
             moreButton.setOnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    PopupMenu(context, it, Gravity.TOP or Gravity.END)
+                    PopupMenu(activity, it, Gravity.TOP or Gravity.END)
                 } else {
-                    PopupMenu(context, it)
+                    PopupMenu(activity, it)
                 }.apply {
                     inflate(R.menu.info_item_action_no_link)
                     setOnMenuItemClickListener {
                         when (it.itemId) {
                             R.id.item_open -> {
-                                ViewTimetableActivity.open(context, infoData.id)
+                                ViewTimetableActivity.open(activity, infoData.id)
                             }
                             R.id.item_edit -> {
-                                EditTimetableActivity.open(context, infoData.id)
+                                EditTimetableActivity.open(activity, infoData.id)
                             }
                         }
                         true

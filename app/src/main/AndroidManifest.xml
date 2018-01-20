@@ -83,10 +83,12 @@
         <activity android:name=".LoginAgainActivity" />
         <activity
             android:name=".home.timetable.ViewTimetableActivity"
-            android:label="@string/timetable" />
+            android:label="@string/timetable"
+            android:theme="@style/AppTheme.Translucent" />
         <activity
             android:name=".home.info.ViewInfoActivity"
-            android:label="@string/info" />
+            android:label="@string/info"
+            android:theme="@style/AppTheme.Translucent" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

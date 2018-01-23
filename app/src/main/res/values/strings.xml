@@ -91,4 +91,6 @@
     <string name="accessibility_increase">Increase</string>
     <string name="accessibility_decrease">Decrease</string>
     <string name="not_implemented_message">Sorry. This function is currently not unavailable  Please wait until next version released</string>
+    <string name="join_with_barcode">Join with QR Code</string>
+    <string name="barcode_not_found">No valid QR code found</string>
 </resources>

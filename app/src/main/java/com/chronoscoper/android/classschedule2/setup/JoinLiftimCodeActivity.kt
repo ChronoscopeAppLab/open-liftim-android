@@ -15,10 +15,13 @@
  */
 package com.chronoscoper.android.classschedule2.setup
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
@@ -36,8 +39,13 @@ import kotterknife.bindView
 import java.io.IOException
 
 class JoinLiftimCodeActivity : BaseActivity() {
+    companion object {
+        private const val RC_BARCODE = 100
+        internal const val EXTRA_INVITATION_NUM = "invitation_num"
+    }
 
     private val invitationNumberInput by bindView<EditText>(R.id.invitation_number)
+    private val joinWithBarcodeButton by bindView<Button>(R.id.join_with_barcode)
     private val doneButton by bindView<Button>(R.id.done)
     private val status by bindView<TextView>(R.id.status)
 
@@ -56,43 +64,70 @@ class JoinLiftimCodeActivity : BaseActivity() {
             }
             status.text = getString(R.string.join_progress)
             it.isEnabled = false
-            val observer = object : DisposableObserver<Long>() {
-                override fun onComplete() {
-                    finish()
-                }
-
-                override fun onNext(t: Long) {
-                    status.text = getString(R.string.loading_data)
-                }
-
-                override fun onError(e: Throwable) {
-                    status.text = getString(R.string.incorrect_invitation_number)
-                    it.isEnabled = true
-                }
-            }
-            Observable.create<Long> {
-                val liftimCode = JoinLiftimCodeTask(LiftimContext.getToken())
-                        .joinAndObtainLiftimCode(invitationNumber)
-                if (liftimCode == null) {
-                    it.onError(InvalidInvitationNumException())
-                    return@create
-                } else {
-                    it.onNext(liftimCode)
-                }
-                val token = LiftimContext.getToken()
-                try {
-                    LiftimCodeInfoLoader(liftimCode, token, false).run()
-                    obtainAllDataFor(liftimCode, token)
-                } catch (ignore: IOException) {
-                    // Continue anyway
-                }
-                it.onComplete()
-            }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(observer)
-            disposables.add(observer)
+            tryToJoin(invitationNumber)
         }
+
+        joinWithBarcodeButton.setOnClickListener {
+            startActivityForResult(
+                    Intent(this, JoinWithBarcodeActivity::class.java),
+                    RC_BARCODE)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        data ?: return
+        if (requestCode == RC_BARCODE && resultCode == Activity.RESULT_OK) {
+            val invitationNumber = data.getIntExtra(EXTRA_INVITATION_NUM, -1)
+            if (invitationNumber <= 0) {
+                //TODO: Another approach better than Toast
+                Toast.makeText(
+                        this, getString(R.string.barcode_not_found), Toast.LENGTH_LONG)
+                        .show()
+                return
+            }
+            invitationNumberInput.setText(invitationNumber.toString())
+            tryToJoin(invitationNumber)
+        }
+    }
+
+    private fun tryToJoin(invitationNumber: Int) {
+        val observer = object : DisposableObserver<Long>() {
+            override fun onComplete() {
+                finish()
+            }
+
+            override fun onNext(t: Long) {
+                status.text = getString(R.string.loading_data)
+            }
+
+            override fun onError(e: Throwable) {
+                status.text = getString(R.string.incorrect_invitation_number)
+                doneButton.isEnabled = true
+            }
+        }
+        Observable.create<Long> {
+            val liftimCode = JoinLiftimCodeTask(LiftimContext.getToken())
+                    .joinAndObtainLiftimCode(invitationNumber)
+            if (liftimCode == null) {
+                it.onError(InvalidInvitationNumException())
+                return@create
+            } else {
+                it.onNext(liftimCode)
+            }
+            val token = LiftimContext.getToken()
+            try {
+                LiftimCodeInfoLoader(liftimCode, token, false).run()
+                obtainAllDataFor(liftimCode, token)
+            } catch (ignore: IOException) {
+                // Continue anyway
+            }
+            it.onComplete()
+        }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer)
+        disposables.add(observer)
     }
 
     private fun obtainAllDataFor(liftimCode: Long, token: String) {

@@ -89,6 +89,9 @@
             android:name=".home.info.ViewInfoActivity"
             android:label="@string/info"
             android:theme="@style/AppTheme.Translucent" />
+        <activity
+            android:name=".setup.JoinWithBarcodeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

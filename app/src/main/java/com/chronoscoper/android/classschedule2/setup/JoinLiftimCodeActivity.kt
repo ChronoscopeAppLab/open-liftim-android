@@ -30,6 +30,7 @@ import com.chronoscoper.android.classschedule2.task.JoinLiftimCodeTask
 import com.chronoscoper.android.classschedule2.task.LiftimCodeInfoLoader
 import com.chronoscoper.android.classschedule2.task.SubjectLoader
 import com.chronoscoper.android.classschedule2.task.WeeklyLoader
+import com.chronoscoper.android.classschedule2.util.showToast
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -80,10 +81,7 @@ class JoinLiftimCodeActivity : BaseActivity() {
         if (requestCode == RC_BARCODE && resultCode == Activity.RESULT_OK) {
             val invitationNumber = data.getIntExtra(EXTRA_INVITATION_NUM, -1)
             if (invitationNumber <= 0) {
-                //TODO: Another approach better than Toast
-                Toast.makeText(
-                        this, getString(R.string.barcode_not_found), Toast.LENGTH_LONG)
-                        .show()
+                showToast(this, getString(R.string.barcode_not_found), Toast.LENGTH_LONG)
                 return
             }
             invitationNumberInput.setText(invitationNumber.toString())

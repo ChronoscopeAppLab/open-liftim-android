@@ -35,6 +35,7 @@ import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.HomeActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimCodeInfo
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import com.chronoscoper.android.classschedule2.util.openInNewTask
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import kotterknife.bindView
 
@@ -93,9 +94,7 @@ class LiftimCodeChooserFragment : Fragment() {
                         .apply()
                 (activity.application as? LiftimApplication ?: return@setOnClickListener)
                         .initEnvironment()
-                activity.finish()
-                activity.startActivity(Intent(activity, HomeActivity::class.java)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+                openInNewTask(activity, HomeActivity::class.java)
             }
         }
 

@@ -15,7 +15,46 @@
  */
 package com.chronoscoper.android.classschedule2.setting
 
+import android.content.Intent
+import android.os.Bundle
+import android.preference.PreferenceManager
+import android.support.v7.app.AlertDialog
+import android.widget.Button
+import android.widget.TextView
 import com.chronoscoper.android.classschedule2.BaseActivity
+import com.chronoscoper.android.classschedule2.LauncherActivity
+import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import kotterknife.bindView
 
 class ManageAccountActivity : BaseActivity() {
+
+    private val userNameLabel by bindView<TextView>(R.id.user_name)
+    private val logoutButton by bindView<Button>(R.id.logout)
+
+    private val sharedPrefs by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_manage_account)
+
+        userNameLabel.text = sharedPrefs.getString(getString(R.string.p_account_name), "")
+        logoutButton.setOnClickListener {
+            AlertDialog.Builder(this)
+                    .setMessage(R.string.logout_warning)
+                    .setPositiveButton(R.string.logout, { _, _ ->
+                        removeAllData()
+                        startActivity(Intent(this, LauncherActivity::class.java)
+                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+
+        }
+    }
+
+    private fun removeAllData() {
+        LiftimContext.getOrmaDatabase().deleteAll()
+        sharedPrefs.edit().clear().apply()
+    }
 }

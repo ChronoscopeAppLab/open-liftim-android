@@ -48,6 +48,7 @@ class ManageAccountActivity : BaseActivity() {
                         removeAllData()
                         openInNewTask(this, LauncherActivity::class.java)
                         setComponentEnabled(this, true, SetupActivity::class.java)
+                        setComponentEnabled(this, false, SettingsActivity::class.java)
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .show()

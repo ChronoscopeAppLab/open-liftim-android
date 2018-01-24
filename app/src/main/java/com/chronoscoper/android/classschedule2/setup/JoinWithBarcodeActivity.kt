@@ -28,6 +28,7 @@ import android.view.View
 import android.widget.Toast
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.util.showToast
 import com.google.android.cameraview.CameraView
 import com.google.zxing.BinaryBitmap
 import com.google.zxing.MultiFormatReader
@@ -88,11 +89,8 @@ class JoinWithBarcodeActivity : BaseActivity() {
                     val result = MultiFormatReader().decodeWithState(bb)
                     setResultAndFinish(result.text)
                 } catch (e: Exception) {
-                    //TODO: Another approach better than Toast
-                    Toast.makeText(
-                            this@JoinWithBarcodeActivity,
+                    showToast(this@JoinWithBarcodeActivity,
                             getString(R.string.barcode_not_found), Toast.LENGTH_LONG)
-                            .show()
                     captureButton.isEnabled = true
                 }
                 bitmap.recycle()

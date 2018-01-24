@@ -1,13 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+def commitCount =
+        Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
+
 android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.chronoscoper.android.classschedule2.open"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 1
+        versionCode commitCount
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true

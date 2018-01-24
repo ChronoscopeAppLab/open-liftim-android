@@ -25,7 +25,9 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginStart="50dp"
-        app:cardCornerRadius="0dp">
+        android:backgroundTint="#bfe775"
+        app:cardCornerRadius="0dp"
+        tools:ignore="UnusedAttribute">
 
         <TextView
             android:id="@+id/text"

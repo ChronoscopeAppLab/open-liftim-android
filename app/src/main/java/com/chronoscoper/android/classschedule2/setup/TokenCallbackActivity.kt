@@ -21,6 +21,7 @@ import android.preference.PreferenceManager
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.HomeActivity
+import com.chronoscoper.android.classschedule2.setting.SettingsActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.AccountInfoLoader
 import com.chronoscoper.android.classschedule2.task.ColorPaletteLoader
@@ -29,6 +30,7 @@ import com.chronoscoper.android.classschedule2.task.LiftimCodeInfoLoader
 import com.chronoscoper.android.classschedule2.task.SubjectLoader
 import com.chronoscoper.android.classschedule2.task.WeeklyLoader
 import com.chronoscoper.android.classschedule2.task.enforceValidToken
+import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -80,6 +82,8 @@ class TokenCallbackActivity : BaseActivity() {
                     startActivity(Intent(this@TokenCallbackActivity,
                             HomeActivity::class.java)
                             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+                    setComponentEnabled(this@TokenCallbackActivity, false,
+                            TokenCallbackActivity::class.java)
                 }
             }
         }
@@ -96,6 +100,8 @@ class TokenCallbackActivity : BaseActivity() {
                 supportFragmentManager.beginTransaction()
                         .replace(android.R.id.content, LiftimCodeChooserFragment())
                         .commit()
+                setComponentEnabled(this@TokenCallbackActivity, true,
+                        SettingsActivity::class.java)
             }
 
             override fun onNext(t: Unit) {
@@ -113,9 +119,9 @@ class TokenCallbackActivity : BaseActivity() {
             val accountInfo = AccountInfoLoader(token)
                     .load()
                     ?: kotlin.run {
-                it.onError(Exception())
-                return@create
-            }
+                        it.onError(Exception())
+                        return@create
+                    }
             ColorPaletteLoader().run()
             val prefEditor = sharedPrefs.edit()
             prefEditor.apply {

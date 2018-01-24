@@ -139,6 +139,13 @@ class TokenCallbackActivity : BaseActivity() {
                     // Continue anyway
                 }
             }
+            //Set default Liftim code here in case user close app
+            //without selecting default Liftim code
+            accountInfo.liftimCodes.firstOrNull()?.let {
+                sharedPrefs.edit()
+                        .putLong(getString(R.string.p_default_liftim_code), it.liftimCode)
+                        .apply()
+            }
             it.onComplete()
         }
                 .subscribeOn(Schedulers.io())

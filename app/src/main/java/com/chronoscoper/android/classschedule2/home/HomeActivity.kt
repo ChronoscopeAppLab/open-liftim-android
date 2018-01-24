@@ -17,6 +17,7 @@ package com.chronoscoper.android.classschedule2.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.preference.PreferenceManager
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
@@ -27,6 +28,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.MenuItem
+import android.widget.Toast
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
@@ -34,6 +36,8 @@ import com.chronoscoper.android.classschedule2.archive.ArchiveFragment
 import com.chronoscoper.android.classschedule2.home.info.EditInfoActivity
 import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
 import com.chronoscoper.android.classschedule2.setting.SettingsActivity
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import com.chronoscoper.android.classschedule2.util.showToast
 import com.chronoscoper.android.classschedule2.weekly.EditWeeklyActivity
 import com.chronoscoper.android.classschedule2.weekly.WeeklyFragment
 import kotterknife.bindView
@@ -71,6 +75,22 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
         fab.setOnClickListener {
             fabAction?.run()
+        }
+        showLiftimCodeName()
+    }
+
+    private fun showLiftimCodeName() {
+        Handler().post {
+            val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this@HomeActivity)
+            val defaultLiftimCode = sharedPrefs.getLong(getString(R.string.p_default_liftim_code), -1)
+            if (defaultLiftimCode < 0) {
+                showToast(this, getString(R.string.no_joined_class), Toast.LENGTH_LONG)
+            } else {
+                val liftimCodeInfo = LiftimContext.getOrmaDatabase().selectFromLiftimCodeInfo()
+                        .liftimCodeEq(defaultLiftimCode)
+                        .firstOrNull() ?: return@post
+                showToast(this, liftimCodeInfo.name, Toast.LENGTH_LONG)
+            }
         }
     }
 

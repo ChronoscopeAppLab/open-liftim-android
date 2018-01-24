@@ -17,6 +17,7 @@ package com.chronoscoper.android.classschedule2.util
 
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 
 /**
@@ -34,4 +35,12 @@ fun setComponentEnabled(context: Context, enable: Boolean, vararg components: Cl
         val componentName = ComponentName(context, it)
         pm.setComponentEnabledSetting(componentName, valueToSet, PackageManager.DONT_KILL_APP)
     }
+}
+
+/**
+ * Opens Activity as a new task and clear old task
+ */
+fun openInNewTask(context: Context, clazz: Class<*>) {
+    context.startActivity(Intent(context,clazz)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION))
 }

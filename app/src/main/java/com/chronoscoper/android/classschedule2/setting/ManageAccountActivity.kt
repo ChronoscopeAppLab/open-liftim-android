@@ -15,7 +15,6 @@
  */
 package com.chronoscoper.android.classschedule2.setting
 
-import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AlertDialog
@@ -24,7 +23,10 @@ import android.widget.TextView
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LauncherActivity
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.setup.SetupActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import com.chronoscoper.android.classschedule2.util.openInNewTask
+import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import kotterknife.bindView
 
 class ManageAccountActivity : BaseActivity() {
@@ -44,8 +46,8 @@ class ManageAccountActivity : BaseActivity() {
                     .setMessage(R.string.logout_warning)
                     .setPositiveButton(R.string.logout, { _, _ ->
                         removeAllData()
-                        startActivity(Intent(this, LauncherActivity::class.java)
-                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+                        openInNewTask(this, LauncherActivity::class.java)
+                        setComponentEnabled(this, true, SetupActivity::class.java)
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .show()

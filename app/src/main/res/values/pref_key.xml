@@ -24,4 +24,5 @@
     <string name="p_manage_liftim_code" translatable="false">manage_liftim_code</string>
     <string name="p_app_info" translatable="false">app_info</string>
     <string name="p_oss_license" translatable="false">oss_license</string>
+    <string name="p_last_used_version" translatable="false">last_used_version</string>
 </resources>

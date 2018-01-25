@@ -16,6 +16,7 @@
 package com.chronoscoper.android.classschedule2.view
 
 import android.content.Context
+import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -31,7 +32,7 @@ class SwipeDismissFrameLayout(context: Context, attrs: AttributeSet?, defStyleAt
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
     override fun onStartNestedScroll(child: View, target: View, nestedScrollAxes: Int): Boolean {
-        return nestedScrollAxes and View.SCROLL_AXIS_VERTICAL != 0
+        return nestedScrollAxes and ViewCompat.SCROLL_AXIS_VERTICAL != 0
     }
 
     override fun onNestedScroll(target: View?, dxConsumed: Int, dyConsumed: Int,

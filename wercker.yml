@@ -10,13 +10,9 @@ build:
           cat sdk-licenses/android-sdk-license > "${ANDROID_HOME}/licenses/android-sdk-license"
           cat sdk-licenses/android-sdk-preview-license > "${ANDROID_HOME}/licenses/android-sdk-preview-license"
     - script:
-        name: Make gradlew executable
-        code: |
-          chmod +x gradlew
-    - script:
         name: Assemble Debug
         code: |
-          ./gradlew assembleDebug
+          chmod +x gradlew; ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR assembleDebug
   after-steps:
     - wantedly/pretty-slack-notify:
         webhook-url: $SLACK_WEBHOOK_URL
@@ -29,7 +25,8 @@ testing:
           cat sdk-licenses/android-sdk-preview-license > "${ANDROID_HOME}/licenses/android-sdk-preview-license"
     - script:
         name: Run JUit test
-        code: ./gradlew test
+        code: |
+          chmod +x gradlew; ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR test
 deploy:
   steps:
     - script:

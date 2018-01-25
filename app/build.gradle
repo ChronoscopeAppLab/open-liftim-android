@@ -89,6 +89,7 @@ dependencies {
     implementation 'com.github.gfx.android.orma:orma:4.2.5'
     implementation 'com.chronoscoper.library:cameraview:0.1@aar'
     implementation 'com.google.zxing:core:3.3.0'
+    implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'

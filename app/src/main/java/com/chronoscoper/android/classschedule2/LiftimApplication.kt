@@ -23,6 +23,7 @@ import com.chronoscoper.android.classschedule2.setup.TokenCallbackActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import com.squareup.leakcanary.LeakCanary
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 
 class LiftimApplication : Application() {
     override fun onCreate() {
@@ -30,6 +31,10 @@ class LiftimApplication : Application() {
 
         initEnvironment()
         migrateIfNeeded()
+
+        CalligraphyConfig.initDefault(CalligraphyConfig.Builder()
+                .setDefaultFontPath("Rubik-Regular.ttf")
+                .build())
     }
 
     private val sharedPrefs by lazy { PreferenceManager.getDefaultSharedPreferences(this) }

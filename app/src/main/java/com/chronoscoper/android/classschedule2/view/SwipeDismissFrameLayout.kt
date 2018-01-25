@@ -58,7 +58,7 @@ class SwipeDismissFrameLayout(context: Context, attrs: AttributeSet?, defStyleAt
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        dismissDistance = h / 10f
+        dismissDistance = h / 15f
     }
 
     private var totalScroll = 0f

@@ -29,6 +29,7 @@ import android.widget.Toast
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.util.showToast
+import com.google.android.cameraview.AspectRatio
 import com.google.android.cameraview.CameraView
 import com.google.zxing.BinaryBitmap
 import com.google.zxing.MultiFormatReader
@@ -75,6 +76,7 @@ class JoinWithBarcodeActivity : BaseActivity() {
     }
 
     private fun initContents() {
+        cameraView.setAspectRatio(AspectRatio.of(250, 250))
         cameraView.addCallback(object : CameraView.Callback() {
             override fun onPictureTaken(cameraView: CameraView?, data: ByteArray?) {
                 cameraView ?: return

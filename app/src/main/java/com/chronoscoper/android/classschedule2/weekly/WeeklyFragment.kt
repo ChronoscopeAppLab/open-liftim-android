@@ -50,6 +50,8 @@ class WeeklyFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         pager.adapter = Adapter(context, childFragmentManager)
+        tabs.tabMode = TabLayout.MODE_SCROLLABLE
+        tabs.tabGravity = TabLayout.GRAVITY_FILL
         tabs.setupWithViewPager(pager)
     }
 

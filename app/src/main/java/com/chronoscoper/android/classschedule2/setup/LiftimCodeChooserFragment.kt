@@ -36,6 +36,7 @@ import com.chronoscoper.android.classschedule2.home.HomeActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimCodeInfo
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.openInNewTask
+import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import kotterknife.bindView
 
@@ -85,6 +86,7 @@ class LiftimCodeChooserFragment : Fragment() {
                                     "liftim_code=${item.liftimCode}&" +
                                     "token=${LiftimContext.getToken()}"))
                     .apply(RequestOptions.circleCropTransform())
+                    .transition(progressiveFadeInTransition())
                     .into(image)
             name.text = item.name
             view.setOnClickListener {

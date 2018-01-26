@@ -41,6 +41,7 @@ import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.RegisterInfoService
+import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import kotterknife.bindView
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
 import org.joda.time.DateTime
@@ -86,6 +87,7 @@ class EditInfoActivity : BaseActivity() {
                         "?liftim_code=$liftimCode" +
                         "&token=${LiftimContext.getToken()}"))
                 .apply(RequestOptions.circleCropTransform())
+                .transition(progressiveFadeInTransition())
                 .into(liftimCodeImage)
         val liftimCodeInfo = LiftimContext.getOrmaDatabase()
                 .selectFromLiftimCodeInfo().liftimCodeEq(liftimCode)

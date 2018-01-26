@@ -97,4 +97,6 @@
     <string name="logout_warning">By logging out, you\'ll have lost all data you registered locally.</string>
     <string name="no_joined_class">You don\'t join any class.</string>
     <string name="accessibility_back">Back</string>
+    <string name="delete_liftim_code_warning">You\'ll lose read permission for this class</string>
+    <string name="continue_anyway">Continue anyway</string>
 </resources>

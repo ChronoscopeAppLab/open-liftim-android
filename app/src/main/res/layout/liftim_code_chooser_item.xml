@@ -13,6 +13,7 @@
 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -31,11 +32,24 @@
 
     <TextView
         android:id="@+id/liftim_code_name"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         tools:text="Liftim code" />
+
+    <ImageButton
+        android:id="@+id/more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/clickable_background_black"
+        android:contentDescription="@string/more_actions"
+        android:padding="5dp"
+        app:srcCompat="@drawable/ic_more_vert" />
 </LinearLayout>

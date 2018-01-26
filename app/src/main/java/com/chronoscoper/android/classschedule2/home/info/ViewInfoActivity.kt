@@ -72,7 +72,7 @@ class ViewInfoActivity : BaseActivity() {
         backButton.setOnClickListener {
             animateFinishCompat()
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && savedInstanceState == null) {
             window.sharedElementEnterTransition.addListener(object : TransitionListenerAdapter() {
                 @SuppressLint("NewApi")
                 override fun onTransitionEnd(transition: Transition?) {

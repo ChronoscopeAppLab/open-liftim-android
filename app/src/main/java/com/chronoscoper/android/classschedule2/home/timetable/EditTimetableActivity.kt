@@ -47,6 +47,7 @@ import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.RegisterInfoService
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
+import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import com.chronoscoper.android.classschedule2.view.BottomMarginItemDecoration
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import kotterknife.bindView
@@ -88,6 +89,7 @@ class EditTimetableActivity : BaseActivity() {
                         "?liftim_code=$liftimCode" +
                         "&token=${LiftimContext.getToken()}"))
                 .apply(RequestOptions.circleCropTransform())
+                .transition(progressiveFadeInTransition())
                 .into(liftimCodeImage)
         val liftimCodeInfo = LiftimContext.getOrmaDatabase()
                 .selectFromLiftimCodeInfo().liftimCodeEq(liftimCode)

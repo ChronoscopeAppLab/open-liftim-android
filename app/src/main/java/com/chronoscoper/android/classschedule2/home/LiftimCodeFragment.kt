@@ -27,6 +27,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimCodeInfo
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import kotterknife.bindView
 
 class LiftimCodeFragment : Fragment() {
@@ -67,6 +68,7 @@ class LiftimCodeFragment : Fragment() {
         Glide.with(context).load(LiftimContext.getApiUrl("liftim_code_image.png?" +
                 "liftim_code=$liftimCode"))
                 .apply(RequestOptions.circleCropTransform())
+                .transition(progressiveFadeInTransition())
                 .into(image)
         nameLabel.text = name
     }

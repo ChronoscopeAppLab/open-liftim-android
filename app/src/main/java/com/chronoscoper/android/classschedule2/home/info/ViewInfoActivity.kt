@@ -34,7 +34,6 @@ import android.widget.TextView
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.Info
-import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 import com.chronoscoper.android.classschedule2.util.TransitionListenerAdapter
 import com.chronoscoper.android.classschedule2.util.getColorForInfoType
@@ -42,13 +41,14 @@ import com.chronoscoper.android.classschedule2.util.getDarkerColor
 import com.chronoscoper.android.classschedule2.util.openInCustomTab
 import com.chronoscoper.android.classschedule2.view.SwipeDismissFrameLayout
 import kotterknife.bindView
+import org.parceler.Parcels
 
 class ViewInfoActivity : BaseActivity() {
     companion object {
-        private const val ID = "target_id"
-        fun open(context: Context, id: String, options: Bundle?) {
+        private const val EXTRA_TARGET = "target"
+        fun open(context: Context, item: Info, options: Bundle?) {
             context.startActivity(Intent(context, ViewInfoActivity::class.java)
-                    .putExtra(ID, id), options)
+                    .putExtra(EXTRA_TARGET, Parcels.wrap(item)), options)
         }
     }
 
@@ -65,7 +65,8 @@ class ViewInfoActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_info)
-        val item = obtainSpecifiedElement() ?: kotlin.run { finish(); return }
+        val item = Parcels.unwrap<Info>(intent.getParcelableExtra(EXTRA_TARGET))
+                ?: kotlin.run { finish(); return }
         infoType = item.type
         val backButton = LayoutInflater.from(this)
                 .inflate(R.layout.back, toolbar, false)
@@ -175,15 +176,6 @@ class ViewInfoActivity : BaseActivity() {
         animateToolbar(infoType, true)
         toolbar.removeViewAt(0)
         super.animateFinishCompat()
-    }
-
-    private fun obtainSpecifiedElement(): Info? {
-        val id = intent.getStringExtra(ID) ?: return null
-        return LiftimContext.getOrmaDatabase()
-                .selectFromInfo()
-                .liftimCodeEq(LiftimContext.getLiftimCode())
-                .idEq(id)
-                .firstOrNull()
     }
 
     override fun onBackPressed() {

@@ -22,6 +22,11 @@ import com.github.gfx.android.orma.annotation.Column;
 import com.github.gfx.android.orma.annotation.Setter;
 import com.github.gfx.android.orma.annotation.Table;
 
+import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
+import org.parceler.ParcelProperty;
+
+@Parcel
 @Table("info")
 public class Info {
     public Info(long liftimCode, @NonNull String id,
@@ -67,6 +72,7 @@ public class Info {
         remoteDeleted = false;
     }
 
+    @ParcelProperty("liftim_code")
     @Column(value = "liftimCode", indexed = true)
     public long liftimCode;
 

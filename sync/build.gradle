@@ -33,4 +33,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.2.5'
     implementation 'com.github.gfx.android.orma:orma:4.2.5'
+    implementation 'org.parceler:parceler-api:1.1.9'
+    annotationProcessor 'org.parceler:parceler:1.1.9'
 }

@@ -151,7 +151,7 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
                 } else {
                     null
                 }
-                ViewInfoActivity.open(activity, infoData.id, options)
+                ViewInfoActivity.open(activity, infoData, options)
             }
             title.text = infoData.title
             if (!infoData.detail.isNullOrEmpty()) {

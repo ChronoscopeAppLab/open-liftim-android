@@ -96,4 +96,5 @@
     <string name="logout">Log out</string>
     <string name="logout_warning">By logging out, you\'ll have lost all data you registered locally.</string>
     <string name="no_joined_class">You don\'t join any class.</string>
+    <string name="accessibility_back">Back</string>
 </resources>

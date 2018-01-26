@@ -20,7 +20,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +35,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.HomeActivity
+import com.chronoscoper.android.classschedule2.setting.manager.LiftimCodeSettingsActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimCodeInfo
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.openInNewTask
@@ -80,6 +83,7 @@ class LiftimCodeChooserFragment : Fragment() {
             val item = data[position]
             val image = view.findViewById<ImageView>(R.id.image)
             val name = view.findViewById<TextView>(R.id.liftim_code_name)
+            val more = view.findViewById<View>(R.id.more)
             Glide.with(activity)
                     .load(LiftimContext
                             .getApiUrl("liftim_code_image.png?" +
@@ -98,6 +102,39 @@ class LiftimCodeChooserFragment : Fragment() {
                         .initEnvironment()
                 openInNewTask(activity, HomeActivity::class.java)
             }
+            more.setOnClickListener {
+                val menu = PopupMenu(activity, it)
+                menu.inflate(
+                        if (item.isManager) {
+                            R.menu.liftim_code_chooser_action_manager
+                        } else {
+                            R.menu.liftim_code_chooser_action
+                        })
+                menu.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.delete -> {
+                            AlertDialog.Builder(activity)
+                                    .setMessage(
+                                            activity.getString(R.string.delete_liftim_code_warning))
+                                    .setPositiveButton(activity.getString(R.string.continue_anyway),
+                                            { _, _ ->
+                                                deleteLiftimCode(item.liftimCode)
+                                            })
+                                    .setNegativeButton(activity.getString(R.string.cancel), null)
+                                    .show()
+                        }
+                        R.id.settings -> {
+                            LiftimCodeSettingsActivity.start(activity, item.liftimCode)
+                        }
+                    }
+                    true
+                }
+                menu.show()
+            }
+        }
+
+        private fun deleteLiftimCode(liftimCode: Long) {
+            //TODO: Implement deleting liftim code
         }
 
         val inflater by lazy { LayoutInflater.from(activity) }

@@ -15,18 +15,30 @@
  */
 package com.chronoscoper.android.classschedule2.home.info
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.PorterDuff
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
+import android.transition.Transition
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
+import com.chronoscoper.android.classschedule2.util.TransitionListenerAdapter
+import com.chronoscoper.android.classschedule2.util.getColorForInfoType
+import com.chronoscoper.android.classschedule2.util.getDarkerColor
 import com.chronoscoper.android.classschedule2.util.openInCustomTab
 import com.chronoscoper.android.classschedule2.view.SwipeDismissFrameLayout
 import kotterknife.bindView
@@ -41,25 +53,45 @@ class ViewInfoActivity : BaseActivity() {
     }
 
     private val dismissFrame by bindView<SwipeDismissFrameLayout>(R.id.dismiss_frame)
-    private val toolbar by bindView<Toolbar>(R.id.toolbar)
+    private val toolbar by bindView<LinearLayout>(R.id.toolbar)
+    private val title by bindView<TextView>(R.id.title)
     private val detail by bindView<TextView>(R.id.detail)
     private val date by bindView<TextView>(R.id.date)
     private val linkUrl by bindView<TextView>(R.id.link_url)
     private val type by bindView<TextView>(R.id.type)
 
+    private var infoType = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_info)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val item = obtainSpecifiedElement() ?: kotlin.run { finish(); return }
-        title = item.title
+        infoType = item.type
+        val backButton = LayoutInflater.from(this)
+                .inflate(R.layout.back, toolbar, false)
+        backButton.setOnClickListener {
+            animateFinishCompat()
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.sharedElementEnterTransition.addListener(object : TransitionListenerAdapter() {
+                @SuppressLint("NewApi")
+                override fun onTransitionEnd(transition: Transition?) {
+                    toolbar.addView(backButton, 0)
+                    animateToolbar(item.type, false)
+                    transition?.removeListener(this)
+                }
+            })
+        } else {
+            toolbar.addView(backButton, 0)
+            animateToolbar(item.type, false)
+        }
+        title.text = item.title
         dismissFrame.swipeDismissCallback =
                 object : SwipeDismissFrameLayout.SwipeDismissCallback() {
-            override fun onDismiss() {
-                animateFinishCompat()
-            }
-        }
+                    override fun onDismiss() {
+                        animateFinishCompat()
+                    }
+                }
         detail.text = item.detail
         if (!item.date.isNullOrEmpty()) {
             date.visibility = View.VISIBLE
@@ -96,6 +128,55 @@ class ViewInfoActivity : BaseActivity() {
         }
     }
 
+    private fun animateToolbar(infoType: Int, reverse: Boolean) {
+        val toolbarBackgroundAnimator = ValueAnimator.ofObject(ArgbEvaluator(),
+                Color.TRANSPARENT, getColorForInfoType(infoType))
+        toolbarBackgroundAnimator.duration = 250
+        toolbarBackgroundAnimator.addUpdateListener {
+            toolbar.background = ColorDrawable(it.animatedValue as Int)
+        }
+        if (reverse) {
+            toolbarBackgroundAnimator.reverse()
+        } else {
+            toolbarBackgroundAnimator.start()
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val statusBarAnimator = ValueAnimator.ofObject(ArgbEvaluator(),
+                    window.statusBarColor, getDarkerColor(getColorForInfoType(infoType)))
+            statusBarAnimator.duration = 250
+            statusBarAnimator.addUpdateListener {
+                window.statusBarColor = it.animatedValue as Int
+            }
+            if (reverse) {
+                statusBarAnimator.reverse()
+            } else {
+                statusBarAnimator.start()
+            }
+        }
+
+        val backButton = findViewById<ImageButton>(R.id.back)
+        val titleAnimator = ValueAnimator.ofObject(ArgbEvaluator(),
+                Color.BLACK, Color.WHITE)
+        titleAnimator.duration = 250
+        titleAnimator.addUpdateListener {
+            val animated = it.animatedValue as Int
+            title.setTextColor(animated)
+            backButton.setColorFilter(animated)
+        }
+        if (reverse) {
+            titleAnimator.reverse()
+        } else {
+            titleAnimator.start()
+        }
+    }
+
+    override fun animateFinishCompat() {
+        animateToolbar(infoType, true)
+        toolbar.removeViewAt(0)
+        super.animateFinishCompat()
+    }
+
     private fun obtainSpecifiedElement(): Info? {
         val id = intent.getStringExtra(ID) ?: return null
         return LiftimContext.getOrmaDatabase()
@@ -103,5 +184,9 @@ class ViewInfoActivity : BaseActivity() {
                 .liftimCodeEq(LiftimContext.getLiftimCode())
                 .idEq(id)
                 .firstOrNull()
+    }
+
+    override fun onBackPressed() {
+        animateFinishCompat()
     }
 }

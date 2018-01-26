@@ -47,7 +47,7 @@ abstract class BaseActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun animateFinishCompat() {
+    open fun animateFinishCompat() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             finishAfterTransition()
         } else {

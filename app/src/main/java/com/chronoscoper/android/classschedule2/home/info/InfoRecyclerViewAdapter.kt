@@ -15,14 +15,12 @@
  */
 package com.chronoscoper.android.classschedule2.home.info
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityOptions
 import android.graphics.PorterDuff
 import android.os.Build
 import android.support.constraint.ConstraintLayout
 import android.support.constraint.ConstraintSet
-import android.support.transition.AutoTransition
 import android.support.transition.TransitionManager
 import android.support.v7.widget.RecyclerView
 import android.util.Pair
@@ -34,11 +32,11 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
-import com.chronoscoper.android.classschedule2.home.timetable.ViewTimetableActivity
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.InfoLoader
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
+import com.chronoscoper.android.classschedule2.util.getColorForInfoType
 import com.chronoscoper.android.classschedule2.util.openInCustomTab
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import io.reactivex.Flowable
@@ -46,6 +44,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subscribers.DisposableSubscriber
+import kotterknife.bindView
 
 open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapter<RecyclerViewHolder>() {
     companion object {
@@ -106,7 +105,7 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerViewHolder =
             if (viewType == VIEW_TYPE_INFO) {
                 InfoHolder(inflater
-                        .inflate(R.layout.info_item_collapsed, parent, false))
+                        .inflate(R.layout.info_item, parent, false))
             } else {
                 TimetableHolder(inflater
                         .inflate(R.layout.info_timetable_item_collapsed, parent, false))
@@ -134,89 +133,73 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
     }
 
     inner class InfoHolder(itemView: View) : RecyclerViewHolder(itemView) {
-        private var expanded = false
-        private val expandedConstraints = ConstraintSet()
-        private val collapsedConstraints = ConstraintSet()
-
-        init {
-            expandedConstraints.clone(activity, R.layout.info_item_expanded)
-            collapsedConstraints.clone(activity, R.layout.info_item_collapsed)
-        }
+        private val title by bindView<TextView>(R.id.title)
+        private val detail by bindView<TextView>(R.id.detail)
+        private val date by bindView<TextView>(R.id.date)
+        private val linkUrl by bindView<TextView>(R.id.link_url)
+        private val type by bindView<TextView>(R.id.type)
+        private val delete by bindView<View>(R.id.delete)
+        private val more by bindView<View>(R.id.more)
 
         fun bindContent(infoData: Info) {
-            expanded = false
-            val parent = itemView as ConstraintLayout? ?: return
-            collapsedConstraints.applyTo(parent)
-            bindContent(parent, infoData)
-        }
-
-        @SuppressLint("ClickableViewAccessibility")
-        private fun bindContent(parent: ConstraintLayout, infoData: Info) {
-            parent.setOnClickListener {
-                val parentRecyclerView = parent.parent as RecyclerView
-                TransitionManager.beginDelayedTransition(parentRecyclerView, AutoTransition())
-                if (expanded) {
-                    collapsedConstraints.applyTo(parent)
+            itemView.setOnClickListener {
+                val options = if (Build.VERSION.SDK_INT
+                        >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions.makeSceneTransitionAnimation(activity,
+                            Pair(itemView, activity.getString(R.string.t_background))
+                    ).toBundle()
                 } else {
-                    expandedConstraints.applyTo(parent)
+                    null
                 }
-                expanded = !expanded
-                bindContent(parent, infoData)
+                ViewInfoActivity.open(activity, infoData.id, options)
             }
-            val titleView = parent.findViewById<TextView>(R.id.title)
-            titleView.text = infoData.title
-            val detailView = parent.findViewById<TextView>(R.id.detail)
+            title.text = infoData.title
             if (!infoData.detail.isNullOrEmpty()) {
-                detailView.visibility = View.VISIBLE
-                detailView.text = infoData.detail
+                detail.visibility = View.VISIBLE
+                detail.text = infoData.detail
             } else {
-                detailView.visibility = View.GONE
+                detail.visibility = View.GONE
             }
-            if (expanded) {
-                detailView.maxLines = 50
-            } else {
-                detailView.maxLines = 1
-            }
-            val dateView = parent.findViewById<TextView>(R.id.date)
             if (!infoData.date.isNullOrEmpty()) {
-                dateView.visibility = View.VISIBLE
-                dateView.text = infoData.date
+                date.visibility = View.VISIBLE
+                date.text = infoData.date
             } else {
-                dateView.visibility = View.GONE
+                date.visibility = View.GONE
             }
-            val linkView = parent.findViewById<TextView>(R.id.link_url)
             if (!infoData.link.isNullOrEmpty()) {
-                linkView.visibility = View.VISIBLE
-                linkView.text = infoData.link
+                linkUrl.visibility = View.VISIBLE
+                linkUrl.text = infoData.link
+                linkUrl.setOnClickListener {
+                    openInCustomTab(activity, infoData.link!!)
+                }
             } else {
-                linkView.visibility = View.GONE
+                linkUrl.visibility = View.GONE
+                linkUrl.setOnClickListener(null)
             }
-            val typeView = parent.findViewById<TextView>(R.id.type)
-            when (infoData.type) {
+            type.background.setColorFilter(
+                    getColorForInfoType(infoData.type), PorterDuff.Mode.SRC_IN)
+            type.text = when (infoData.type) {
                 Info.TYPE_UNSPECIFIED -> {
-                    typeView.background.setColorFilter(-0x777778, PorterDuff.Mode.SRC_IN)
-                    typeView.text = activity.getString(R.string.type_unspecified)
+                    activity.getString(R.string.type_unspecified)
                 }
                 Info.TYPE_EVENT -> {
-                    typeView.background.setColorFilter(-0x6800, PorterDuff.Mode.SRC_IN)
-                    typeView.text = activity.getString(R.string.type_event)
+                    activity.getString(R.string.type_event)
                 }
                 Info.TYPE_INFORMATION -> {
-                    typeView.background.setColorFilter(-0xde690d, PorterDuff.Mode.SRC_IN)
-                    typeView.text = activity.getString(R.string.type_information)
+                    activity.getString(R.string.type_information)
                 }
                 Info.TYPE_SUBMISSION -> {
-                    typeView.background.setColorFilter(-0xb350b0, PorterDuff.Mode.SRC_IN)
-                    typeView.text = activity.getString(R.string.type_submission)
+                    activity.getString(R.string.type_submission)
                 }
                 Info.TYPE_LOCAL_MEMO -> {
-                    typeView.background.setColorFilter(-0x98c549, PorterDuff.Mode.SRC_IN)
-                    typeView.text = activity.getString(R.string.type_memo)
+                    activity.getString(R.string.type_memo)
+                }
+                else -> {
+                    ""
                 }
             }
-            val removeButton = parent.findViewById<View>(R.id.delete)
             if (infoData.removable) {
-                removeButton.apply {
+                delete.apply {
                     visibility = View.VISIBLE
                     setOnClickListener {
                         LiftimContext.getOrmaDatabase().updateInfo()
@@ -229,17 +212,12 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
                     }
                 }
             } else {
-                removeButton.apply {
+                delete.apply {
                     visibility = View.INVISIBLE
                     setOnClickListener(null)
                 }
             }
-            removeButton.apply {
-                isClickable = infoData.removable
-                isFocusable = infoData.removable
-            }
-            val moreButton = parent.findViewById<View>(R.id.more)
-            moreButton.setOnClickListener {
+            more.setOnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     PopupMenu(activity, it, Gravity.TOP or Gravity.END)
                 } else {
@@ -253,17 +231,6 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
                             })
                     setOnMenuItemClickListener {
                         when (it.itemId) {
-                            R.id.item_open -> {
-                                val options = if (Build.VERSION.SDK_INT
-                                        >= Build.VERSION_CODES.LOLLIPOP) {
-                                    ActivityOptions.makeSceneTransitionAnimation(activity,
-                                            Pair(parent, activity.getString(R.string.t_background))
-                                    ).toBundle()
-                                } else {
-                                    null
-                                }
-                                ViewInfoActivity.open(activity, infoData.id, options)
-                            }
                             R.id.item_open_link -> {
                                 openInCustomTab(activity, infoData.link!!)
                             }
@@ -340,9 +307,6 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
                     inflate(R.menu.info_item_action_no_link)
                     setOnMenuItemClickListener {
                         when (it.itemId) {
-                            R.id.item_open -> {
-                                ViewTimetableActivity.open(activity, infoData.id)
-                            }
                             R.id.item_edit -> {
                                 EditTimetableActivity.open(activity, infoData.id)
                             }

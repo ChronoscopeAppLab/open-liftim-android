@@ -87,7 +87,7 @@
             android:label="@string/timetable"
             android:theme="@style/AppTheme.Translucent" />
         <activity
-            android:name=".home.info.ViewInfoActivity"
+            android:name=".home.info.detail.ViewInfoActivity"
             android:label="@string/info"
             android:theme="@style/AppTheme.Translucent" />
         <activity

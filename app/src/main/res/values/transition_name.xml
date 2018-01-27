@@ -13,4 +13,5 @@
 -->
 <resources>
     <string name="t_background" translatable="false">transition_background</string>
+    <string name="t_fab" translatable="false">transition_fab</string>
 </resources>

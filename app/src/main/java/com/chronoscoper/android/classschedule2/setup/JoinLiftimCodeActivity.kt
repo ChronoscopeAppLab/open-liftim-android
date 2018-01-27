@@ -18,6 +18,8 @@ package com.chronoscoper.android.classschedule2.setup
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -47,7 +49,7 @@ class JoinLiftimCodeActivity : BaseActivity() {
 
     private val invitationNumberInput by bindView<EditText>(R.id.invitation_number)
     private val joinWithBarcodeButton by bindView<Button>(R.id.join_with_barcode)
-    private val doneButton by bindView<Button>(R.id.done)
+    private val doneButton by bindView<View>(R.id.done)
     private val status by bindView<TextView>(R.id.status)
 
     private val disposables = CompositeDisposable()
@@ -69,9 +71,13 @@ class JoinLiftimCodeActivity : BaseActivity() {
         }
 
         joinWithBarcodeButton.setOnClickListener {
+            val options = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(this, doneButton, getString(R.string.t_fab))
+                    .toBundle()
+            //TODO: Avoid using restricted API
             startActivityForResult(
                     Intent(this, JoinWithBarcodeActivity::class.java),
-                    RC_BARCODE)
+                    RC_BARCODE, options)
         }
     }
 

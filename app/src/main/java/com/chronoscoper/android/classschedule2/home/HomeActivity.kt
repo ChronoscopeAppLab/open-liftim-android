@@ -80,11 +80,12 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun showLiftimCodeName() {
+        if (!hasWindowFocus()) return
         Handler().post {
             val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this@HomeActivity)
             val defaultLiftimCode = sharedPrefs.getLong(getString(R.string.p_default_liftim_code), -1)
             if (defaultLiftimCode < 0) {
-                showToast(this, getString(R.string.no_joined_class), Toast.LENGTH_LONG)
+                showToast(this, getString(R.string.no_joined_class), Toast.LENGTH_SHORT)
             } else {
                 val liftimCodeInfo = LiftimContext.getOrmaDatabase().selectFromLiftimCodeInfo()
                         .liftimCodeEq(defaultLiftimCode)

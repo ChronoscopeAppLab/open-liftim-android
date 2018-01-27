@@ -101,5 +101,8 @@
     <string name="continue_anyway">Continue anyway</string>
     <string name="accessibility_change_liftim_code_image">Change image for this class</string>
     <string name="edit_subject_list">Edit subject list</string>
-    <string name="delete_class_manager">Delete this class</string>
+    <string name="delete_liftim_code_manager">Delete this class</string>
+    <string name="subject_name">Subject name</string>
+    <string name="subject_short_name">Subject short name</string>
+    <string name="edit_subject">Edit subject</string>
 </resources>

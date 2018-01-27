@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -43,6 +44,8 @@ class LiftimCodeSettingsActivity : BaseActivity() {
     private val liftimCodeImage by bindView<ImageView>(R.id.liftim_code_image)
     private val liftimCodeName by bindView<TextView>(R.id.liftim_code_name)
     private val liftimCodeNameLabel by bindView<TextInputLayout>(R.id.liftim_code_name_label)
+    private val editSubjectListButton by bindView<View>(R.id.edit_subject_list)
+    private val deleteLiftimCodeButton by bindView<View>(R.id.delete)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +70,9 @@ class LiftimCodeSettingsActivity : BaseActivity() {
                 .transition(progressiveFadeInTransition())
                 .into(liftimCodeImage)
         liftimCodeName.text = liftimCodeInfo.name
+        editSubjectListButton.setOnClickListener {
+            EditSubjectListActivity.open(this, liftimCode)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chronoscoper.android.classschedule2.home.info
+package com.chronoscoper.android.classschedule2.home.info.detail
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
@@ -21,13 +21,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.transition.Transition
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -38,7 +36,6 @@ import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 import com.chronoscoper.android.classschedule2.util.TransitionListenerAdapter
 import com.chronoscoper.android.classschedule2.util.getColorForInfoType
 import com.chronoscoper.android.classschedule2.util.getDarkerColor
-import com.chronoscoper.android.classschedule2.util.openInCustomTab
 import com.chronoscoper.android.classschedule2.view.SwipeDismissFrameLayout
 import kotterknife.bindView
 import org.parceler.Parcels
@@ -55,10 +52,6 @@ class ViewInfoActivity : BaseActivity() {
     private val dismissFrame by bindView<SwipeDismissFrameLayout>(R.id.dismiss_frame)
     private val toolbar by bindView<LinearLayout>(R.id.toolbar)
     private val title by bindView<TextView>(R.id.title)
-    private val detail by bindView<TextView>(R.id.detail)
-    private val date by bindView<TextView>(R.id.date)
-    private val linkUrl by bindView<TextView>(R.id.link_url)
-    private val type by bindView<TextView>(R.id.type)
 
     private var infoType = 0
 
@@ -86,46 +79,35 @@ class ViewInfoActivity : BaseActivity() {
             toolbar.addView(backButton, 0)
             animateToolbar(item.type, false)
         }
-        title.text = item.title
         dismissFrame.swipeDismissCallback =
                 object : SwipeDismissFrameLayout.SwipeDismissCallback() {
                     override fun onDismiss() {
                         animateFinishCompat()
                     }
                 }
-        detail.text = item.detail
-        if (!item.date.isNullOrEmpty()) {
-            date.visibility = View.VISIBLE
-            date.text = DateTimeUtils.getParsedDateExpression(item.date)
+        if (infoType == Info.TYPE_TIMETABLE) {
+            bindTimetable(item, savedInstanceState == null)
+        } else {
+            bindInfo(item, savedInstanceState == null)
         }
-        if (!item.link.isNullOrEmpty()) {
-            linkUrl.visibility = View.VISIBLE
-            linkUrl.text = item.link
-            linkUrl.setOnClickListener {
-                openInCustomTab(this, item.link!!)
-            }
+    }
+
+    private fun bindInfo(item: Info, initial: Boolean) {
+        title.text = item.title
+        if (initial) {
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.content, InfoFragment.obtain(item))
+                    .commit()
         }
-        when (item.type) {
-            Info.TYPE_UNSPECIFIED -> {
-                type.background.setColorFilter(-0x777778, PorterDuff.Mode.SRC_IN)
-                type.text = getString(R.string.type_unspecified)
-            }
-            Info.TYPE_EVENT -> {
-                type.background.setColorFilter(-0x6800, PorterDuff.Mode.SRC_IN)
-                type.text = getString(R.string.type_event)
-            }
-            Info.TYPE_INFORMATION -> {
-                type.background.setColorFilter(-0xde690d, PorterDuff.Mode.SRC_IN)
-                type.text = getString(R.string.type_information)
-            }
-            Info.TYPE_SUBMISSION -> {
-                type.background.setColorFilter(-0xb350b0, PorterDuff.Mode.SRC_IN)
-                type.text = getString(R.string.type_submission)
-            }
-            Info.TYPE_LOCAL_MEMO -> {
-                type.background.setColorFilter(-0x98c549, PorterDuff.Mode.SRC_IN)
-                type.text = getString(R.string.type_memo)
-            }
+    }
+
+    private fun bindTimetable(item: Info, initial: Boolean) {
+        title.text = getString(R.string.info_title_timetable,
+                DateTimeUtils.getParsedDateExpression(item.date))
+        if (initial) {
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.content, TimetableFragment.obtain(item))
+                    .commit()
         }
     }
 

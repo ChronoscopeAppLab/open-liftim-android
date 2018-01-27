@@ -19,9 +19,6 @@ import android.app.Activity
 import android.app.ActivityOptions
 import android.graphics.PorterDuff
 import android.os.Build
-import android.support.constraint.ConstraintLayout
-import android.support.constraint.ConstraintSet
-import android.support.transition.TransitionManager
 import android.support.v7.widget.RecyclerView
 import android.util.Pair
 import android.view.Gravity
@@ -31,6 +28,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.home.info.detail.ViewInfoActivity
 import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
@@ -108,7 +106,7 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
                         .inflate(R.layout.info_item, parent, false))
             } else {
                 TimetableHolder(inflater
-                        .inflate(R.layout.info_timetable_item_collapsed, parent, false))
+                        .inflate(R.layout.info_timetable_item, parent, false))
             }
 
     override fun getItemCount(): Int = data.size
@@ -247,48 +245,37 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
     }
 
     inner class TimetableHolder(itemView: View) : RecyclerViewHolder(itemView) {
-        private var expanded = false
-        private val expandedConstraints = ConstraintSet()
-        private val collapsedConstraints = ConstraintSet()
-
-        init {
-            expandedConstraints.clone(activity, R.layout.info_timetable_item_expanded)
-            collapsedConstraints.clone(activity, R.layout.info_timetable_item_collapsed)
-        }
+        private val title by bindView<TextView>(R.id.title)
+        private val info by bindView<TextView>(R.id.detail)
+        private val type by bindView<TextView>(R.id.type)
+        private val delete by bindView<View>(R.id.delete)
+        private val more by bindView<View>(R.id.more)
 
         fun bindContent(infoData: Info) {
-            expanded = false
-            val parent = itemView as ConstraintLayout? ?: return
-            collapsedConstraints.applyTo(parent)
-            bindContent(parent, infoData)
-        }
-
-        private fun bindContent(parent: ConstraintLayout, infoData: Info) {
-            parent.setOnClickListener {
-                TransitionManager.beginDelayedTransition(parent.parent as RecyclerView)
-                if (expanded) {
-                    collapsedConstraints.applyTo(parent)
+            itemView.setOnClickListener {
+                val options = if (Build.VERSION.SDK_INT
+                        >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions.makeSceneTransitionAnimation(activity,
+                            Pair(itemView, activity.getString(R.string.t_background))
+                    ).toBundle()
                 } else {
-                    expandedConstraints.applyTo(parent)
+                    null
                 }
-                bindContent(parent, infoData)
-                expanded = !expanded
+                ViewInfoActivity.open(activity, infoData, options)
             }
-            val titleView = parent.findViewById<TextView>(R.id.title)
-            titleView.text = activity.getString(R.string.info_title_timetable, DateTimeUtils.getParsedDateExpression(infoData.date))
-            val infoView = parent.findViewById<TextView>(R.id.detail)
+            title.text = activity.getString(R.string.info_title_timetable,
+                    DateTimeUtils.getParsedDateExpression(infoData.date))
             if (!infoData.detail.isNullOrEmpty()) {
-                infoView.visibility = View.VISIBLE
-                infoView.text = infoData.detail
+                info.visibility = View.VISIBLE
+                info.text = infoData.detail
             } else {
-                infoView.visibility = View.GONE
+                info.visibility = View.GONE
             }
 
-            val typeView = parent.findViewById<TextView>(R.id.type)
-            typeView.background.setColorFilter(-0xff6978, PorterDuff.Mode.SRC_IN)
-            typeView.text = activity.getString(R.string.class_schedule)
-            val deleteButton = parent.findViewById<View>(R.id.delete)
-            deleteButton.setOnClickListener {
+            type.background.setColorFilter(getColorForInfoType(infoData.type),
+                    PorterDuff.Mode.SRC_IN)
+            type.text = activity.getString(R.string.class_schedule)
+            delete.setOnClickListener {
                 LiftimContext.getOrmaDatabase().updateInfo()
                         .deleted(true)
                         .liftimCodeEq(LiftimContext.getLiftimCode())
@@ -297,8 +284,7 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
                 data.remove(infoData)
                 notifyItemRemoved(adapterPosition)
             }
-            val moreButton = parent.findViewById<View>(R.id.more)
-            moreButton.setOnClickListener {
+            more.setOnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     PopupMenu(activity, it, Gravity.TOP or Gravity.END)
                 } else {

@@ -15,8 +15,6 @@
  */
 package com.chronoscoper.android.classschedule2.home.timetable
 
-import android.content.Context
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
@@ -27,12 +25,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.Info
-import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
-import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.view.BottomMarginItemDecoration
-import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import kotterknife.bindView
 
 class TimetableFragment : Fragment() {
@@ -111,69 +106,6 @@ class TimetableFragment : Fragment() {
                     .liftimCodeEq(LiftimContext.getLiftimCode())
                     .idEq(specified)
                     .firstOrNull()
-        }
-    }
-
-    private class TimetableAdapter(context: Context, timetableInfoElement: Info?) :
-            RecyclerView.Adapter<RecyclerViewHolder>() {
-        private val timetable by lazy {
-            val timetableJson = timetableInfoElement?.timetable ?: return@lazy null
-            LiftimContext.getGson()
-                    .fromJson(timetableJson, InfoRemoteModel.Timetable::class.java)
-        }
-
-        override fun getItemCount(): Int = timetable?.subjects?.size ?: 1
-
-        override fun onBindViewHolder(holder: RecyclerViewHolder?, position: Int) {
-            holder ?: return
-            if (holder.itemViewType == ViewType.NORMAL.type) {
-                val item = timetable?.subjects?.get(position) ?: return
-                val view = holder.itemView
-                val index = view.findViewById<TextView>(R.id.index)
-                val subject = view.findViewById<TextView>(R.id.subject)
-                val detail = view.findViewById<TextView>(R.id.detail)
-                index.text = (timetable!!.subjectMinIndex + position).toString()
-                index.background.setColorFilter(
-                        obtainColorCorrespondsTo(item.subject), PorterDuff.Mode.SRC_IN)
-                subject.text = item.subject
-                if (item.detail.isNullOrEmpty()) {
-                    detail.visibility = View.GONE
-                    detail.setOnClickListener(null)
-                } else {
-                    detail.visibility = View.VISIBLE
-                    detail.text = item.detail
-                    view.setOnClickListener {
-                        detail.maxLines = if (detail.maxLines == 1) {
-                            50
-                        } else {
-                            1
-                        }
-                    }
-                }
-            }
-        }
-
-        private val inflater by lazy { LayoutInflater.from(context) }
-
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerViewHolder =
-                if (viewType == ViewType.NORMAL.type) {
-                    RecyclerViewHolder(inflater.inflate(
-                            R.layout.timetable_item, parent, false))
-                } else {
-                    RecyclerViewHolder(inflater.inflate(
-                            R.layout.timetable_placeholder, parent, false))
-                }
-
-        override fun getItemViewType(position: Int): Int =
-                if (timetable != null) {
-                    ViewType.NORMAL.type
-                } else {
-                    ViewType.PLACEHOLDER.type
-                }
-
-        private enum class ViewType(val type: Int) {
-            NORMAL(1),
-            PLACEHOLDER(2)
         }
     }
 }

@@ -18,8 +18,18 @@ package com.chronoscoper.android.classschedule2.setting.manager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.TextInputLayout
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
+import kotterknife.bindView
 
 class LiftimCodeSettingsActivity : BaseActivity() {
     companion object {
@@ -30,6 +40,10 @@ class LiftimCodeSettingsActivity : BaseActivity() {
         }
     }
 
+    private val liftimCodeImage by bindView<ImageView>(R.id.liftim_code_image)
+    private val liftimCodeName by bindView<TextView>(R.id.liftim_code_name)
+    private val liftimCodeNameLabel by bindView<TextInputLayout>(R.id.liftim_code_name_label)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val liftimCode = intent.getLongExtra(EXTRA_LIFTIM_CODE, -1)
@@ -39,6 +53,32 @@ class LiftimCodeSettingsActivity : BaseActivity() {
         }
         setContentView(R.layout.activity_liftim_code_settings)
 
-        //TODO: Add more implementation here..
+        val liftimCodeInfo = LiftimContext.getOrmaDatabase()
+                .selectFromLiftimCodeInfo()
+                .liftimCodeEq(liftimCode)
+                .firstOrNull() ?: kotlin.run { finish(); return }
+
+        Glide.with(this)
+                .load(LiftimContext
+                        .getApiUrl("liftim_code_image.png?" +
+                                "liftim_code=${liftimCode}&" +
+                                "token=${LiftimContext.getToken()}"))
+                .apply(RequestOptions.circleCropTransform())
+                .transition(progressiveFadeInTransition())
+                .into(liftimCodeImage)
+        liftimCodeName.text = liftimCodeInfo.name
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.options_liftim_code_settings, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        item ?: return false
+        if (item.itemId == R.id.options_done) {
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

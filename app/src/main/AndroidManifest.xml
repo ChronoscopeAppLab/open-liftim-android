@@ -96,6 +96,7 @@
         <activity
             android:name=".setting.manager.LiftimCodeSettingsActivity"
             android:label="@string/settings" />
+        <activity android:name=".setting.manager.EditSubjectListActivity" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

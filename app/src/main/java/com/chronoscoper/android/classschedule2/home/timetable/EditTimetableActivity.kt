@@ -299,7 +299,7 @@ class EditTimetableActivity : BaseActivity() {
         inner class DragViewHolder(itemView: View) : RecyclerViewHolder(itemView) {
             init {
                 itemView.findViewById<View>(R.id.drag_handle)
-                        .setOnTouchListener { view, motionEvent ->
+                        .setOnTouchListener { _, motionEvent ->
                             if (motionEvent.actionMasked == MotionEvent.ACTION_DOWN) {
                                 itemTouchHelper.startDrag(this)
                             }

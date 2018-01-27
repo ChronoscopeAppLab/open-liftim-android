@@ -20,7 +20,10 @@ import com.github.gfx.android.orma.annotation.Table;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 @Table("subject")
+@Parcel
 public class Subject {
     @Column(value = "liftim_code", indexed = true)
     public long liftimCode;

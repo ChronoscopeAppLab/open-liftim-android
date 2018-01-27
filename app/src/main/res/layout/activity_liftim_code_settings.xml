@@ -73,11 +73,11 @@
             android:text="@string/edit_subject_list" />
 
         <Button
-            android:id="@+id/delete_class"
+            android:id="@+id/delete"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/delete_class_manager"
+            android:text="@string/delete_liftim_code_manager"
             android:textColor="@android:color/holo_red_light" />
     </LinearLayout>
 </ScrollView>

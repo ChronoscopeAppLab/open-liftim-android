@@ -14,4 +14,6 @@
 <resources>
     <string name="t_background" translatable="false">transition_background</string>
     <string name="t_fab" translatable="false">transition_fab</string>
+    <string name="t_subject_color" translatable="false">transition_subject_color</string>
+    <string name="t_subject_name" translatable="false">transition_subject_name</string>
 </resources>

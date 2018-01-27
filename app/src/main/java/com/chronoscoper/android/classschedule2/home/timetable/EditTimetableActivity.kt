@@ -339,10 +339,10 @@ class EditTimetableActivity : BaseActivity() {
         }
 
         override fun onCreateView(
-                inflater: LayoutInflater?,
+                inflater: LayoutInflater,
                 container: ViewGroup?,
                 savedInstanceState: Bundle?): View? =
-                inflater?.inflate(R.layout.fragment_class_editor, container, false)
+                inflater.inflate(R.layout.fragment_class_editor, container, false)
 
         private val subjectInput by bindView<EditText>(R.id.subject)
         private val detailInput by bindView<EditText>(R.id.detail)
@@ -378,10 +378,10 @@ class EditTimetableActivity : BaseActivity() {
 
     class ChangeMinIndexDialog : DialogFragment() {
         override fun onCreateView(
-                inflater: LayoutInflater?,
+                inflater: LayoutInflater,
                 container: ViewGroup?,
                 savedInstanceState: Bundle?): View? =
-                inflater?.inflate(R.layout.fragment_change_min_index, container, false)
+                inflater.inflate(R.layout.fragment_change_min_index, container, false)
 
         private val startTime by bindView<EditText>(R.id.start_time)
 

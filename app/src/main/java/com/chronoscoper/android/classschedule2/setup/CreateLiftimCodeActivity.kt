@@ -56,6 +56,7 @@ class CreateLiftimCodeActivity : BaseActivity() {
         webView.addJavascriptInterface(JSIAndroidNative(), "androidNative")
     }
 
+    @Suppress("DEPRECATION")
     private fun initCookie() {
         val cookieManager = CookieManager.getInstance()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

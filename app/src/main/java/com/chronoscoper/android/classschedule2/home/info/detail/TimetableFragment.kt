@@ -25,18 +25,17 @@ class TimetableFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater?.inflate(R.layout.fragment_detail_timetable, container, false)
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_detail_timetable, container, false)
 
     private val timetableList by bindView<RecyclerView>(R.id.timetable_list)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val item = Parcels.unwrap<Info>(arguments.getParcelable(EXTRA_ITEM)) ?: return
-        timetableList.adapter = TimetableAdapterWithTopInfo(context, item)
+        val item = Parcels.unwrap<Info>(arguments?.getParcelable(EXTRA_ITEM)) ?: return
+        timetableList.adapter = TimetableAdapterWithTopInfo(context!!, item)
         timetableList.addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }

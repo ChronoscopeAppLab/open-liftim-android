@@ -40,10 +40,9 @@ class InfoFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater?.inflate(R.layout.fragment_detail_info, container, false)
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_detail_info, container, false)
 
     private val detail by bindView<TextView>(R.id.detail)
     private val date by bindView<TextView>(R.id.date)
@@ -63,7 +62,7 @@ class InfoFragment : Fragment() {
             linkUrl.visibility = View.VISIBLE
             linkUrl.text = item.link
             linkUrl.setOnClickListener {
-                openInCustomTab(context, item.link!!)
+                openInCustomTab(context!!, item.link!!)
             }
         }
         when (item.type) {

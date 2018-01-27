@@ -29,10 +29,9 @@ import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import kotterknife.bindView
 
 class LoginFragment : BaseSetupFragment() {
-    override fun onCreateView(inflater: LayoutInflater?,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater?.inflate(R.layout.fragment_login, container, false)
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_login, container, false)
 
     private val loginButton by bindView<Button>(R.id.login)
 
@@ -49,8 +48,8 @@ class LoginFragment : BaseSetupFragment() {
             val intent = Intent(Intent.ACTION_VIEW,
                     Uri.parse(LiftimContext.getApiUrl("auth")))
             startActivity(intent)
-            setComponentEnabled(context, true, TokenCallbackActivity::class.java)
-            activity.finish()
+            setComponentEnabled(context!!, true, TokenCallbackActivity::class.java)
+            activity!!.finish()
         }
     }
 }

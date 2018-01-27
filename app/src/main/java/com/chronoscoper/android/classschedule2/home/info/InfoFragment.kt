@@ -28,10 +28,8 @@ import kotterknife.bindView
 
 class InfoFragment : Fragment() {
     override fun onCreateView(
-            inflater: LayoutInflater?,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_info, container, false)
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_info, container, false)
     }
 
     private val list by bindView<RecyclerView>(R.id.list)
@@ -40,7 +38,7 @@ class InfoFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         list.apply {
-            adapter = InfoRecyclerViewAdapter(activity)
+            adapter = InfoRecyclerViewAdapter(activity!!)
             addItemDecoration(BottomMarginItemDecoration())
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }

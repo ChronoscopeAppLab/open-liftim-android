@@ -26,10 +26,8 @@ import kotterknife.bindView
 
 class InitialSyncErrorFragment : Fragment() {
     override fun onCreateView(
-            inflater: LayoutInflater?,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View? =
-            inflater?.inflate(R.layout.fragment_initial_sync_error, container, false)
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_initial_sync_error, container, false)
 
     val retryButton by bindView<Button>(R.id.retry)
 

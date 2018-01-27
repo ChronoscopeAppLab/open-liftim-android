@@ -5,11 +5,11 @@ def commitCount =
         Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.chronoscoper.android.classschedule2.open"
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode commitCount
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

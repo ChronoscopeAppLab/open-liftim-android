@@ -23,8 +23,7 @@ import android.view.ViewGroup
 import com.chronoscoper.android.classschedule2.R
 
 class TokenCallbackFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater?,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater?.inflate(R.layout.fragment_token_callback, container, false)
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_token_callback, container, false)
 }

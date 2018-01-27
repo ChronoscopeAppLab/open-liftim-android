@@ -23,9 +23,7 @@ import android.view.ViewGroup
 
 open class BaseSetupFragment : Fragment() {
     override fun onCreateView(
-            inflater: LayoutInflater?,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View? {
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (activity !is SetupActivity) {
             throw IllegalStateException("Parent activity must be instance of SetupActivity")
         }

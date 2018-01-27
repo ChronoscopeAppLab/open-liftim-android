@@ -47,10 +47,9 @@ class LiftimCodeFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater?.inflate(R.layout.liftim_code_pager, container, false)
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.liftim_code_pager, container, false)
 
     private val nameLabel by bindView<TextView>(R.id.name)
     private val image by bindView<ImageView>(R.id.image)

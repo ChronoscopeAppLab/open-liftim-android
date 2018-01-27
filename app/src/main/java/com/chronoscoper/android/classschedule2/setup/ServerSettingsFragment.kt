@@ -28,10 +28,8 @@ import kotterknife.bindView
 
 class ServerSettingsFragment : BaseSetupFragment() {
     override fun onCreateView(
-            inflater: LayoutInflater?,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_server_settings, container, false)
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_server_settings, container, false)
     }
 
     private val urlEditText by bindView<EditText>(R.id.sync_url)
@@ -50,7 +48,7 @@ class ServerSettingsFragment : BaseSetupFragment() {
                     .putString(getString(R.string.p_sync_url), url)
                     .apply()
 
-            LiftimContext.init(context, url, 0, "")
+            LiftimContext.init(context!!, url, 0, "")
 
             nextStep()
         }

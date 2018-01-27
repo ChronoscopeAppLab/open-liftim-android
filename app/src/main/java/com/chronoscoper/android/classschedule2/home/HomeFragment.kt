@@ -43,10 +43,8 @@ class HomeFragment : Fragment(), ViewPager.OnPageChangeListener {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_home, container, false)
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     private val tabLayout by bindView<TabLayout>(R.id.tab_layout)
@@ -60,7 +58,7 @@ class HomeFragment : Fragment(), ViewPager.OnPageChangeListener {
         pager.pageMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f,
                 resources.displayMetrics).toInt()
         pager.setPageMarginDrawable(R.drawable.pager_margin)
-        pager.adapter = HomePagerAdapter(context, childFragmentManager)
+        pager.adapter = HomePagerAdapter(context!!, childFragmentManager)
         pager.addOnPageChangeListener(this)
         pager.currentItem = page
 

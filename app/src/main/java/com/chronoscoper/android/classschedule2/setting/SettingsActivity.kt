@@ -71,10 +71,10 @@ class SettingsActivity : BaseActivity() {
 
     class AppInfoDialog : BottomSheetDialogFragment() {
         override fun onCreateView(
-                inflater: LayoutInflater?,
+                inflater: LayoutInflater,
                 container: ViewGroup?,
                 savedInstanceState: Bundle?): View? =
-                inflater?.inflate(R.layout.fragment_app_info, container, false)
+                inflater.inflate(R.layout.fragment_app_info, container, false)
 
         private val openProjectPageButton by bindView<Button>(R.id.open_project_page)
 

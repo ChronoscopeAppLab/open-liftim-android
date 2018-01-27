@@ -43,10 +43,8 @@ class TimetableFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View? =
-            inflater?.inflate(R.layout.fragment_timetable, container, false)
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_timetable, container, false)
 
     private val timetableList by bindView<RecyclerView>(R.id.timetable_list)
     private val dateLabel by bindView<TextView>(R.id.date)
@@ -69,7 +67,7 @@ class TimetableFragment : Fragment() {
 
     private fun initTimetable() {
         val timetable = obtainTargetElement()
-        timetableList.adapter = TimetableAdapter(context, timetable)
+        timetableList.adapter = TimetableAdapter(context!!, timetable)
         timetableList.addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         timetableList.addItemDecoration(BottomMarginItemDecoration())

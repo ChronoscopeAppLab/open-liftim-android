@@ -226,10 +226,10 @@ class EditInfoActivity : BaseActivity() {
         }
 
         override fun onCreateView(
-                inflater: LayoutInflater?,
+                inflater: LayoutInflater,
                 container: ViewGroup?,
                 savedInstanceState: Bundle?): View? =
-                inflater?.inflate(R.layout.fragment_remote_additional_field,
+                inflater.inflate(R.layout.fragment_remote_additional_field,
                         container, false)
 
         private val removableSwitch by bindView<Switch>(R.id.user_removable)
@@ -254,7 +254,7 @@ class EditInfoActivity : BaseActivity() {
                     link = element.link
                     type = typeSpinner.selectedItemPosition
                     removable = removableSwitch.isChecked
-                    RegisterInfoService.start(context, LiftimContext.getGson()
+                    RegisterInfoService.start(context!!, LiftimContext.getGson()
                             .toJson(remoteFormatElement))
                 }
             }

@@ -44,10 +44,9 @@ import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import kotterknife.bindView
 
 class LiftimCodeChooserFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater?,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater?.inflate(R.layout.fragment_liftim_code_chooser, container, false)
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_liftim_code_chooser, container, false)
 
     private val list by bindView<RecyclerView>(R.id.list)
     private val joinButton by bindView<Button>(R.id.join)
@@ -60,7 +59,7 @@ class LiftimCodeChooserFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        list.adapter = LiftimCodeAdapter(activity)
+        list.adapter = LiftimCodeAdapter(activity!!)
         joinButton.setOnClickListener {
             startActivity(Intent(context, JoinLiftimCodeActivity::class.java))
         }

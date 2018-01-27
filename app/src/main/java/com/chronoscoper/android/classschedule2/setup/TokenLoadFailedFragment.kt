@@ -28,10 +28,9 @@ import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import kotterknife.bindView
 
 class TokenLoadFailedFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater?,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater?.inflate(R.layout.fragment_token_load_failed, container, false)
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_token_load_failed, container, false)
 
     private val retryButton by bindView<Button>(R.id.retry)
 
@@ -41,7 +40,7 @@ class TokenLoadFailedFragment : Fragment() {
             val intent = Intent(Intent.ACTION_VIEW,
                     Uri.parse(LiftimContext.getApiUrl("auth")))
             startActivity(intent)
-            activity.finish()
+            activity!!.finish()
         }
     }
 }

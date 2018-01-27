@@ -39,17 +39,15 @@ import kotterknife.bindView
 
 class WeeklyFragment : Fragment() {
     override fun onCreateView(
-            inflater: LayoutInflater?,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View? =
-            inflater?.inflate(R.layout.fragment_weekly, container, false)
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_weekly, container, false)
 
     private val tabs by bindView<TabLayout>(R.id.tab)
     private val pager by bindView<ViewPager>(R.id.pager)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        pager.adapter = Adapter(context, childFragmentManager)
+        pager.adapter = Adapter(context!!, childFragmentManager)
         tabs.tabMode = TabLayout.MODE_SCROLLABLE
         tabs.tabGravity = TabLayout.GRAVITY_FILL
         tabs.setupWithViewPager(pager)
@@ -97,17 +95,17 @@ class WeeklyFragment : Fragment() {
             }
 
             override fun onCreateView(
-                    inflater: LayoutInflater?,
+                    inflater: LayoutInflater,
                     container: ViewGroup?,
                     savedInstanceState: Bundle?): View? =
-                    inflater?.inflate(R.layout.fragment_day, container, false)
+                    inflater.inflate(R.layout.fragment_day, container, false)
 
             private val list by bindView<RecyclerView>(R.id.list)
 
             override fun onActivityCreated(savedInstanceState: Bundle?) {
                 super.onActivityCreated(savedInstanceState)
 
-                list.adapter = DayAdapter(context, arguments.getInt(DAY_OF_WEEK))
+                list.adapter = DayAdapter(context!!, arguments!!.getInt(DAY_OF_WEEK))
                 list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
                 list.addItemDecoration(BottomMarginItemDecoration())
             }

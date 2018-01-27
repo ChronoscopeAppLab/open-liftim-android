@@ -15,17 +15,16 @@ import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import kotterknife.bindView
 
 class ArchiveFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater?,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater?.inflate(R.layout.fragment_archive, container, false)
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_archive, container, false)
 
     private val list by bindView<RecyclerView>(R.id.list)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        list.adapter = Adapter(activity)
+        list.adapter = Adapter(activity!!)
         list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }
 

@@ -24,12 +24,12 @@ import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import kotterknife.bindView
 
-class LoginAgainActivity : BaseActivity() {
+class ReLoginActivity : BaseActivity() {
     private val loginButton by bindView<Button>(R.id.login)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login_again)
+        setContentView(R.layout.activity_re_login)
         loginButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW,
                     Uri.parse(LiftimContext.getApiUrl("auth")))

@@ -166,7 +166,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         })
         pager.setPageTransformer(false,
-                ViewPager.PageTransformer { page, position ->
+                { page, position ->
                     page.alpha = 1 - Math.abs(position)
                 })
     }

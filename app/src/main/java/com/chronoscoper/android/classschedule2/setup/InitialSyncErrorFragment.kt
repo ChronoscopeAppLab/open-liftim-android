@@ -29,7 +29,7 @@ class InitialSyncErrorFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_initial_sync_error, container, false)
 
-    val retryButton by bindView<Button>(R.id.retry)
+    private val retryButton by bindView<Button>(R.id.retry)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

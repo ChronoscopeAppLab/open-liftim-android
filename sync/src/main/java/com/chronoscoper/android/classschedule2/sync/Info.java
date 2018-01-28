@@ -19,11 +19,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.github.gfx.android.orma.annotation.Column;
-import com.github.gfx.android.orma.annotation.Setter;
 import com.github.gfx.android.orma.annotation.Table;
 
 import org.parceler.Parcel;
-import org.parceler.ParcelConstructor;
 import org.parceler.ParcelProperty;
 
 @Parcel

@@ -33,7 +33,7 @@ import kotterknife.bindView
 
 class HomeFragment : Fragment(), ViewPager.OnPageChangeListener {
     companion object {
-        private const val EXTRA_PAGE = "page";
+        private const val EXTRA_PAGE = "page"
 
         fun obtain(page: Int): HomeFragment {
             val result = HomeFragment()

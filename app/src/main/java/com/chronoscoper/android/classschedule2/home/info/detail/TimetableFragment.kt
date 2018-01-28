@@ -7,9 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.chronoscoper.android.classschedule2.R
-import com.chronoscoper.android.classschedule2.home.timetable.TimetableAdapter
 import com.chronoscoper.android.classschedule2.sync.Info
 import kotterknife.bindView
 import org.parceler.Parcels

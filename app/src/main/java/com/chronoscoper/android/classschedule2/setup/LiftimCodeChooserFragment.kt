@@ -136,7 +136,7 @@ class LiftimCodeChooserFragment : Fragment() {
             //TODO: Implement deleting liftim code
         }
 
-        val inflater by lazy { LayoutInflater.from(activity) }
+        val inflater: LayoutInflater by lazy { LayoutInflater.from(activity) }
 
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerViewHolder =
                 RecyclerViewHolder(inflater.inflate(

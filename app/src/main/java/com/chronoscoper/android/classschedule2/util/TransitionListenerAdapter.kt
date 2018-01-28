@@ -15,8 +15,10 @@
  */
 package com.chronoscoper.android.classschedule2.util
 
+import android.annotation.TargetApi
 import android.transition.Transition
 
+@TargetApi(19)
 abstract class TransitionListenerAdapter : Transition.TransitionListener {
     override fun onTransitionStart(transition: Transition?) {}
 

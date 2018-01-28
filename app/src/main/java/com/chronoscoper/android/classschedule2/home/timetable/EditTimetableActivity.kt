@@ -311,7 +311,7 @@ class EditTimetableActivity : BaseActivity() {
         fun generateCurrentStateJson(): String {
             return InfoRemoteModel.Timetable().apply {
                 subjectMinIndex = minIndex
-                subjects = data.toTypedArray();
+                subjects = data.toTypedArray()
             }.toString()
         }
 

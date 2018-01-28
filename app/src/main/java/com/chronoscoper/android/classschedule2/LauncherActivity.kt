@@ -63,7 +63,7 @@ class LauncherActivity : BaseActivity() {
             override fun onError(e: Throwable) {
                 e.printStackTrace()
                 if (e is InvalidTokenException) {
-                    startActivity(Intent(this@LauncherActivity, LoginAgainActivity::class.java))
+                    startActivity(Intent(this@LauncherActivity, ReLoginActivity::class.java))
                     finish()
                     return
                 }

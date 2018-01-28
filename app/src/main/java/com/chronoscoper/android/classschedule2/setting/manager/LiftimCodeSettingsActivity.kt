@@ -64,7 +64,7 @@ class LiftimCodeSettingsActivity : BaseActivity() {
         Glide.with(this)
                 .load(LiftimContext
                         .getApiUrl("liftim_code_image.png?" +
-                                "liftim_code=${liftimCode}&" +
+                                "liftim_code=$liftimCode&" +
                                 "token=${LiftimContext.getToken()}"))
                 .apply(RequestOptions.circleCropTransform())
                 .transition(progressiveFadeInTransition())

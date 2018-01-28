@@ -24,6 +24,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.transition.Transition
 import android.view.LayoutInflater
 import android.widget.ImageButton
@@ -111,6 +112,7 @@ class ViewInfoActivity : BaseActivity() {
         }
     }
 
+    @SuppressLint("NewApi")
     private fun animateToolbar(infoType: Int, reverse: Boolean) {
         val toolbarBackgroundAnimator = ValueAnimator.ofObject(ArgbEvaluator(),
                 Color.TRANSPARENT, getColorForInfoType(infoType))

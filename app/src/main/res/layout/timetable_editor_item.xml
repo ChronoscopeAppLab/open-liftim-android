@@ -13,6 +13,7 @@
 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
@@ -38,7 +39,7 @@
         android:paddingRight="5dp"
         android:paddingStart="10dp"
         android:paddingTop="5dp"
-        android:src="@drawable/ic_drag_handle" />
+        app:srcCompat="@drawable/ic_drag_handle" />
 
     <TextView
         android:id="@+id/index"
@@ -78,5 +79,5 @@
         android:background="@drawable/clickable_background_black"
         android:contentDescription="@string/delete"
         android:padding="5dp"
-        android:src="@drawable/ic_delete" />
+        app:srcCompat="@drawable/ic_delete" />
 </LinearLayout>

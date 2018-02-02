@@ -64,4 +64,13 @@ object DateTimeUtils {
         }
         return dateTime.toString(DateTimeFormat.fullDate())
     }
+
+    fun getToday(): String {
+        return DateTime.now().toString(DateTimeFormat.forPattern("yyyy/MM/dd"))
+    }
+
+    fun getTomorrowPosixTime(): Long {
+        return DateTime.now().withTime(0,0,0,0)
+                .plusDays(1).millis
+    }
 }

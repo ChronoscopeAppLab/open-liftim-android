@@ -16,11 +16,13 @@
 package com.chronoscoper.android.classschedule2
 
 import android.app.Application
+import android.os.Build
 import android.preference.PreferenceManager
 import com.chronoscoper.android.classschedule2.setting.SettingsActivity
 import com.chronoscoper.android.classschedule2.setup.SetupActivity
 import com.chronoscoper.android.classschedule2.setup.TokenCallbackActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import com.chronoscoper.android.classschedule2.util.NotificationChannel
 import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import com.squareup.leakcanary.LeakCanary
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
@@ -35,6 +37,8 @@ class LiftimApplication : Application() {
         CalligraphyConfig.initDefault(CalligraphyConfig.Builder()
                 .setDefaultFontPath("Rubik-Regular.ttf")
                 .build())
+
+        RegisterNotificationChannelIfNeeded()
     }
 
     private val sharedPrefs by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
@@ -61,6 +65,12 @@ class LiftimApplication : Application() {
                 setComponentEnabled(this, false,
                         SetupActivity::class.java, TokenCallbackActivity::class.java)
             }
+        }
+    }
+
+    private fun RegisterNotificationChannelIfNeeded() {
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+            NotificationChannel.register(this)
         }
     }
 }

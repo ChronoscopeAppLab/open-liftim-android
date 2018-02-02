@@ -26,6 +26,7 @@ import android.os.Build
 import android.os.Bundle
 import android.transition.Transition
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -43,13 +44,16 @@ import org.parceler.Parcels
 class ViewInfoActivity : BaseActivity() {
     companion object {
         private const val EXTRA_TARGET = "target"
+        private const val WINDOW_ANIMATION_NEEDED = "window_anim_needed"
+
         fun open(context: Context, item: Info, options: Bundle?) {
-            context.startActivity(createIntent(context, item), options)
+            context.startActivity(createIntent(context, item, true), options)
         }
 
-        fun createIntent(context: Context, item: Info): Intent {
+        fun createIntent(context: Context, item: Info, windowAnimNeeded: Boolean = false): Intent {
             return Intent(context, ViewInfoActivity::class.java)
                     .putExtra(EXTRA_TARGET, Parcels.wrap(item))
+                    .putExtra(WINDOW_ANIMATION_NEEDED, windowAnimNeeded)
         }
     }
 
@@ -58,6 +62,8 @@ class ViewInfoActivity : BaseActivity() {
     private val title by bindView<TextView>(R.id.title)
 
     private var infoType = 0
+
+    private var isWindowAnimationNeeded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,14 +77,21 @@ class ViewInfoActivity : BaseActivity() {
             animateFinishCompat()
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && savedInstanceState == null) {
-            window.sharedElementEnterTransition.addListener(object : TransitionListenerAdapter() {
-                @SuppressLint("NewApi")
-                override fun onTransitionEnd(transition: Transition?) {
-                    toolbar.addView(backButton, 0)
-                    animateToolbar(item.type, false)
-                    transition?.removeListener(this)
-                }
-            })
+            isWindowAnimationNeeded = intent.getBooleanExtra(WINDOW_ANIMATION_NEEDED, false)
+            if (isWindowAnimationNeeded) {
+                window.sharedElementEnterTransition.addListener(
+                        object : TransitionListenerAdapter() {
+                            @SuppressLint("NewApi")
+                            override fun onTransitionEnd(transition: Transition?) {
+                                toolbar.addView(backButton, 0)
+                                animateToolbar(item.type, false)
+                                transition?.removeListener(this)
+                            }
+                        })
+            } else {
+                toolbar.addView(backButton, 0)
+                animateToolbar(item.type, false)
+            }
         } else {
             toolbar.addView(backButton, 0)
             animateToolbar(item.type, false)
@@ -143,14 +156,14 @@ class ViewInfoActivity : BaseActivity() {
             }
         }
 
-        val backButton = findViewById<ImageButton>(R.id.back)
+        val backButton = findViewById<View>(R.id.back) as? ImageButton
         val titleAnimator = ValueAnimator.ofObject(ArgbEvaluator(),
                 Color.BLACK, Color.WHITE)
         titleAnimator.duration = 250
         titleAnimator.addUpdateListener {
             val animated = it.animatedValue as Int
             title.setTextColor(animated)
-            backButton.setColorFilter(animated)
+            backButton?.setColorFilter(animated)
         }
         if (reverse) {
             titleAnimator.reverse()
@@ -160,9 +173,13 @@ class ViewInfoActivity : BaseActivity() {
     }
 
     override fun animateFinishCompat() {
-        animateToolbar(infoType, true)
-        toolbar.removeViewAt(0)
-        super.animateFinishCompat()
+        if (isWindowAnimationNeeded) {
+            animateToolbar(infoType, true)
+            toolbar.removeViewAt(0)
+            super.animateFinishCompat()
+        } else {
+            finish()
+        }
     }
 
     override fun onBackPressed() {

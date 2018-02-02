@@ -24,7 +24,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.RequiresApi
 import android.transition.Transition
 import android.view.LayoutInflater
 import android.widget.ImageButton
@@ -45,8 +44,12 @@ class ViewInfoActivity : BaseActivity() {
     companion object {
         private const val EXTRA_TARGET = "target"
         fun open(context: Context, item: Info, options: Bundle?) {
-            context.startActivity(Intent(context, ViewInfoActivity::class.java)
-                    .putExtra(EXTRA_TARGET, Parcels.wrap(item)), options)
+            context.startActivity(createIntent(context, item), options)
+        }
+
+        fun createIntent(context: Context, item: Info): Intent {
+            return Intent(context, ViewInfoActivity::class.java)
+                    .putExtra(EXTRA_TARGET, Parcels.wrap(item))
         }
     }
 

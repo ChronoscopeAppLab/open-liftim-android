@@ -243,6 +243,7 @@ class EditInfoActivity : BaseActivity() {
             val element = (activity as? EditInfoActivity)?.createElementFromCurrentState()
                     ?: throw IllegalStateException("Must be added to EditInfoActivity")
             okButton.setOnClickListener {
+                it.isEnabled = false
                 val remoteFormatElement = InfoRemoteModel.InfoBody()
                 remoteFormatElement.apply {
                     id = element.id
@@ -257,6 +258,8 @@ class EditInfoActivity : BaseActivity() {
                     RegisterInfoService.start(context!!, LiftimContext.getGson()
                             .toJson(remoteFormatElement))
                 }
+                dismiss()
+                activity?.finish()
             }
             cancelButton.setOnClickListener {
                 dismiss()

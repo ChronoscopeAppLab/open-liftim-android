@@ -16,7 +16,6 @@
 package com.chronoscoper.android.classschedule2.setup
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.webkit.CookieManager
@@ -37,18 +36,9 @@ class CreateLiftimCodeActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_liftim_code)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            initCookie()
-        }
+        initCookie()
         webView.loadUrl(LiftimContext.getApiUrl("pages/create_liftim_code"))
-        webView.webViewClient = object : WebViewClient() {
-            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                super.onPageStarted(view, url, favicon)
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    initCookie()
-                }
-            }
-        }
+        webView.webViewClient = WebViewClient()
         webView.settings.apply {
             javaScriptEnabled = true
             cacheMode = WebSettings.LOAD_NO_CACHE

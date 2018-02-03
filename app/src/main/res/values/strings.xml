@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
+
 <!--
    Copyright 2017-2018 Chronoscope
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,6 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
 <resources>
     <string name="app_name">Liftim</string>
     <string name="sync_url">Sync URL(e.g. http://example.com/)</string>
@@ -68,7 +70,6 @@
     <string name="move_item">Move item</string>
     <string name="register_local">Register locally</string>
     <string name="share_class">Share with classmate</string>
-    <string name="register_progress">Registering…</string>
     <string name="subject">Subject</string>
     <string name="detail">Detail</string>
     <string name="cancel">Cancel</string>

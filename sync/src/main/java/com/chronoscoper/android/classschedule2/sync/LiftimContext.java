@@ -22,6 +22,9 @@ import com.github.gfx.android.orma.AccessThreadConstraint;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -30,16 +33,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public final class LiftimContext {
     private static OkHttpClient sOkHttpClient;
     private static LiftimService sLiftimService;
-    private static Gson sGson;
+    private static Gson sGson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
     private static OrmaDatabase sOrmaDatabase;
     private static String sBaseUrl;
+    private static ExecutorService sThreadPool = Executors.newCachedThreadPool();
 
     public static void init(
             @NonNull final Context context,
             @NonNull final String baseUrl,
             final long liftimCode,
             final String token) {
-        sGson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
@@ -114,5 +117,9 @@ public final class LiftimContext {
     @NonNull
     public static String getApiUrl(@NonNull String fileName) {
         return sBaseUrl + "api/v1/" + fileName;
+    }
+
+    public static void executeBackground(@NonNull Runnable task) {
+        sThreadPool.execute(task);
     }
 }

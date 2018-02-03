@@ -19,9 +19,6 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import android.support.v4.app.NotificationCompat
-import android.support.v4.content.ContextCompat
-import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 
 class RegisterInfoService : Service() {
@@ -33,33 +30,20 @@ class RegisterInfoService : Service() {
         }
     }
 
-    override fun onBind(p0: Intent?): IBinder? = null
+    override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val content = intent?.getStringExtra(CONTENT)
-                ?: kotlin.run { stopSelf(); return START_STICKY }
-        object : Thread() {
-            override fun run() {
-                val notification = NotificationCompat.Builder(
-                        this@RegisterInfoService, "").apply {
-                    color = ContextCompat.getColor(this@RegisterInfoService,
-                            R.color.colorPrimaryDarkText)
-                    setContentTitle(getString(R.string.register_progress))
-                }.build()
-                startForeground(1, notification)
-                try {
-                    LiftimContext.getLiftimService()
-                            .registerInfo(LiftimContext.getLiftimCode(),
-                                    LiftimContext.getToken(), content)
-                            .execute()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-                stopForeground(true)
-                stopSelf()
+        val content = intent?.getStringExtra(CONTENT) ?: return START_NOT_STICKY
+        LiftimContext.executeBackground {
+            try {
+                LiftimContext.getLiftimService()
+                        .registerInfo(LiftimContext.getLiftimCode(),
+                                LiftimContext.getToken(), content)
+                        .execute()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        }.start()
-
-        return START_STICKY
+        }
+        return START_NOT_STICKY
     }
 }

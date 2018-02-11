@@ -27,7 +27,6 @@ import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
-import com.chronoscoper.android.classschedule2.view.BottomMarginItemDecoration
 import kotterknife.bindView
 
 class TimetableFragment : Fragment() {
@@ -70,7 +69,6 @@ class TimetableFragment : Fragment() {
         timetableList.adapter = TimetableAdapter(context!!, timetable)
         timetableList.addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        timetableList.addItemDecoration(BottomMarginItemDecoration())
         if (timetable != null) {
             dateLabel.text = DateTimeUtils.getParsedDateExpression(timetable.date)
             currentItemId = timetable.id

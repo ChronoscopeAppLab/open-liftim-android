@@ -41,7 +41,7 @@ object NotificationChannel {
             Info.TYPE_INFORMATION -> ID_INFO_INFORMATION
             Info.TYPE_SUBMISSION -> ID_INFO_ASSIGNMENT
             Info.TYPE_TIMETABLE -> ID_INFO_TIMETABLE
-            // Info.TYPE_UNSPECIFIED (= 0) will be caught by 'else'
+        // Info.TYPE_UNSPECIFIED (= 0) will be caught by 'else'
             else -> ID_INFO_UNSPECIFIED
         }
     }

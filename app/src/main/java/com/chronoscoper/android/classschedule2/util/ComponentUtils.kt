@@ -41,6 +41,6 @@ fun setComponentEnabled(context: Context, enable: Boolean, vararg components: Cl
  * Opens Activity as a new task and clear old task
  */
 fun openInNewTask(context: Context, clazz: Class<*>) {
-    context.startActivity(Intent(context,clazz)
+    context.startActivity(Intent(context, clazz)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION))
 }

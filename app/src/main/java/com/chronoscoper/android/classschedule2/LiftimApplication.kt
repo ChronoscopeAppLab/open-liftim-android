@@ -69,7 +69,7 @@ class LiftimApplication : Application() {
     }
 
     private fun RegisterNotificationChannelIfNeeded() {
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel.register(this)
         }
     }

@@ -116,11 +116,14 @@ class EditInfoActivity : BaseActivity() {
         }
     }
 
+    private var item: Info? = null
+
     private fun initWithSpecifiedId(id: String) {
         val item = LiftimContext.getOrmaDatabase().selectFromInfo()
                 .liftimCodeEq(LiftimContext.getLiftimCode())
                 .idEq(id)
                 .firstOrNull() ?: kotlin.run { finish(); return }
+        this.item = item
         titleInput.setText(item.title ?: "")
         detailInput.setText(item.detail ?: "")
         linkUrlInput.setText(item.link ?: "")
@@ -214,8 +217,9 @@ class EditInfoActivity : BaseActivity() {
                         linkUrl
                     }
             removable = true
+            addedBy = item?.addedBy ?: Info.LOCAL
             type = Info.TYPE_LOCAL_MEMO
-            this.addedBy = Info.LOCAL
+            edited = true
         }
         return result
     }

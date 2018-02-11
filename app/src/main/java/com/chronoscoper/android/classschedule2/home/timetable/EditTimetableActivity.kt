@@ -19,11 +19,13 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.Editable
 import android.text.TextWatcher
@@ -46,6 +48,7 @@ import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.RegisterInfoService
+import com.chronoscoper.android.classschedule2.transition.FabTransition
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
@@ -63,6 +66,7 @@ class EditTimetableActivity : BaseActivity() {
         }
     }
 
+    private val toolbar by bindView<Toolbar>(R.id.toolbar)
     private val liftimCodeImage by bindView<ImageView>(R.id.liftim_code_image)
     private val liftimCodeLabel by bindView<TextView>(R.id.liftim_code)
     private val dateLabel by bindView<TextView>(R.id.date)
@@ -71,8 +75,14 @@ class EditTimetableActivity : BaseActivity() {
     private val fab by bindView<FloatingActionButton>(R.id.fab)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_timetable)
+        setSupportActionBar(toolbar)
+        super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.sharedElementEnterTransition = FabTransition()
+//            window.exitTransition = FabTransition()
+        }
 
         initialize()
     }

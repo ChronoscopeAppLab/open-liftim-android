@@ -19,9 +19,11 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -41,6 +43,7 @@ import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.RegisterInfoService
+import com.chronoscoper.android.classschedule2.transition.FabTransition
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import kotterknife.bindView
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
@@ -56,6 +59,7 @@ class EditInfoActivity : BaseActivity() {
         }
     }
 
+    private val toolbar by bindView<Toolbar>(R.id.toolbar)
     private val liftimCodeImage by bindView<ImageView>(R.id.liftim_code_image)
     private val liftimCodeLabel by bindView<TextView>(R.id.liftim_code)
     private val titleInput by bindView<EditText>(R.id.title)
@@ -72,8 +76,13 @@ class EditInfoActivity : BaseActivity() {
     private var sourceId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_info)
+        setSupportActionBar(toolbar)
+        super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.sharedElementEnterTransition = FabTransition()
+        }
 
         val id = intent.getStringExtra(ID)
         if (id != null) {

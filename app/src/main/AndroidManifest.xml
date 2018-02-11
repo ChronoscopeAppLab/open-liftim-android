@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
    Copyright 2017-2018 Chronoscope
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,8 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.chronoscoper.android.classschedule2">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -73,14 +73,17 @@
         <activity
             android:name=".home.info.EditInfoActivity"
             android:label="@string/add_info"
+            android:theme="@style/AppTheme.Translucent"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".home.timetable.EditTimetableActivity"
             android:label="@string/edit_timetable"
+            android:theme="@style/AppTheme.Translucent"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".weekly.EditWeeklyActivity"
             android:label="@string/edit_weekly"
+            android:theme="@style/AppTheme.Translucent"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ReLoginActivity" />
         <activity

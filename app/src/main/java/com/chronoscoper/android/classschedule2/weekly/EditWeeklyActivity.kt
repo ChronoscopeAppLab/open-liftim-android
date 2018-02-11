@@ -15,13 +15,25 @@
  */
 package com.chronoscoper.android.classschedule2.weekly
 
+import android.os.Build
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.transition.FabTransition
+import kotterknife.bindView
 
 class EditWeeklyActivity : BaseActivity() {
+
+    private val toolbar by bindView<Toolbar>(R.id.toolbar)
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_weekly)
+        setSupportActionBar(toolbar)
+        super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.sharedElementEnterTransition = FabTransition()
+        }
     }
 }

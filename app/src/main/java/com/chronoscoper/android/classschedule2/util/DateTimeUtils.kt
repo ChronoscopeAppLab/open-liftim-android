@@ -70,7 +70,7 @@ object DateTimeUtils {
     }
 
     fun getTomorrowPosixTime(): Long {
-        return DateTime.now().withTime(0,0,0,0)
+        return DateTime.now().withTime(0, 0, 0, 0)
                 .plusDays(1).millis
     }
 }

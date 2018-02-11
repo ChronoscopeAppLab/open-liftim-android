@@ -33,7 +33,6 @@ import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.sync.WeeklyItem
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
-import com.chronoscoper.android.classschedule2.view.BottomMarginItemDecoration
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import kotterknife.bindView
 
@@ -107,7 +106,6 @@ class WeeklyFragment : Fragment() {
 
                 list.adapter = DayAdapter(context!!, arguments!!.getInt(DAY_OF_WEEK))
                 list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-                list.addItemDecoration(BottomMarginItemDecoration())
             }
 
             class DayAdapter(context: Context, dayOfWeek: Int)

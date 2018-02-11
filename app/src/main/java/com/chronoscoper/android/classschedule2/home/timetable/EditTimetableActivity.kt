@@ -48,7 +48,6 @@ import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.RegisterInfoService
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
-import com.chronoscoper.android.classschedule2.view.BottomMarginItemDecoration
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import kotterknife.bindView
 import org.joda.time.DateTime
@@ -122,7 +121,6 @@ class EditTimetableActivity : BaseActivity() {
         }
         classList.addItemDecoration(
                 DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        classList.addItemDecoration(BottomMarginItemDecoration())
         fab.setOnClickListener {
             ClassEditorDialog().show(supportFragmentManager, null)
         }

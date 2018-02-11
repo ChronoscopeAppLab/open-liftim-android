@@ -21,7 +21,9 @@ import android.os.Handler
 import android.preference.PreferenceManager
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -37,6 +39,7 @@ import com.chronoscoper.android.classschedule2.home.info.EditInfoActivity
 import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
 import com.chronoscoper.android.classschedule2.setting.SettingsActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import com.chronoscoper.android.classschedule2.transition.FabTransition
 import com.chronoscoper.android.classschedule2.util.showToast
 import com.chronoscoper.android.classschedule2.weekly.EditWeeklyActivity
 import com.chronoscoper.android.classschedule2.weekly.WeeklyFragment
@@ -48,6 +51,39 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private val fab by bindView<FloatingActionButton>(R.id.add)
 
     private var fabAction: Runnable? = null
+
+    private val editTimetableFabAction by lazy {
+        Runnable {
+            FabTransition.configure(
+                    ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
+            val activityOptions = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))
+            startActivity(Intent(this, EditTimetableActivity::class.java),
+                    activityOptions.toBundle())
+        }
+    }
+
+    private val editInfoFabAction by lazy {
+        Runnable {
+            FabTransition.configure(
+                    ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
+            val activityOptions = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))
+            startActivity(Intent(this, EditInfoActivity::class.java),
+                    activityOptions.toBundle())
+        }
+    }
+
+    private val editWeeklyFabAction by lazy {
+        Runnable {
+            FabTransition.configure(
+                    ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
+            val activityOptions = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))
+            startActivity(Intent(this, EditWeeklyActivity::class.java),
+                    activityOptions.toBundle())
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,9 +106,8 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         initLiftimCodePager()
 
-        fabAction = Runnable {
-            startActivity(Intent(this, EditTimetableActivity::class.java))
-        }
+        fabAction = editTimetableFabAction
+
         fab.setOnClickListener {
             fabAction?.run()
         }
@@ -108,15 +143,11 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         when (page) {
             0 -> {
                 drawerMenu.setCheckedItem(R.id.drawer_timetable)
-                fabAction = Runnable {
-                    startActivity(Intent(this, EditTimetableActivity::class.java))
-                }
+                fabAction = editTimetableFabAction
             }
             1 -> {
                 drawerMenu.setCheckedItem(R.id.drawer_info)
-                fabAction = Runnable {
-                    startActivity(Intent(this, EditInfoActivity::class.java))
-                }
+                fabAction = editInfoFabAction
             }
         }
     }
@@ -128,6 +159,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             if (contentFragment !is HomeFragment) {
                 drawerMenu.setCheckedItem(R.id.drawer_timetable)
                 replaceFragment(HomeFragment())
+                fabAction = editTimetableFabAction
             } else {
                 val homeFragment = contentFragment as? HomeFragment ?: return
                 if (homeFragment.page != 0) {
@@ -180,9 +212,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     val fragment = contentFragment as? HomeFragment ?: return true
                     fragment.page = 0
                 }
-                fabAction = Runnable {
-                    startActivity(Intent(this, EditTimetableActivity::class.java))
-                }
+                fabAction = editTimetableFabAction
             }
             R.id.drawer_info -> {
                 if (contentFragment !is HomeFragment) {
@@ -191,15 +221,11 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     val fragment = contentFragment as? HomeFragment ?: return true
                     fragment.page = 1
                 }
-                fabAction = Runnable {
-                    startActivity(Intent(this, EditInfoActivity::class.java))
-                }
+                fabAction = editInfoFabAction
             }
             R.id.drawer_weekly -> {
                 replaceFragment(WeeklyFragment())
-                fabAction = Runnable {
-                    startActivity(Intent(this, EditWeeklyActivity::class.java))
-                }
+                fabAction = editWeeklyFabAction
             }
             R.id.drawer_archive -> {
                 replaceFragment(ArchiveFragment())

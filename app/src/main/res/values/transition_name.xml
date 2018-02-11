@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
    Copyright 2018 Chronoscope
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,4 +17,5 @@
     <string name="t_fab" translatable="false">transition_fab</string>
     <string name="t_subject_color" translatable="false">transition_subject_color</string>
     <string name="t_subject_name" translatable="false">transition_subject_name</string>
+    <string name="t_tab" translatable="false">transition_fab</string>
 </resources>

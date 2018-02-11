@@ -35,23 +35,25 @@ class InfoLoader(private val liftimCode: Long, private val token: String) : Runn
             return
         }
         val info = response.body() ?: return
-        LiftimContext.getOrmaDatabase().updateInfo()
-                .liftimCodeEq(liftimCode).addedByEq(Info.REMOTE)
-                .remoteDeleted(true)
-                .execute()
-        nextCursor = info.nextCursor
         val db = LiftimContext.getOrmaDatabase()
+        db.updateInfo()
+                .liftimCodeEq(liftimCode).addedByEq(Info.REMOTE)
+                .edited(false)
+                .execute()
+        val edited = db.selectFromInfo().liftimCodeEq(liftimCode).editedEq(true).toList()
+                .map { it.id }
+        nextCursor = info.nextCursor
+        db.deleteFromInfo().liftimCodeEq(liftimCode)
+                .addedByEq(Info.REMOTE)
+                .editedEq(false)
+                .execute()
         val inserter = db.prepareInsertIntoInfo()
-        info.info?.forEach {
+        info.info?.filterNotNull()?.filterNot { edited.contains(it.id) }?.forEach {
             val base = db.selectFromInfo().liftimCodeEq(liftimCode).idEq(it.id).firstOrNull()
                     ?: Info()
             base.set(liftimCode, it.id, it.title, it.detail, it.weight, it.date,
                     it.time, it.link, it.type, it.timetable?.toString(), it.removable, Info.REMOTE)
             inserter.execute(base)
         }
-        db.deleteFromInfo().liftimCodeEq(liftimCode)
-                .addedByEq(Info.REMOTE)
-                .remoteDeletedEq(true)
-                .execute()
     }
 }

@@ -125,4 +125,7 @@ public class Info {
 
     @Column(value = "remote_deleted", indexed = true)
     public boolean remoteDeleted = false;
+
+    @Column(value = "edited", indexed = true, defaultExpr = "FALSE")
+    public boolean edited = false;
 }

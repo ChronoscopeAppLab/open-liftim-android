@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
-import com.chronoscoper.android.classschedule2.transition.FabTransition
+import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
 import kotterknife.bindView
 
 class EditWeeklyActivity : BaseActivity() {
@@ -33,7 +33,7 @@ class EditWeeklyActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.sharedElementEnterTransition = FabTransition()
+            window.sharedElementEnterTransition = FabExpandTransition()
         }
     }
 }

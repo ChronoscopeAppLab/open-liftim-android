@@ -39,7 +39,7 @@ import com.chronoscoper.android.classschedule2.home.info.EditInfoActivity
 import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
 import com.chronoscoper.android.classschedule2.setting.SettingsActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
-import com.chronoscoper.android.classschedule2.transition.FabTransition
+import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
 import com.chronoscoper.android.classschedule2.util.showToast
 import com.chronoscoper.android.classschedule2.weekly.EditWeeklyActivity
 import com.chronoscoper.android.classschedule2.weekly.WeeklyFragment
@@ -54,7 +54,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private val editTimetableFabAction by lazy {
         Runnable {
-            FabTransition.configure(
+            FabExpandTransition.configure(
                     ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
             val activityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))
@@ -65,7 +65,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private val editInfoFabAction by lazy {
         Runnable {
-            FabTransition.configure(
+            FabExpandTransition.configure(
                     ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
             val activityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))
@@ -76,7 +76,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private val editWeeklyFabAction by lazy {
         Runnable {
-            FabTransition.configure(
+            FabExpandTransition.configure(
                     ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
             val activityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))

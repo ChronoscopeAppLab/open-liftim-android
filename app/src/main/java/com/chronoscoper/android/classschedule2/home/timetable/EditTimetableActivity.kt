@@ -48,7 +48,7 @@ import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.RegisterInfoService
-import com.chronoscoper.android.classschedule2.transition.FabTransition
+import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
@@ -80,8 +80,7 @@ class EditTimetableActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.sharedElementEnterTransition = FabTransition()
-//            window.exitTransition = FabTransition()
+            window.sharedElementEnterTransition = FabExpandTransition()
         }
 
         initialize()

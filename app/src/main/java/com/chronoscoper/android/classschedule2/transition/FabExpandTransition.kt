@@ -31,7 +31,7 @@ import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-class FabTransition : Transition() {
+class FabExpandTransition : Transition() {
     companion object {
         fun configure(@ColorInt color: Int) {
             this.color = color
@@ -116,6 +116,9 @@ class FabTransition : Transition() {
         animatorSet.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator?) {
                 endView.overlay.clear()
+                if (toFab) {
+                    sceneRoot.visibility = View.GONE
+                }
             }
         })
         return animatorSet

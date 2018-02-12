@@ -18,9 +18,12 @@ package com.chronoscoper.android.classschedule2.home.timetable
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.content.ContextCompat
 import android.view.View
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
 import com.chronoscoper.android.classschedule2.transition.FabTransformTransition
 import kotterknife.bindView
 
@@ -45,12 +48,28 @@ class EditTargetDialog : BaseActivity() {
         }
 
         addNew.setOnClickListener {
-            startActivity(Intent(this,EditTimetableActivity::class.java))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                it.transitionName = getString(R.string.t_fab)
+            }
+            FabExpandTransition.configure(
+                    ContextCompat.getColor(this, R.color.colorAccent))
+            val activityOptions = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(this, it, getString(R.string.t_fab))
+            startActivity(Intent(this, EditTimetableActivity::class.java),
+                    activityOptions.toBundle())
             finish()
         }
 
         editExisting.setOnClickListener {
-            startActivity(Intent(this,EditTimetableActivity::class.java))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                it.transitionName = getString(R.string.t_fab)
+            }
+            FabExpandTransition.configure(
+                    ContextCompat.getColor(this, R.color.colorAccent))
+            val activityOptions = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(this, it, getString(R.string.t_fab))
+            startActivity(Intent(this, EditTimetableActivity::class.java),
+                    activityOptions.toBundle())
             finish()
         }
 

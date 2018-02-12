@@ -102,6 +102,9 @@
         <activity
             android:name=".setting.manager.EditSubjectActivity"
             android:label="@string/edit_subject" />
+        <activity
+            android:name=".home.timetable.EditTargetDialog"
+            android:theme="@style/AppTheme.Translucent" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

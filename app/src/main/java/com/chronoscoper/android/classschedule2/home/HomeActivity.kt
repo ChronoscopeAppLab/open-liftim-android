@@ -36,10 +36,12 @@ import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.archive.ArchiveFragment
 import com.chronoscoper.android.classschedule2.home.info.EditInfoActivity
+import com.chronoscoper.android.classschedule2.home.timetable.EditTargetDialog
 import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
 import com.chronoscoper.android.classschedule2.setting.SettingsActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
+import com.chronoscoper.android.classschedule2.transition.FabTransformTransition
 import com.chronoscoper.android.classschedule2.util.showToast
 import com.chronoscoper.android.classschedule2.weekly.EditWeeklyActivity
 import com.chronoscoper.android.classschedule2.weekly.WeeklyFragment
@@ -54,11 +56,11 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private val editTimetableFabAction by lazy {
         Runnable {
-            FabExpandTransition.configure(
+            FabTransformTransition.configure(
                     ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
             val activityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))
-            startActivity(Intent(this, EditTimetableActivity::class.java),
+            startActivity(Intent(this, EditTargetDialog::class.java),
                     activityOptions.toBundle())
         }
     }

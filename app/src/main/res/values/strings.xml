@@ -106,4 +106,7 @@
     <string name="subject_name">Subject name</string>
     <string name="subject_short_name">Subject short name</string>
     <string name="edit_subject">Edit subject</string>
+    <string name="edit_existing_timetable">Edit existing timetable</string>
+    <string name="add_new_timetable">Add new timetable</string>
+    <string name="select_target">Select a target</string>
 </resources>

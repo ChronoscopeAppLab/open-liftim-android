@@ -185,11 +185,11 @@ class EditTimetableActivity : BaseActivity() {
         when (item.itemId) {
             R.id.options_register_local -> {
                 registerLocal(createElementFromCurrentState())
-                finish()
+                animateFinishCompat()
             }
             R.id.options_register_remote -> {
                 registerRemote(createElementFromCurrentState())
-                finish()
+                animateFinishCompat()
             }
             R.id.options_change_min_indx -> {
                 ChangeMinIndexDialog().show(supportFragmentManager, null)

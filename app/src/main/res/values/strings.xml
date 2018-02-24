@@ -109,4 +109,8 @@
     <string name="edit_existing_timetable">Edit existing timetable</string>
     <string name="add_new_timetable">Add new timetable</string>
     <string name="select_target">Select a target</string>
+    <string name="login_failed">Failed to login to Liftim</string>
+    <string name="notification_login_content">Tap here to login to liftim again</string>
+    <string name="liftim_code_deleted_title">Previously selected class has deleted</string>
+    <string name="liftim_code_deleted_content">Please check which class you are now</string>
 </resources>

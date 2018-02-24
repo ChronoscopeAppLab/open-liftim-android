@@ -15,13 +15,14 @@ object NotificationChannel {
     const val ID_INFO_INFORMATION = "info_information"
     const val ID_INFO_ASSIGNMENT = "info_assignment"
     const val ID_INFO_TIMETABLE = "info_timetable"
+    const val ID_MISC = "misc"
 
     private val IDS = arrayOf(ID_INFO_LOCAL_MEMO, ID_INFO_UNSPECIFIED,
             ID_INFO_EVENT, ID_INFO_INFORMATION,
-            ID_INFO_ASSIGNMENT, ID_INFO_TIMETABLE)
+            ID_INFO_ASSIGNMENT, ID_INFO_TIMETABLE, ID_MISC)
     private val NAME_RES_IDS = arrayOf(R.string.type_memo, R.string.type_unspecified,
             R.string.type_event, R.string.type_information, R.string.type_submission,
-            R.string.timetable)
+            R.string.timetable, R.string.misc)
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun register(context: Context) {

@@ -21,25 +21,38 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.chronoscoper.android.classschedule2.service.NotificationRegistererService
+import com.chronoscoper.android.classschedule2.service.UserInfoSyncService
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 
 class ServiceTriggerReceiver : BroadcastReceiver() {
     companion object {
         private const val REQUEST_NOTIFICATION_REGISTERER = 101
+        private const val REQUEST_UPDATE_USER_INFO = 102
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        context ?: return
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        scheduleNotificationRegisterer(context, alarmManager)
+        if (context == null || intent == null) return
+        val action = intent.action
+        if (action == Intent.ACTION_BOOT_COMPLETED
+                || action == Intent.ACTION_MY_PACKAGE_REPLACED) {
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            scheduleNotificationRegisterer(context, alarmManager)
+        }
     }
 
     private fun scheduleNotificationRegisterer(context: Context, alarmManager: AlarmManager) {
-        val pendingIntent = PendingIntent.getService(context, REQUEST_NOTIFICATION_REGISTERER,
+        // Register service to publish notification on Info
+        val notificationPublish = PendingIntent.getService(context, REQUEST_NOTIFICATION_REGISTERER,
                 Intent(context, NotificationRegistererService::class.java),
                 PendingIntent.FLAG_CANCEL_CURRENT)
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
                 DateTimeUtils.getTomorrowPosixTime(),
-                AlarmManager.INTERVAL_DAY, pendingIntent)
+                AlarmManager.INTERVAL_DAY, notificationPublish)
+
+        // Register service to update user info
+        val userInfo = PendingIntent.getService(context, REQUEST_UPDATE_USER_INFO,
+                Intent(context, UserInfoSyncService::class.java), PendingIntent.FLAG_CANCEL_CURRENT)
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, 0,
+                AlarmManager.INTERVAL_DAY, userInfo)
     }
 }

@@ -15,6 +15,7 @@
  */
 package com.chronoscoper.android.classschedule2.setting.manager
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -39,6 +40,8 @@ class LiftimCodeSettingsActivity : BaseActivity() {
             context.startActivity(Intent(context, LiftimCodeSettingsActivity::class.java)
                     .putExtra(EXTRA_LIFTIM_CODE, liftimCode))
         }
+
+        private const val RC_DELETE_CODE = 100
     }
 
     private val liftimCodeImage by bindView<ImageView>(R.id.liftim_code_image)
@@ -72,6 +75,16 @@ class LiftimCodeSettingsActivity : BaseActivity() {
         liftimCodeName.text = liftimCodeInfo.name
         editSubjectListButton.setOnClickListener {
             EditSubjectListActivity.open(this, liftimCode)
+        }
+        deleteLiftimCodeButton.setOnClickListener {
+            DeleteLiftimCodeActivity.start(this, liftimCode, RC_DELETE_CODE)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_DELETE_CODE && resultCode == Activity.RESULT_OK) {
+            finish()
         }
     }
 

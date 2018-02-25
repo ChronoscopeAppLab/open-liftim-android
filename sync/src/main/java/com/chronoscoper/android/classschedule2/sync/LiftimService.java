@@ -18,6 +18,7 @@ package com.chronoscoper.android.classschedule2.sync;
 import java.util.HashMap;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -35,6 +36,12 @@ public interface LiftimService {
     Call<JoinedLiftimCode> joinLiftimCode(
             @Field("token") String token,
             @Field("invitation_number") int invitationNum);
+
+    @FormUrlEncoded
+    @DELETE("api/v1/liftim_code_info.json")
+    Call<Void> deleteLiftimCode(
+            @Field("liftim_code") long liftimCode,
+            @Field("token") String token);
 
     @GET("api/v1/info.json")
     Call<InfoRemoteModel> getInfo(

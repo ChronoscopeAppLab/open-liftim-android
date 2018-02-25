@@ -113,4 +113,7 @@
     <string name="notification_login_content">Tap here to login to liftim again</string>
     <string name="liftim_code_deleted_title">Previously selected class has deleted</string>
     <string name="liftim_code_deleted_content">Please check which class you are now</string>
+    <string name="confirm_title">Are you sure?</string>
+    <string name="manager_delete_liftim_code_warning">This action cannot be undone. This will delete following class including data stored in the class permanently</string>
+    <string name="liftim_code_delete_medium">Swipe downward to confirm deletion</string>
 </resources>

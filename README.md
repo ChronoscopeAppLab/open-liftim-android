@@ -24,8 +24,7 @@ Distributed on DeployGate.
 ## FAQ
 
 Q. What is the different between open source edition and official release build?  
-A. In the open source version, server-side infrastructure is NOT provided by Chronoscope.
-And, it doesn't support any locales but default(en-US).  
+A. In the open source version, server-side infrastructure is NOT provided by Chronoscope.  
   
 Q. Where can I try it?  
 A. Server-side system for testing exists on `http://lidev.starfree.jp/`.

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+   Copyright 2017-2018 Chronoscope
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<resources>
+    <string name="app_name">Liftim</string>
+    <string name="sync_url">同期先URL(例: http://example.com/)</string>
+    <string name="ok">OK</string>
+    <string name="liftim_code">クラス</string>
+    <string name="open_drawer">ナビゲーションドロワーを開く</string>
+    <string name="close_drawer">ナビゲーションドロワを閉じる</string>
+    <string name="more_actions">その他のアクション</string>
+    <string name="delete">削除</string>
+    <string name="type_unspecified">その他</string>
+    <string name="type_event">イベント</string>
+    <string name="type_information">情報</string>
+    <string name="type_submission">課題</string>
+    <string name="type_memo">メモ</string>
+    <string name="class_schedule">時間割</string>
+    <string name="info_title_timetable">%1$sの時間割</string>
+    <string name="edit">編集</string>
+    <string name="open">開く</string>
+    <string name="timetable">時間割</string>
+    <string name="info">情報 &amp; イベント</string>
+    <string name="weekly">一週間の時間割</string>
+    <string name="misc">その他</string>
+    <string name="settings">設定</string>
+    <string name="day_of_week_sunday">日曜日</string>
+    <string name="day_of_week_monday">月曜日</string>
+    <string name="day_of_week_tuesday">火曜日</string>
+    <string name="day_of_week_wednesday">水曜日</string>
+    <string name="day_of_week_thursday">木曜日</string>
+    <string name="day_of_week_friday">金曜日</string>
+    <string name="day_of_week_saturday">土曜日</string>
+    <string name="loading_data">データを読み込み中…</string>
+    <string name="token_load_failed_description">アプリの認証に失敗しました。もう一度お試しください。</string>
+    <string name="retry">再試行</string>
+    <string name="initial_sync_failed_description">アカウント情報の読み込みに失敗しました。「再試行」をタップしてもう一度お試しください。</string>
+    <string name="liftim_code_chooser_description">クラスを選択するか新たにクラスに参加します</string>
+    <string name="join_class">クラスに参加</string>
+    <string name="timetable_placehoder_message">時間割はありません</string>
+    <string name="done">完了</string>
+    <string name="archive">アーカイブ</string>
+    <string name="account">アカウント</string>
+    <string name="manage_account">アカウントの管理</string>
+    <string name="manage_liftim_code">クラスの管理</string>
+    <string name="app_info">アプリ情報</string>
+    <string name="open_source_license">オープンソースライセンス</string>
+    <string name="general">一般</string>
+    <string name="join_class_description">招待番号でクラスに参加します</string>
+    <string name="invitation_number">招待番号</string>
+    <string name="incorrect_invitation_number">招待番号が間違っています</string>
+    <string name="join_progress">クラスの参加をリクエストしています…</string>
+    <string name="create_liftim_code">クラスの作成</string>
+    <string name="add_info">情報やイベントを追加</string>
+    <string name="edit_timetable">時間割を編集</string>
+    <string name="edit_weekly">一週間の時間割を編集</string>
+    <string name="timetable_info">情報</string>
+    <string name="move_item">アイテムを移動</string>
+    <string name="register_local">自分だけで見る</string>
+    <string name="share_class">クラスメイトと共有</string>
+    <string name="subject">教科</string>
+    <string name="detail">詳細</string>
+    <string name="cancel">キャンセル</string>
+    <string name="title">タイトル</string>
+    <string name="specify_date">日付を指定</string>
+    <string name="specify_time">時間を指定</string>
+    <string name="allow_hide_info">クラスメイトが非表示にすることを許可</string>
+    <string name="importance">重要度</string>
+    <string name="form_error_info">タイトルを入力してください</string>
+    <string name="login">ログイン</string>
+    <string name="login_error_description">ログインに失敗しました。もう一度認証してください。</string>
+    <string name="link_url">リンクのURL</string>
+    <string name="open_link">リンクを開く</string>
+    <string name="login_message">Liftimを利用するにはログインしてください。ログインするとクラスメイトと時間割や情報を共有する場所を手に入れることができます。</string>
+    <string name="login_message_extra">一度もログインしたことがない場合、Liftimのアカウントはログインに使用したGoogleアカウント用に自動的にセットアップされます。</string>
+    <string name="change_min_index">クラスの始まりの時間を変更</string>
+    <string name="accessibility_increase">増やす</string>
+    <string name="accessibility_decrease">減らす</string>
+    <string name="not_implemented_message">申し訳ありません。\nこの機能はまだ使用できません。次のバージョンまでお待ちください。</string>
+    <string name="join_with_barcode">QRコードで参加</string>
+    <string name="barcode_not_found">QRコードが見つかりません</string>
+    <string name="logout">ログアウト</string>
+    <string name="logout_warning">ログアウトすると[自分だけで見る]に指定した情報も削除されます</string>
+    <string name="no_joined_class">参加しているクラスはありません</string>
+    <string name="accessibility_back">戻る</string>
+    <string name="delete_liftim_code_warning">このクラスを見る権限はなくなります</string>
+    <string name="continue_anyway">続行</string>
+    <string name="accessibility_change_liftim_code_image">クラスの画像を変更</string>
+    <string name="edit_subject_list">教科一覧を編集</string>
+    <string name="delete_liftim_code_manager">クラスを削除</string>
+    <string name="subject_name">教科名</string>
+    <string name="subject_short_name">教科の短縮名</string>
+    <string name="edit_subject">教科を編集</string>
+    <string name="edit_existing_timetable">既存の時間割を編集</string>
+    <string name="add_new_timetable">新しい時間割を追加</string>
+    <string name="select_target">編集対象を選択</string>
+    <string name="login_failed">Liftimにログインできませんでした</string>
+    <string name="notification_login_content">ここをタップしてもう一度ログインしてください</string>
+    <string name="liftim_code_deleted_title">以前に選択したクラスは削除されました</string>
+    <string name="liftim_code_deleted_content">選択しているクラスを確認してください</string>
+    <string name="confirm_title">続行しますか？</string>
+    <string name="manager_delete_liftim_code_warning">この操作を取り消すことはできません。\nこの操作によって次のクラスとそのクラスに保存されたデータはすべて削除されます。</string>
+    <string name="liftim_code_delete_medium">下にスワイプして続行</string>
+</resources>

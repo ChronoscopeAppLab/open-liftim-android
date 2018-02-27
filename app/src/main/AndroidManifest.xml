@@ -124,6 +124,9 @@
         <service android:name=".service.NotificationRegistererService" />
         <service android:name=".service.NotificationPublishService" />
         <service android:name=".service.UserInfoSyncService" />
+        <service
+            android:name=".service.UserInfoSyncJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <receiver android:name=".receiver.ServiceTriggerReceiver">
             <intent-filter>

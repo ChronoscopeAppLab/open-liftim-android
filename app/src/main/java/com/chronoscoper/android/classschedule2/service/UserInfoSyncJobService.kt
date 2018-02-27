@@ -15,15 +15,19 @@
  */
 package com.chronoscoper.android.classschedule2.service
 
-import android.app.Service
-import android.content.Intent
-import android.os.IBinder
+import android.app.job.JobParameters
+import android.app.job.JobService
+import android.os.Build
+import android.support.annotation.RequiresApi
 
-class UserInfoSyncService : Service() {
-    override fun onBind(intent: Intent?): IBinder? = null
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+class UserInfoSyncJobService : JobService() {
+    override fun onStopJob(params: JobParameters?): Boolean = true
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        UserInfoSyncImplementation(this).start()
-        return START_NOT_STICKY
+    override fun onStartJob(params: JobParameters?): Boolean {
+        UserInfoSyncImplementation(this)
+                .apply { onCompleteListener = { jobFinished(params, true) } }
+                .start()
+        return true
     }
 }

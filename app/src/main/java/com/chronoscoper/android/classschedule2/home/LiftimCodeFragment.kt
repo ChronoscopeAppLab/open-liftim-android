@@ -64,7 +64,7 @@ class LiftimCodeFragment : Fragment() {
         }
         val name = args.getString(EXTRA_NAME) ?: return
 
-        Glide.with(context).load(LiftimContext.getApiUrl("liftim_code_image.png?" +
+        Glide.with(context!!).load(LiftimContext.getApiUrl("liftim_code_image.png?" +
                 "liftim_code=$liftimCode"))
                 .apply(RequestOptions.circleCropTransform())
                 .transition(progressiveFadeInTransition())

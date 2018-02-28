@@ -17,6 +17,7 @@ package com.chronoscoper.android.classschedule2.task
 
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import com.chronoscoper.android.classschedule2.util.optimizeInfo
 
 class InfoLoader(private val liftimCode: Long, private val token: String) : Runnable {
     companion object {
@@ -55,5 +56,6 @@ class InfoLoader(private val liftimCode: Long, private val token: String) : Runn
                     it.time, it.link, it.type, it.timetable?.toString(), it.removable, Info.REMOTE)
             inserter.execute(base)
         }
+        optimizeInfo()
     }
 }

@@ -24,10 +24,11 @@
             android:id="@+id/drawer_weekly"
             android:icon="@drawable/ic_weekly"
             android:title="@string/weekly" />
-        <item
-            android:id="@+id/drawer_archive"
-            android:icon="@drawable/ic_archive"
-            android:title="@string/archive" />
+        <!-- TODO: Disabled temporarily. I want to implement but I've time enough to implement it :( -->
+        <!--<item-->
+            <!--android:id="@+id/drawer_archive"-->
+            <!--android:icon="@drawable/ic_archive"-->
+            <!--android:title="@string/archive" />-->
         <item android:title="@string/misc">
             <menu>
                 <item

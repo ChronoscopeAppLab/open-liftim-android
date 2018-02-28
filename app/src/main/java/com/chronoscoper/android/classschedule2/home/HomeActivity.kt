@@ -229,9 +229,10 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 replaceFragment(WeeklyFragment())
                 fabAction = editWeeklyFabAction
             }
-            R.id.drawer_archive -> {
-                replaceFragment(ArchiveFragment())
-            }
+            // TODO: Disabled temporarily:(
+//            R.id.drawer_archive -> {
+//                replaceFragment(ArchiveFragment())
+//            }
             R.id.drawer_settings -> {
                 startActivity(Intent(this, SettingsActivity::class.java))
             }

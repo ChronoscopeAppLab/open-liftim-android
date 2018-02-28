@@ -21,16 +21,19 @@ import android.preference.PreferenceManager
 import com.chronoscoper.android.classschedule2.home.HomeActivity
 import com.chronoscoper.android.classschedule2.setup.SetupActivity
 import com.chronoscoper.android.classschedule2.setup.TokenCallbackActivity
+import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.InvalidTokenException
 import com.chronoscoper.android.classschedule2.task.TokenReloadTask
 import com.chronoscoper.android.classschedule2.task.enforceValidToken
+import com.chronoscoper.android.classschedule2.util.optimizeInfo
 import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
+import org.joda.time.DateTime
 
 class LauncherActivity : BaseActivity() {
 
@@ -85,6 +88,8 @@ class LauncherActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber)
         disposables.add(subscriber)
+
+        optimizeInfo()
     }
 
     override fun onRestart() {

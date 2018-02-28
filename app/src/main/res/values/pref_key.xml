@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
    Copyright 2017-2018 Chronoscope
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,6 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
 <resources>
     <string name="p_setup_completed" translatable="false">setup_completed</string>
     <string name="p_sync_url" translatable="false">sync_url</string>
@@ -25,4 +27,5 @@
     <string name="p_app_info" translatable="false">app_info</string>
     <string name="p_oss_license" translatable="false">oss_license</string>
     <string name="p_last_used_version" translatable="false">last_used_version</string>
+    <string name="p_send_feedback">send_feedback</string>
 </resources>

@@ -12,6 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.chronoscoper.android.classschedule2">
 
@@ -108,6 +109,9 @@
         <activity
             android:name=".setting.manager.DeleteLiftimCodeActivity"
             android:theme="@style/AppTheme.Translucent" />
+        <activity
+            android:name=".setting.FeedbackActivity"
+            android:label="@string/send_feedback" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

@@ -50,9 +50,9 @@ class EditTargetDialog : BaseActivity() {
         addNew.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 it.transitionName = getString(R.string.t_fab)
+                FabExpandTransition.configure(
+                        ContextCompat.getColor(this, R.color.colorAccent))
             }
-            FabExpandTransition.configure(
-                    ContextCompat.getColor(this, R.color.colorAccent))
             val activityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this, it, getString(R.string.t_fab))
             startActivity(Intent(this, EditTimetableActivity::class.java),
@@ -63,9 +63,9 @@ class EditTargetDialog : BaseActivity() {
         editExisting.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 it.transitionName = getString(R.string.t_fab)
+                FabExpandTransition.configure(
+                        ContextCompat.getColor(this, R.color.colorAccent))
             }
-            FabExpandTransition.configure(
-                    ContextCompat.getColor(this, R.color.colorAccent))
             val activityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this, it, getString(R.string.t_fab))
             startActivity(Intent(this, EditTimetableActivity::class.java),

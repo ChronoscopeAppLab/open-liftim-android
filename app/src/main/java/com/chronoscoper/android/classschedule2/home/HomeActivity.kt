@@ -16,6 +16,7 @@
 package com.chronoscoper.android.classschedule2.home
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.preference.PreferenceManager
@@ -34,10 +35,8 @@ import android.widget.Toast
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
-import com.chronoscoper.android.classschedule2.archive.ArchiveFragment
 import com.chronoscoper.android.classschedule2.home.info.EditInfoActivity
 import com.chronoscoper.android.classschedule2.home.timetable.EditTargetDialog
-import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
 import com.chronoscoper.android.classschedule2.setting.SettingsActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
@@ -56,8 +55,10 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private val editTimetableFabAction by lazy {
         Runnable {
-            FabTransformTransition.configure(
-                    ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                FabTransformTransition.configure(
+                        ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
+            }
             val activityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))
             startActivity(Intent(this, EditTargetDialog::class.java),
@@ -67,8 +68,10 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private val editInfoFabAction by lazy {
         Runnable {
-            FabExpandTransition.configure(
-                    ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                FabExpandTransition.configure(
+                        ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
+            }
             val activityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))
             startActivity(Intent(this, EditInfoActivity::class.java),
@@ -78,8 +81,10 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private val editWeeklyFabAction by lazy {
         Runnable {
-            FabExpandTransition.configure(
-                    ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                FabExpandTransition.configure(
+                        ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
+            }
             val activityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))
             startActivity(Intent(this, EditWeeklyActivity::class.java),
@@ -229,7 +234,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 replaceFragment(WeeklyFragment())
                 fabAction = editWeeklyFabAction
             }
-            // TODO: Disabled temporarily:(
+        // TODO: Disabled temporarily:(
 //            R.id.drawer_archive -> {
 //                replaceFragment(ArchiveFragment())
 //            }

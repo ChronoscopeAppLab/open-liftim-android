@@ -27,5 +27,5 @@
     <string name="p_app_info" translatable="false">app_info</string>
     <string name="p_oss_license" translatable="false">oss_license</string>
     <string name="p_last_used_version" translatable="false">last_used_version</string>
-    <string name="p_send_feedback">send_feedback</string>
+    <string name="p_send_feedback" translatable="false">send_feedback</string>
 </resources>

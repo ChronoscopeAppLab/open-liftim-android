@@ -18,6 +18,7 @@ package com.chronoscoper.android.classschedule2
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.view.View
 import com.chronoscoper.android.classschedule2.home.HomeActivity
 import com.chronoscoper.android.classschedule2.setting.ManageLiftimCodeActivity
 import com.chronoscoper.android.classschedule2.setup.SetupActivity
@@ -38,14 +39,43 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
+import kotterknife.bindView
 import org.joda.time.DateTime
 
 class LauncherActivity : BaseActivity() {
 
     private val prefs by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
+    private val iconForeground by bindView<View>(R.id.icon_foreground)
+
+    private var animationFinished = false
+    private var syncFinished = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_launcher)
+
+        iconForeground.apply {
+            visibility = View.VISIBLE
+            alpha = 0f
+            translationY = 300f
+            scaleX = 0.8f
+            scaleY = 0.8f
+        }
+
+        iconForeground.animate().alpha(1f).translationY(-50f)
+                .scaleX(1f).scaleY(1f)
+                .setDuration(500)
+                .withEndAction {
+                    iconForeground.animate().translationY(0f)
+                            .setDuration(500)
+                            .withEndAction {
+                                animationFinished = true
+                                startMainIfNeeded()
+                            }
+                            .start()
+                }
+                .start()
+
 
         val setupCompleted = prefs.getBoolean(getString(R.string.p_setup_completed), false)
         if (setupCompleted) {
@@ -59,6 +89,14 @@ class LauncherActivity : BaseActivity() {
         }
     }
 
+    private fun startMainIfNeeded() {
+        if (animationFinished && syncFinished) {
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
+    }
+
     private val disposables = CompositeDisposable()
 
     private fun secondLaunchTime() {
@@ -69,9 +107,8 @@ class LauncherActivity : BaseActivity() {
         }
         val subscriber = object : DisposableObserver<Unit>() {
             override fun onComplete() {
-                startActivity(Intent(this@LauncherActivity, HomeActivity::class.java))
-                finish()
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                syncFinished = true
+                startMainIfNeeded()
             }
 
             override fun onError(e: Throwable) {
@@ -81,9 +118,8 @@ class LauncherActivity : BaseActivity() {
                     finish()
                     return
                 }
-                startActivity(Intent(this@LauncherActivity, HomeActivity::class.java))
-                finish()
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                syncFinished = true
+                startMainIfNeeded()
             }
 
             override fun onNext(t: Unit) {

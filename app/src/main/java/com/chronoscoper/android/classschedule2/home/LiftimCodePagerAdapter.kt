@@ -33,6 +33,9 @@ class LiftimCodePagerAdapter(fm: FragmentManager, private val context: Context) 
     }
 
     override fun getItem(position: Int): Fragment {
+        if (data.size == 0) {
+            return Fragment()
+        }
         val page = position % data.size
         return LiftimCodeFragment.obtain(data[page])
     }

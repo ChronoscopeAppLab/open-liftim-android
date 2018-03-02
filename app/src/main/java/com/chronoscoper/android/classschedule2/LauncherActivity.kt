@@ -19,6 +19,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import com.chronoscoper.android.classschedule2.home.HomeActivity
+import com.chronoscoper.android.classschedule2.setting.ManageLiftimCodeActivity
 import com.chronoscoper.android.classschedule2.setup.SetupActivity
 import com.chronoscoper.android.classschedule2.setup.TokenCallbackActivity
 import com.chronoscoper.android.classschedule2.sync.Info
@@ -56,6 +57,11 @@ class LauncherActivity : BaseActivity() {
     private val disposables = CompositeDisposable()
 
     private fun secondLaunchTime() {
+        val db = LiftimContext.getOrmaDatabase()
+        if (db.selectFromLiftimCodeInfo().count() == 0) {
+            noLiftimCode()
+            return
+        }
         val subscriber = object : DisposableObserver<Unit>() {
             override fun onComplete() {
                 startActivity(Intent(this@LauncherActivity, HomeActivity::class.java))
@@ -90,6 +96,12 @@ class LauncherActivity : BaseActivity() {
         disposables.add(subscriber)
 
         optimizeInfo()
+    }
+
+    private fun noLiftimCode() {
+        startActivity(Intent(this, ManageLiftimCodeActivity::class.java))
+        finish()
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     }
 
     override fun onRestart() {

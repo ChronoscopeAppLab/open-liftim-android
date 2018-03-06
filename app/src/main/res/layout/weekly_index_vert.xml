@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
    Copyright 2017-2018 Chronoscope
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,15 +12,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<resources>
-    <color name="colorPrimary">#b4e67b</color>
-    <color name="colorPrimaryDark">#98d751</color>
-    <color name="colorAccent">#4077ff</color>
-    <color name="textColorPrimary">#232323</color>
-    <color name="textColorSecondary">#282828</color>
-    <color name="colorPrimaryDarkText">#395916</color>
-    <color name="clickEffectDark">#3c000000</color>
-    <color name="black_vail">#5e000000</color>
-    <color name="zebra_light">#f4f4f4</color>
-    <color name="zebra_dark">#dedede</color>
-</resources>
+
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="30sp"
+    android:layout_height="80sp"
+    android:background="@android:color/white"
+    android:gravity="center"
+    android:textColor="@android:color/black" />

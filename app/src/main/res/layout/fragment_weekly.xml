@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
    Copyright 2017-2018 Chronoscope
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,8 +12,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list"
@@ -20,18 +21,106 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/index_horiz"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?colorPrimary"
+        android:background="@android:color/white"
         android:elevation="5dp"
-        app:tabIndicatorColor="@android:color/black"
-        tools:ignore="UnusedAttribute" />
+        android:orientation="horizontal"
+        tools:ignore="UnusedAttribute">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <View
+            android:layout_width="30sp"
+            android:layout_height="30dp" />
 
+        <TextView
+            android:layout_width="120sp"
+            android:layout_height="30sp"
+            android:background="@color/zebra_light"
+            android:gravity="center"
+            android:text="@string/day_of_week_sunday"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/holo_red_dark" />
+
+        <TextView
+            android:layout_width="120sp"
+            android:layout_height="30sp"
+            android:background="@color/zebra_dark"
+            android:gravity="center"
+            android:text="@string/day_of_week_monday"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        <TextView
+            android:layout_width="120sp"
+            android:layout_height="30sp"
+            android:background="@color/zebra_light"
+            android:gravity="center"
+            android:text="@string/day_of_week_tuesday"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        <TextView
+            android:layout_width="120sp"
+            android:layout_height="30sp"
+            android:background="@color/zebra_dark"
+            android:gravity="center"
+            android:text="@string/day_of_week_wednesday"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        <TextView
+            android:layout_width="120sp"
+            android:layout_height="30sp"
+            android:background="@color/zebra_light"
+            android:gravity="center"
+            android:text="@string/day_of_week_thursday"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        <TextView
+            android:layout_width="120sp"
+            android:layout_height="30sp"
+            android:background="@color/zebra_dark"
+            android:gravity="center"
+            android:text="@string/day_of_week_friday"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        <TextView
+            android:layout_width="120sp"
+            android:layout_height="30sp"
+            android:background="@color/zebra_light"
+            android:gravity="center"
+            android:text="@string/day_of_week_saturday"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/holo_blue_light" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/index_vert"
+            android:layout_width="30sp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:elevation="3dp"
+            android:orientation="vertical"
+            tools:ignore="UnusedAttribute" />
+
+        <com.chronoscoper.android.classschedule2.view.ObservableScrollView
+            android:id="@+id/grid_horizontal_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/grid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:clipToPadding="false"
+                android:paddingBottom="100dp"
+                app:spanCount="7" />
+        </com.chronoscoper.android.classschedule2.view.ObservableScrollView>
+    </LinearLayout>
 </LinearLayout>

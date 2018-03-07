@@ -60,7 +60,7 @@ class WeeklyFragment : Fragment() {
                 .liftimCodeEq(LiftimContext.getLiftimCode())
                 .orderByDayOfWeekAsc()
                 .toList()
-        val data = arrayListOf<WeeklyItem?>(null, null, null, null, null, null, null)
+        val data = ArrayList<WeeklyItem>(7)
         var minMinIndex = Integer.MAX_VALUE
         var rowCount = 0
         loadedData.forEach {
@@ -70,7 +70,7 @@ class WeeklyFragment : Fragment() {
             }
             if (it.minIndex < minMinIndex) minMinIndex = it.minIndex
             if (it.dayOfWeek in 1..7) {
-                data[it.dayOfWeek - 1] = it
+                data.add(it.dayOfWeek - 1, it)
             }
         }
         loadedData.forEach {
@@ -87,7 +87,7 @@ class WeeklyFragment : Fragment() {
         }
         grid.layoutManager = GridLayoutManager(context, rowCount,
                 GridLayoutManager.HORIZONTAL, false)
-        grid.adapter = WeeklyTimetableAdapter(context!!, loadedData, minMinIndex, rowCount)
+        grid.adapter = WeeklyTimetableAdapter(context!!, data, minMinIndex, rowCount)
         setupIndexVert(indexVert, minMinIndex, rowCount)
     }
 

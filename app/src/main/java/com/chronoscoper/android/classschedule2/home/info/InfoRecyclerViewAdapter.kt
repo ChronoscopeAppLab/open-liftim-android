@@ -293,7 +293,7 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
                     setOnMenuItemClickListener {
                         when (it.itemId) {
                             R.id.item_edit -> {
-                                EditTimetableActivity.open(activity, infoData.id)
+                                EditTimetableActivity.openWithSourceTimetable(activity, infoData)
                             }
                         }
                         true

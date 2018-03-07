@@ -19,7 +19,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:focusable="true">
+    tools:ignore="KeyboardInaccessibleWidget">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -30,6 +30,7 @@
         android:layout_marginRight="40dp"
         android:layout_marginStart="40dp"
         android:background="@drawable/dialog_background"
+        android:clickable="true"
         android:elevation="15dp"
         android:transitionName="@string/t_fab"
         tools:ignore="UnusedAttribute,UselessParent">

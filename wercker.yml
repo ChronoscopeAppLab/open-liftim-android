@@ -7,12 +7,14 @@ build:
     - script:
         name: Agree with Licenses
         code: |
-          cat sdk-licenses/android-sdk-license > "${ANDROID_HOME}/licenses/android-sdk-license"
-          cat sdk-licenses/android-sdk-preview-license > "${ANDROID_HOME}/licenses/android-sdk-preview-license"
+          cp sdk-licenses/android-sdk-license "${ANDROID_HOME}/licenses/android-sdk-license"
+          cp sdk-licenses/android-sdk-preview-license "${ANDROID_HOME}/licenses/android-sdk-preview-license"
     - script:
         name: Assemble Debug
         code: |
-          chmod +x gradlew; ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR assembleDebug
+          echo "ENABLE_PROGUARD=true" >> gradle.properties &&
+          chmod +x gradlew &&
+           ./gradlew --project-cache-dir="$WERCKER_CACHE_DIR" assembleDebug
   after-steps:
     - wantedly/pretty-slack-notify:
         webhook-url: $SLACK_WEBHOOK_URL
@@ -21,15 +23,15 @@ testing:
     - script:
         name: Agree with Licenses
         code: |
-          cat sdk-licenses/android-sdk-license > "${ANDROID_HOME}/licenses/android-sdk-license"
-          cat sdk-licenses/android-sdk-preview-license > "${ANDROID_HOME}/licenses/android-sdk-preview-license"
+          cp sdk-licenses/android-sdk-license "${ANDROID_HOME}/licenses/android-sdk-license"
+          cp sdk-licenses/android-sdk-preview-license "${ANDROID_HOME}/licenses/android-sdk-preview-license"
     - script:
         name: Run JUit test
         code: |
-          chmod +x gradlew; ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR test
+          chmod +x gradlew; ./gradlew --project-cache-dir="$WERCKER_CACHE_DIR" test
 deploy:
   steps:
     - script:
-        name: Deploy via DeployGate
+        name: Deploy
         code: |
-          chmod +x deploy.sh; ./deploy.sh
+          chmod +x deploy.sh && ./deploy.sh

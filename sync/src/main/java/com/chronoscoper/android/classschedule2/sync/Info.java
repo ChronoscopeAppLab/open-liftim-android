@@ -70,7 +70,6 @@ public class Info {
         remoteDeleted = false;
     }
 
-    @ParcelProperty("liftim_code")
     @Column(value = "liftimCode", indexed = true)
     public long liftimCode;
 

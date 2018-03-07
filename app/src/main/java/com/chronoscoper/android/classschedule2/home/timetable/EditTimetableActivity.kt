@@ -56,13 +56,14 @@ import kotterknife.bindView
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
+import org.parceler.Parcels
 
 class EditTimetableActivity : BaseActivity() {
     companion object {
-        private const val ID = "source_id"
-        fun open(context: Context, id: String) {
+        private const val SOURCE_TIMETABLE = "SOURCE_TIMETABLE"
+        fun openWithSourceTimetable(context: Context, source: Info?, options: Bundle? = null) {
             context.startActivity(Intent(context, EditTimetableActivity::class.java)
-                    .putExtra(ID, id))
+                    .putExtra(SOURCE_TIMETABLE, Parcels.wrap(source)), options)
         }
     }
 
@@ -136,23 +137,7 @@ class EditTimetableActivity : BaseActivity() {
     }
 
     private fun obtainTargetElement(): Info? {
-        val specified = intent.getStringExtra(ID)
-        if (specified == null) {
-            return LiftimContext.getOrmaDatabase().selectFromInfo()
-                    .liftimCodeEq(LiftimContext.getLiftimCode())
-                    .typeEq(Info.TYPE_TIMETABLE)
-                    .orderByDateAsc()
-                    .firstOrNull()
-        } else {
-            return LiftimContext.getOrmaDatabase().selectFromInfo()
-                    .liftimCodeEq(LiftimContext.getLiftimCode())
-                    .typeEq(Info.TYPE_TIMETABLE)
-                    .idEq(specified)
-                    .firstOrNull()
-                    ?.apply {
-                        this@EditTimetableActivity.id = id
-                    }
-        }
+        return Parcels.unwrap<Info>(intent.getParcelableExtra(SOURCE_TIMETABLE))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

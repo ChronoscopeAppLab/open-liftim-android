@@ -23,6 +23,8 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.sync.Info
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
 import com.chronoscoper.android.classschedule2.transition.FabTransformTransition
 import kotterknife.bindView
@@ -68,8 +70,14 @@ class EditTargetDialog : BaseActivity() {
             }
             val activityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this, it, getString(R.string.t_fab))
-            startActivity(Intent(this, EditTimetableActivity::class.java),
-                    activityOptions.toBundle())
+                    .toBundle()
+            val source = LiftimContext.getOrmaDatabase().selectFromInfo()
+                    .liftimCodeEq(LiftimContext.getLiftimCode())
+                    .typeEq(Info.TYPE_TIMETABLE)
+                    .deletedEq(false)
+                    .orderByDateDesc()
+                    .firstOrNull()
+            EditTimetableActivity.openWithSourceTimetable(this, source, activityOptions)
             finish()
         }
 

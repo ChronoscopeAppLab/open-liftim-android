@@ -127,6 +127,7 @@
         <service android:name=".task.RegisterInfoService" />
         <service android:name=".service.NotificationRegistererService" />
         <service android:name=".service.NotificationPublishService" />
+        <service android:name=".task.RegisterWeeklyService" />
 
         <receiver android:name=".receiver.ServiceTriggerReceiver">
             <intent-filter>

@@ -25,7 +25,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.chronoscoper.android.classschedule2.BuildConfig
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.sync.WeeklyItem
@@ -76,14 +75,6 @@ class WeeklyFragment : Fragment() {
         loadedData.forEach {
             val count = it.minIndex + it.subjects.size - minMinIndex
             if (count > rowCount) rowCount = count
-            if (BuildConfig.DEBUG) {
-                println(it.dayOfWeek)
-                val b = StringBuilder()
-                it.subjects.forEach {
-                    b.append(" ").append(it)
-                }
-                println(b)
-            }
         }
         grid.layoutManager = GridLayoutManager(context, rowCount,
                 GridLayoutManager.HORIZONTAL, false)

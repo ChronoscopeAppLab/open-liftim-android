@@ -25,6 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.ViewSwitcher
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.sync.WeeklyItem
@@ -36,6 +37,8 @@ class WeeklyFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_weekly, container, false)
 
+    private val switcher by bindView<ViewSwitcher>(R.id.switcher)
+    private val placeholderContainer by bindView<View>(R.id.placeholder_container)
     private val indexHoriz by bindView<View>(R.id.index_horiz)
     private val indexVert by bindView<ViewGroup>(R.id.index_vert)
     private val grid by bindView<RecyclerView>(R.id.grid)
@@ -43,7 +46,6 @@ class WeeklyFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         gridVertScroll.onScrollListener = {
             indexVert.scrollTo(0, it)
         }
@@ -55,6 +57,14 @@ class WeeklyFragment : Fragment() {
             }
         })
 
+        if (initializeTimetable()) {
+            switcher.showNext()
+        } else {
+            placeholderContainer.visibility = View.VISIBLE
+        }
+    }
+
+    private fun initializeTimetable(): Boolean {
         val loadedData = LiftimContext.getOrmaDatabase().selectFromWeeklyItem()
                 .liftimCodeEq(LiftimContext.getLiftimCode())
                 .orderByDayOfWeekAsc()
@@ -76,10 +86,14 @@ class WeeklyFragment : Fragment() {
             val count = it.minIndex + it.subjects.size - minMinIndex
             if (count > rowCount) rowCount = count
         }
+        if (rowCount <= 0) {
+            return false
+        }
         grid.layoutManager = GridLayoutManager(context, rowCount,
                 GridLayoutManager.HORIZONTAL, false)
         grid.adapter = WeeklyTimetableAdapter(context!!, data, minMinIndex, rowCount)
         setupIndexVert(indexVert, minMinIndex, rowCount)
+        return true
     }
 
     private val inflater by lazy { LayoutInflater.from(context) }

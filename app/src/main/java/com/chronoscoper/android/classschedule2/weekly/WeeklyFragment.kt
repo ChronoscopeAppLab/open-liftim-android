@@ -25,6 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.chronoscoper.android.classschedule2.BuildConfig
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.sync.WeeklyItem
@@ -57,7 +58,7 @@ class WeeklyFragment : Fragment() {
 
         val loadedData = LiftimContext.getOrmaDatabase().selectFromWeeklyItem()
                 .liftimCodeEq(LiftimContext.getLiftimCode())
-                .orderByLiftimCodeAsc()
+                .orderByDayOfWeekAsc()
                 .toList()
         val data = arrayListOf<WeeklyItem?>(null, null, null, null, null, null, null)
         var minMinIndex = Integer.MAX_VALUE
@@ -68,9 +69,20 @@ class WeeklyFragment : Fragment() {
                         .fromJson(it.serializedSubjects, Array<String>::class.java)
             }
             if (it.minIndex < minMinIndex) minMinIndex = it.minIndex
-            if (it.subjects.size > rowCount) rowCount = it.subjects.size
             if (it.dayOfWeek in 1..7) {
                 data[it.dayOfWeek - 1] = it
+            }
+        }
+        loadedData.forEach {
+            val count = it.minIndex + it.subjects.size - minMinIndex
+            if (count > rowCount) rowCount = count
+            if (BuildConfig.DEBUG) {
+                println(it.dayOfWeek)
+                val b = StringBuilder()
+                it.subjects.forEach {
+                    b.append(" ").append(it)
+                }
+                println(b)
             }
         }
         grid.layoutManager = GridLayoutManager(context, rowCount,

@@ -102,7 +102,7 @@
         <LinearLayout
             android:id="@+id/index_vert"
             android:layout_width="30sp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@android:color/white"
             android:elevation="3dp"
             android:orientation="vertical"

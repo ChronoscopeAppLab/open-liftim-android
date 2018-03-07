@@ -35,14 +35,13 @@ class WeeklyTimetableAdapter(context: Context,
 
     private val inflater by lazy { LayoutInflater.from(context) }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerViewHolder? {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
         return RecyclerViewHolder(inflater.inflate(R.layout.weekly_cell, parent, false))
     }
 
     override fun getItemCount(): Int = maxRowCount * 7
 
-    override fun onBindViewHolder(holder: RecyclerViewHolder?, position: Int) {
-        holder ?: return
+    override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         val view = holder.itemView as TextView
         val name = getSubjectNameForPosition(position)
         view.text = name ?: ""

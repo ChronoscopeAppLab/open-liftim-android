@@ -267,21 +267,21 @@ class EditTimetableActivity : BaseActivity() {
             }
         })
 
-        override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+        override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
             super.onAttachedToRecyclerView(recyclerView)
             itemTouchHelper.attachToRecyclerView(recyclerView)
         }
 
         private val inflater by lazy { LayoutInflater.from(activity) }
 
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): DragViewHolder =
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DragViewHolder =
                 DragViewHolder(
                         inflater.inflate(R.layout.timetable_editor_item, parent, false))
 
         override fun getItemCount(): Int = data.size
 
-        override fun onBindViewHolder(holder: DragViewHolder?, position: Int) {
-            val view = holder?.itemView ?: return
+        override fun onBindViewHolder(holder: DragViewHolder, position: Int) {
+            val view = holder.itemView
             val item = data[position]
 
             val index = view.findViewById<TextView>(R.id.index)

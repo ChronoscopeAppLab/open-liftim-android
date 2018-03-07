@@ -79,7 +79,7 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
                     .deletedEq(false)
 
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         val liftimCode = LiftimContext.getLiftimCode()
         InfoLoader.resetCursor()
@@ -93,14 +93,14 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
         disposables.addAll(subscriber)
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
         disposables.clear()
     }
 
     val inflater: LayoutInflater by lazy { LayoutInflater.from(activity) }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerViewHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder =
             if (viewType == VIEW_TYPE_INFO) {
                 InfoHolder(inflater
                         .inflate(R.layout.info_item, parent, false))
@@ -118,8 +118,7 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
                 VIEW_TYPE_TIMETABLE
             }
 
-    override fun onBindViewHolder(holder: RecyclerViewHolder?, position: Int) {
-        holder ?: return
+    override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         when (holder.itemViewType) {
             VIEW_TYPE_INFO -> {
                 (holder as InfoHolder).bindContent(data[position])

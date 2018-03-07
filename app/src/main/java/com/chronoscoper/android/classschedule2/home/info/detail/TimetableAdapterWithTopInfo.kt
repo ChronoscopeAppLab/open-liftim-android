@@ -46,8 +46,7 @@ class TimetableAdapterWithTopInfo(context: Context,
         return count
     }
 
-    override fun onBindViewHolder(holder: RecyclerViewHolder?, position: Int) {
-        holder ?: return
+    override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         if (holder.itemViewType == R.layout.timetable_info_header) {
             val view = holder.itemView as TextView
             view.text = timetableInfoElement.detail
@@ -86,7 +85,7 @@ class TimetableAdapterWithTopInfo(context: Context,
 
     private val inflater by lazy { LayoutInflater.from(context) }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerViewHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder =
             if (viewType == R.layout.timetable_item) {
                 RecyclerViewHolder(inflater.inflate(
                         R.layout.timetable_item, parent, false))

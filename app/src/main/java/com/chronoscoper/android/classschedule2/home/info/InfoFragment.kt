@@ -22,7 +22,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ViewSwitcher
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import kotterknife.bindView
 
 class InfoFragment : Fragment() {
@@ -31,14 +33,27 @@ class InfoFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_info, container, false)
     }
 
+    private val switcher by bindView<ViewSwitcher>(R.id.switcher)
+    private val placeholder by bindView<View>(R.id.placeholder_container)
     private val list by bindView<RecyclerView>(R.id.list)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        list.apply {
-            adapter = InfoRecyclerViewAdapter(activity!!)
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        val count = LiftimContext.getOrmaDatabase()
+                .selectFromInfo()
+                .liftimCodeEq(LiftimContext.getLiftimCode())
+                .deletedEq(false)
+                .count()
+
+        if (count > 0) {
+            switcher.showNext()
+            list.apply {
+                adapter = InfoRecyclerViewAdapter(activity!!)
+                addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            }
+        } else {
+            placeholder.visibility = View.VISIBLE
         }
     }
 }

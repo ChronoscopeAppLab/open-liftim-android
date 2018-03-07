@@ -17,6 +17,11 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), '../proguard-rules.pro'
         }
+
+        debug {
+            minifyEnabled Boolean.parseBoolean("$ENABLE_PROGUARD")
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), '../proguard-rules.pro'
+        }
     }
 }
 

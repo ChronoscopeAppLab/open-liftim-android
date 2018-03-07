@@ -120,4 +120,6 @@
     <string name="feedback_edit_hint">Write your feedback here</string>
     <string name="send">Send</string>
     <string name="feedback_empty_message">Your feedback is seemed to be empty. Please write your feedback.</string>
+    <string name="add_subject">Add subject</string>
+    <string name="start_index">Start</string>
 </resources>

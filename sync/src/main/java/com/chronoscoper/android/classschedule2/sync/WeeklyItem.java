@@ -37,6 +37,10 @@ public class WeeklyItem {
     @SerializedName("subjects")
     public String[] subjects;
 
+    @Expose
+    @SerializedName("shortSubjects")
+    public String[] shortSubjects;
+
     @Column("subjects")
     public String serializedSubjects;
 }

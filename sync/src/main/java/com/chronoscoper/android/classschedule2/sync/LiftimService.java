@@ -61,6 +61,13 @@ public interface LiftimService {
             @Query("liftim_code") long liftimCode,
             @Query("token") String token);
 
+    @FormUrlEncoded
+    @POST("api/v1/weekly.json")
+    Call<Void> registerWeekly(
+            @Field("liftim_code") long liftimCode,
+            @Field("token") String token,
+            @Field("content") String content);
+
     @GET("api/v1/account_info.json")
     Call<AccountInfo> getAccountInfo(@Query("token") String token);
 

@@ -254,20 +254,20 @@ class EditWeeklyActivity : BaseActivity() {
                         }
                     })
 
-            override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+            override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
                 super.onAttachedToRecyclerView(recyclerView)
                 itemTouchHelper.attachToRecyclerView(recyclerView)
             }
 
             private val inflater by lazy { LayoutInflater.from(context) }
 
-            override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int):
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
                     RecyclerViewHolder = DragViewHolder(
                     inflater.inflate(R.layout.weekly_edit_item, parent, false))
 
 
-            override fun onBindViewHolder(holder: RecyclerViewHolder?, position: Int) {
-                val view = holder?.itemView ?: return
+            override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
+                val view = holder.itemView
                 val subjectName = subjects[position]
 
                 val subject = view.findViewById<TextView>(R.id.subject)
@@ -402,8 +402,7 @@ class EditWeeklyActivity : BaseActivity() {
                 val index = arguments?.getInt(INDEX, -1) ?: -1
                 val subject =
                         if (index >= 0) {
-                            EditWeeklyTemporary.weeklyItems!!.get(dayOfWeek - 1)
-                                    .subjects.get(index) ?: ""
+                            EditWeeklyTemporary.weeklyItems!![dayOfWeek - 1].subjects[index] ?: ""
                         } else {
                             ""
                         }

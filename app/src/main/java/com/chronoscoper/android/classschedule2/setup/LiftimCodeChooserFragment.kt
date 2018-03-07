@@ -77,8 +77,8 @@ class LiftimCodeChooserFragment : Fragment() {
                     .selectFromLiftimCodeInfo().toList())
         }
 
-        override fun onBindViewHolder(holder: RecyclerViewHolder?, position: Int) {
-            val view = holder?.itemView ?: return
+        override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
+            val view = holder.itemView
             val item = data[position]
             val image = view.findViewById<ImageView>(R.id.image)
             val name = view.findViewById<TextView>(R.id.liftim_code_name)
@@ -138,7 +138,7 @@ class LiftimCodeChooserFragment : Fragment() {
 
         val inflater: LayoutInflater by lazy { LayoutInflater.from(activity) }
 
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerViewHolder =
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder =
                 RecyclerViewHolder(inflater.inflate(
                         R.layout.liftim_code_chooser_item, parent, false))
 

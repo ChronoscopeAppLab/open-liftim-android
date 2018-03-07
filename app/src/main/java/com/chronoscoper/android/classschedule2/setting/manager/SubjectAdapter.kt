@@ -33,25 +33,24 @@ import kotterknife.bindView
 class SubjectAdapter(private val activity: Activity, private val subjects: MutableList<Subject>)
     : RecyclerView.Adapter<SubjectAdapter.SubjectViewHolder>() {
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
         itemTouchHelper.attachToRecyclerView(null)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): SubjectViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubjectViewHolder {
         return SubjectViewHolder(
                 activity.layoutInflater.inflate(R.layout.subject_item, parent, false))
     }
 
     override fun getItemCount(): Int = subjects.size
 
-    override fun onBindViewHolder(holder: SubjectViewHolder?, position: Int) {
-        holder ?: return
+    override fun onBindViewHolder(holder: SubjectViewHolder, position: Int) {
         val subject = subjects[position]
         holder.subjectColor.background.setColorFilter(
                 obtainColorCorrespondsTo(subject.subject), PorterDuff.Mode.SRC_IN)

@@ -39,8 +39,7 @@ class TimetableAdapter(context: Context, timetableInfoElement: Info?) :
 
     override fun getItemCount(): Int = timetable?.subjects?.size ?: 1
 
-    override fun onBindViewHolder(holder: RecyclerViewHolder?, position: Int) {
-        holder ?: return
+    override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         if (holder.itemViewType == ViewType.NORMAL.type) {
             val item = timetable?.subjects?.get(position) ?: return
             val view = holder.itemView
@@ -70,7 +69,7 @@ class TimetableAdapter(context: Context, timetableInfoElement: Info?) :
 
     private val inflater by lazy { LayoutInflater.from(context) }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerViewHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder =
             if (viewType == ViewType.NORMAL.type) {
                 RecyclerViewHolder(inflater.inflate(
                         R.layout.timetable_item, parent, false))

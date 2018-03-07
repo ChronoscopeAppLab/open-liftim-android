@@ -21,7 +21,7 @@ import com.chronoscoper.android.classschedule2.util.optimizeInfo
 
 class InfoLoader(private val liftimCode: Long, private val token: String) : Runnable {
     companion object {
-        private var nextCursor = 0L
+        var nextCursor = 0L
 
         fun resetCursor() {
             nextCursor = 0L

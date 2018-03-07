@@ -20,6 +20,7 @@ import android.app.ActivityOptions
 import android.graphics.PorterDuff
 import android.os.Build
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.util.Pair
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -32,6 +33,7 @@ import com.chronoscoper.android.classschedule2.home.info.detail.ViewInfoActivity
 import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import com.chronoscoper.android.classschedule2.task.IncrementalInfoLoader
 import com.chronoscoper.android.classschedule2.task.InfoLoader
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 import com.chronoscoper.android.classschedule2.util.getColorForInfoType
@@ -44,15 +46,17 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subscribers.DisposableSubscriber
 import kotterknife.bindView
 
-open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapter<RecyclerViewHolder>() {
+class InfoRecyclerViewAdapter(val activity: Activity, private val syncEnabled: Boolean = true)
+    : RecyclerView.Adapter<RecyclerViewHolder>() {
     companion object {
+        private const val TAG = "InfoRecyclerViewAdapter"
         private const val VIEW_TYPE_INFO = 1
         private const val VIEW_TYPE_TIMETABLE = 2
     }
 
     private val disposables = CompositeDisposable()
 
-    private val subscriber = object : DisposableSubscriber<Unit>() {
+    private val initialSync = object : DisposableSubscriber<Unit>() {
         override fun onError(t: Throwable?) {
             initView()
         }
@@ -69,28 +73,28 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
 
     private fun initView() {
         data.clear()
-        loadData().forEach { data.add(it) }
+        LiftimContext.getOrmaDatabase().selectFromInfo()
+                .liftimCodeEq(LiftimContext.getLiftimCode())
+                .deletedEq(false)
+                .forEach { data.add(it) }
         notifyDataSetChanged()
     }
-
-    open fun loadData(): Iterable<Info> =
-            LiftimContext.getOrmaDatabase().selectFromInfo()
-                    .liftimCodeEq(LiftimContext.getLiftimCode())
-                    .deletedEq(false)
-
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         val liftimCode = LiftimContext.getLiftimCode()
-        InfoLoader.resetCursor()
-        Flowable.defer {
-            Flowable.just(
-                    InfoLoader(liftimCode, LiftimContext.getToken()).run())
+        if (syncEnabled) {
+            InfoLoader.resetCursor()
+            Flowable.defer {
+                Flowable.just(
+                        InfoLoader(liftimCode, LiftimContext.getToken()).run())
+            }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(initialSync)
+            disposables.addAll(initialSync)
         }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber)
-        disposables.addAll(subscriber)
+        initView()
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
@@ -101,22 +105,36 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
     val inflater: LayoutInflater by lazy { LayoutInflater.from(activity) }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder =
-            if (viewType == VIEW_TYPE_INFO) {
-                InfoHolder(inflater
+            when (viewType) {
+                VIEW_TYPE_INFO -> InfoHolder(inflater
                         .inflate(R.layout.info_item, parent, false))
-            } else {
-                TimetableHolder(inflater
+                R.layout.info_item_progress ->
+                    RecyclerViewHolder(
+                            inflater.inflate(R.layout.info_item_progress, parent, false))
+                else -> TimetableHolder(inflater
                         .inflate(R.layout.info_timetable_item, parent, false))
             }
 
-    override fun getItemCount(): Int = data.size
+    override fun getItemCount(): Int {
+        return if (InfoLoader.nextCursor > 0) {
+            data.size + 1
+        } else {
+            data.size
+        }
+    }
 
-    override fun getItemViewType(position: Int): Int =
-            if (data[position].type in -1..3) {
-                VIEW_TYPE_INFO
-            } else {
-                VIEW_TYPE_TIMETABLE
-            }
+    override fun getItemViewType(position: Int): Int {
+        if (position == data.size) {
+            return R.layout.info_item_progress
+        }
+        return if (data[position].type in -1..3) {
+            VIEW_TYPE_INFO
+        } else {
+            VIEW_TYPE_TIMETABLE
+        }
+    }
+
+    private var loading = false
 
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         when (holder.itemViewType) {
@@ -125,6 +143,37 @@ open class InfoRecyclerViewAdapter(val activity: Activity) : RecyclerView.Adapte
             }
             VIEW_TYPE_TIMETABLE -> {
                 (holder as TimetableHolder).bindContent(data[position])
+            }
+            R.layout.info_item_progress -> {
+                Log.d(TAG, "Progress row is bound")
+                if (!loading && InfoLoader.nextCursor > 0) {
+                    loading = true
+                    val incrementalLoad = object : DisposableSubscriber<List<Info>>() {
+                        override fun onError(t: Throwable?) {
+                            loading = false
+                            notifyDataSetChanged()
+                        }
+
+                        override fun onNext(t: List<Info>?) {
+                            t?.let { data.addAll(t) }
+                        }
+
+                        override fun onComplete() {
+                            loading = false
+                            notifyDataSetChanged()
+                        }
+                    }
+                    Flowable.defer {
+                        Flowable.just(
+                                IncrementalInfoLoader(
+                                        LiftimContext.getLiftimCode(), LiftimContext.getToken())
+                                        .execute())
+                    }
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(incrementalLoad)
+                    disposables.addAll(incrementalLoad)
+                }
             }
         }
     }

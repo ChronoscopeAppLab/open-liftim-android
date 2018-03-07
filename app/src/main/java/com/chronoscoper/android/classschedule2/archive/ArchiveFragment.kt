@@ -24,14 +24,6 @@ class ArchiveFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        list.adapter = Adapter(activity!!)
         list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-    }
-
-    private class Adapter(activity: Activity) : InfoRecyclerViewAdapter(activity) {
-        override fun loadData(): Iterable<Info> =
-                LiftimContext.getOrmaDatabase().selectFromInfo()
-                        .liftimCodeEq(LiftimContext.getLiftimCode())
-                        .deletedEq(true)
     }
 }

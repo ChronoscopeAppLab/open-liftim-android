@@ -128,6 +128,7 @@
         <service android:name=".service.NotificationRegistererService" />
         <service android:name=".service.NotificationPublishService" />
         <service android:name=".task.RegisterWeeklyService" />
+        <service android:name=".service.TokenLoadService" />
 
         <receiver android:name=".receiver.ServiceTriggerReceiver">
             <intent-filter>

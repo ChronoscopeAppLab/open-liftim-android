@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
 import com.chronoscoper.android.classschedule2.home.HomeActivity
+import com.chronoscoper.android.classschedule2.service.TokenLoadService
 import com.chronoscoper.android.classschedule2.setting.ManageLiftimCodeActivity
 import com.chronoscoper.android.classschedule2.setup.SetupActivity
 import com.chronoscoper.android.classschedule2.setup.TokenCallbackActivity
@@ -29,7 +30,6 @@ import com.chronoscoper.android.classschedule2.sync.WeeklyItem
 import com.chronoscoper.android.classschedule2.task.AccountInfoLoader
 import com.chronoscoper.android.classschedule2.task.InvalidTokenException
 import com.chronoscoper.android.classschedule2.task.SubjectLoader
-import com.chronoscoper.android.classschedule2.task.TokenReloadTask
 import com.chronoscoper.android.classschedule2.task.WeeklyLoader
 import com.chronoscoper.android.classschedule2.task.enforceValidToken
 import com.chronoscoper.android.classschedule2.util.optimizeInfo
@@ -128,7 +128,7 @@ class LauncherActivity : BaseActivity() {
 
         Observable.create<Unit> {
             enforceValidToken(LiftimContext.getToken())
-            TokenReloadTask(this).run()
+            startService(Intent(this, TokenLoadService::class.java))
             if (userInfoSyncNeeded) {
                 val token = LiftimContext.getToken()
                 val accountInfo = AccountInfoLoader(token)

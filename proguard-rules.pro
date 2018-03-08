@@ -50,6 +50,11 @@
 }
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
+# [Parceler]
+-keep interface org.parceler.Parcel
+-keep @org.parceler.Parcel class * { *; }
+-keep class **$$Parcelable { *; }
+
 # Keep method that is exposed to JavaScript
 -keepclassmembernames class * {
     @android.webkit.JavascriptInterface <methods>;

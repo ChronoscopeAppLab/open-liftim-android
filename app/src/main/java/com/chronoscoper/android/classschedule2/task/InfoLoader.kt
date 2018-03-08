@@ -37,10 +37,6 @@ class InfoLoader(private val liftimCode: Long, private val token: String) : Runn
         }
         val info = response.body() ?: return
         val db = LiftimContext.getOrmaDatabase()
-        db.updateInfo()
-                .liftimCodeEq(liftimCode).addedByEq(Info.REMOTE)
-                .edited(false)
-                .execute()
         val edited = db.selectFromInfo().liftimCodeEq(liftimCode).editedEq(true).toList()
                 .map { it.id }
         nextCursor = info.nextCursor
@@ -50,6 +46,9 @@ class InfoLoader(private val liftimCode: Long, private val token: String) : Runn
                 .execute()
         val inserter = db.prepareInsertIntoInfo()
         info.info?.filterNotNull()?.filterNot { edited.contains(it.id) }?.forEach {
+            if (it.date != null && it.date == "0000/00/00") {
+                it.date = null
+            }
             val base = db.selectFromInfo().liftimCodeEq(liftimCode).idEq(it.id).firstOrNull()
                     ?: Info()
             base.set(liftimCode, it.id, it.title, it.detail, it.weight, it.date,

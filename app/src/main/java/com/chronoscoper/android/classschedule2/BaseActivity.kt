@@ -26,9 +26,14 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 @SuppressLint("Registered")
 abstract class BaseActivity : AppCompatActivity() {
     override fun attachBaseContext(base: Context?) {
-        //Wrap base context to use custom font whole this app with Calligraphy.
-        //See https://github.com/chrisjenx/Calligraphy for more details on Calligraphy.
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(base))
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
+            // Wrap base context to use custom font whole this app with Calligraphy.
+            // See https://github.com/chrisjenx/Calligraphy for more details on Calligraphy.
+            super.attachBaseContext(CalligraphyContextWrapper.wrap(base))
+        } else {
+            //TODO: As far as I tried, custom font doesn't work properly on Android P.
+            super.attachBaseContext(base)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

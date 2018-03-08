@@ -58,6 +58,7 @@ class InfoRecyclerViewAdapter(val activity: Activity, private val syncEnabled: B
 
     private val initialSync = object : DisposableSubscriber<Unit>() {
         override fun onError(t: Throwable?) {
+            Log.e(TAG, "Sync inside of $TAG has ended in failure.", t)
             initView()
         }
 
@@ -72,11 +73,13 @@ class InfoRecyclerViewAdapter(val activity: Activity, private val syncEnabled: B
     private val data = mutableListOf<Info>()
 
     private fun initView() {
+        Log.d(TAG, "Initializing list after sync")
         data.clear()
         LiftimContext.getOrmaDatabase().selectFromInfo()
                 .liftimCodeEq(LiftimContext.getLiftimCode())
                 .deletedEq(false)
                 .forEach { data.add(it) }
+        Log.d(TAG, "Info count: ${data.size}")
         notifyDataSetChanged()
     }
 
@@ -241,6 +244,7 @@ class InfoRecyclerViewAdapter(val activity: Activity, private val syncEnabled: B
                     activity.getString(R.string.type_memo)
                 }
                 else -> {
+                    Log.e(TAG, "Unknown type info. Using empty string(\"\")")
                     ""
                 }
             }

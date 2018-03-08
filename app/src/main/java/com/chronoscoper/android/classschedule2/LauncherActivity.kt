@@ -127,7 +127,11 @@ class LauncherActivity : BaseActivity() {
         }
 
         Observable.create<Unit> {
-            enforceValidToken(LiftimContext.getToken())
+            try {
+                enforceValidToken(LiftimContext.getToken())
+            } catch (e: Exception) {
+                it.onError(e)
+            }
             startService(Intent(this, TokenLoadService::class.java))
             if (userInfoSyncNeeded) {
                 val token = LiftimContext.getToken()

@@ -47,10 +47,12 @@ import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.sync.WeeklyItem
 import com.chronoscoper.android.classschedule2.task.RegisterWeeklyService
 import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
+import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.util.removedAt
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import kotterknife.bindView
+import org.greenrobot.eventbus.EventBus
 
 class EditWeeklyActivity : BaseActivity() {
 
@@ -114,6 +116,8 @@ class EditWeeklyActivity : BaseActivity() {
                             .executeAll(weeklyItems)
                     RegisterWeeklyService.start(this, LiftimContext.getGson()
                             .toJson(element))
+                    EventBus.getDefault()
+                            .post(EventMessage(WeeklyFragment.EVENT_WEEKLY_TIMETABLE_UPDATED))
                 }
             }
             animateFinishCompat()

@@ -36,6 +36,7 @@ import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.IncrementalInfoLoader
 import com.chronoscoper.android.classschedule2.task.InfoLoader
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
+import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.getColorForInfoType
 import com.chronoscoper.android.classschedule2.util.openInCustomTab
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
@@ -45,6 +46,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subscribers.DisposableSubscriber
 import kotterknife.bindView
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class InfoRecyclerViewAdapter(val activity: Activity, private val syncEnabled: Boolean = true)
     : RecyclerView.Adapter<RecyclerViewHolder>() {
@@ -52,6 +56,8 @@ class InfoRecyclerViewAdapter(val activity: Activity, private val syncEnabled: B
         private const val TAG = "InfoRecyclerViewAdapter"
         private const val VIEW_TYPE_INFO = 1
         private const val VIEW_TYPE_TIMETABLE = 2
+
+        const val EVENT_ENTRY_UPDATED = "INFO_ENTRY_UPDATED"
     }
 
     private val disposables = CompositeDisposable()
@@ -77,6 +83,8 @@ class InfoRecyclerViewAdapter(val activity: Activity, private val syncEnabled: B
         data.clear()
         LiftimContext.getOrmaDatabase().selectFromInfo()
                 .liftimCodeEq(LiftimContext.getLiftimCode())
+                .orderByDateAsc()
+                .orderByTypeAsc()
                 .deletedEq(false)
                 .forEach { data.add(it) }
         Log.d(TAG, "Info count: ${data.size}")
@@ -98,11 +106,25 @@ class InfoRecyclerViewAdapter(val activity: Activity, private val syncEnabled: B
             disposables.addAll(initialSync)
         }
         initView()
+        EventBus.getDefault().register(this)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
+        Log.d(TAG, "Unsubscribing events...")
         disposables.clear()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Suppress("UNUSED")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEntryUpdated(event: EventMessage) {
+        if (event.type == EVENT_ENTRY_UPDATED) {
+            Log.d(TAG, "Event: Updating list entry...")
+            initView()
+        } else {
+            Log.i(TAG, "Event: Not subscribing event $event. Ignoring...")
+        }
     }
 
     val inflater: LayoutInflater by lazy { LayoutInflater.from(activity) }

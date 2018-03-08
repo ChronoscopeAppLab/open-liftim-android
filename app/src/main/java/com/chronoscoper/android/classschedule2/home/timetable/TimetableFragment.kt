@@ -19,6 +19,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,10 +28,15 @@ import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
+import com.chronoscoper.android.classschedule2.util.EventMessage
 import kotterknife.bindView
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class TimetableFragment : Fragment() {
     companion object {
+        private const val TAG = "TimetableFragment"
         private const val ID = "target_id"
         fun obtain(id: String): TimetableFragment {
             val result = TimetableFragment()
@@ -39,6 +45,8 @@ class TimetableFragment : Fragment() {
             }
             return result
         }
+
+        const val EVENT_TIMETABLE_UPDATED = "TIMETABLE_UPDATED"
     }
 
     override fun onCreateView(
@@ -53,12 +61,30 @@ class TimetableFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        EventBus.getDefault().register(this)
+
         initTimetable()
 
         doneButton.setOnClickListener {
             LiftimContext.getOrmaDatabase()
                     .updateInfo().deleted(true).idEq(currentItemId).execute()
             initTimetable()
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Suppress("UNUSED")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onTimetableUpdated(event: EventMessage) {
+        if (event.type == EVENT_TIMETABLE_UPDATED) {
+            Log.d(TAG, "Event: Updating timetable UI...")
+            initTimetable()
+        } else {
+            Log.i(TAG,"Event: Not subscribing event $event. Ignoreing...")
         }
     }
 

@@ -43,6 +43,13 @@
 # Ignore annotation used for build tooling.
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 
+# [EventBus]
+-keepattributes *Annotation*
+-keepclassmembers class * {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
 # Keep method that is exposed to JavaScript
 -keepclassmembernames class * {
     @android.webkit.JavascriptInterface <methods>;

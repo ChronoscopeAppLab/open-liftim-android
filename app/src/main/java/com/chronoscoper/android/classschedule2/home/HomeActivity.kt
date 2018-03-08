@@ -35,6 +35,7 @@ import android.widget.Toast
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.archive.ArchiveFragment
 import com.chronoscoper.android.classschedule2.home.info.EditInfoActivity
 import com.chronoscoper.android.classschedule2.home.timetable.EditTargetDialog
 import com.chronoscoper.android.classschedule2.setting.SettingsActivity
@@ -121,6 +122,18 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         showLiftimCodeName()
     }
 
+    override fun onPause() {
+        super.onPause()
+        fab.hide()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Handler().postDelayed({
+            if (contentFragment !is ArchiveFragment) fab.show()
+        }, 500)
+    }
+
     private fun showLiftimCodeName() {
         if (!hasWindowFocus()) return
         Handler().post {
@@ -140,6 +153,11 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private var contentFragment: Fragment? = null
 
     private fun replaceFragment(fragment: Fragment) {
+        if (fragment is ArchiveFragment) {
+            fab.hide()
+        } else {
+            fab.show()
+        }
         supportFragmentManager.beginTransaction()
                 .replace(R.id.content, fragment)
                 .commit()
@@ -234,10 +252,9 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 replaceFragment(WeeklyFragment())
                 fabAction = editWeeklyFabAction
             }
-        // TODO: Disabled temporarily:(
-//            R.id.drawer_archive -> {
-//                replaceFragment(ArchiveFragment())
-//            }
+            R.id.drawer_archive -> {
+                replaceFragment(ArchiveFragment())
+            }
             R.id.drawer_settings -> {
                 startActivity(Intent(this, SettingsActivity::class.java))
             }

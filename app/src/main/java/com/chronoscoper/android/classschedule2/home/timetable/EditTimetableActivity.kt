@@ -44,15 +44,18 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.home.info.InfoRecyclerViewAdapter
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.RegisterInfoService
 import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
+import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import kotterknife.bindView
+import org.greenrobot.eventbus.EventBus
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
@@ -171,10 +174,18 @@ class EditTimetableActivity : BaseActivity() {
             R.id.options_register_local -> {
                 registerLocal(createElementFromCurrentState())
                 animateFinishCompat()
+                EventBus.getDefault()
+                        .post(EventMessage(TimetableFragment.EVENT_TIMETABLE_UPDATED))
             }
             R.id.options_register_remote -> {
-                registerRemote(createElementFromCurrentState())
+                val element = createElementFromCurrentState()
+                registerLocal(element)
+                registerRemote(element)
                 animateFinishCompat()
+                EventBus.getDefault().let {
+                    it.post(EventMessage(TimetableFragment.EVENT_TIMETABLE_UPDATED))
+                    it.post(EventMessage(InfoRecyclerViewAdapter.EVENT_ENTRY_UPDATED))
+                }
             }
             R.id.options_change_min_indx -> {
                 ChangeMinIndexDialog().show(supportFragmentManager, null)

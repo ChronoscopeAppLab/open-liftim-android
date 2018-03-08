@@ -44,9 +44,11 @@ import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.RegisterInfoService
 import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
+import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import kotterknife.bindView
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+import org.greenrobot.eventbus.EventBus
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
@@ -174,6 +176,8 @@ class EditInfoActivity : BaseActivity() {
                 } else {
                     registerLocal()
                 }
+                EventBus.getDefault()
+                        .post(EventMessage(InfoRecyclerViewAdapter.EVENT_ENTRY_UPDATED))
             }
             R.id.options_register_remote -> {
                 if (titleInput.text.isNullOrEmpty()) {
@@ -227,7 +231,7 @@ class EditInfoActivity : BaseActivity() {
                     }
             removable = true
             addedBy = item?.addedBy ?: Info.LOCAL
-            type = Info.TYPE_LOCAL_MEMO
+            type = item?.type ?: Info.TYPE_LOCAL_MEMO
             edited = true
         }
         return result

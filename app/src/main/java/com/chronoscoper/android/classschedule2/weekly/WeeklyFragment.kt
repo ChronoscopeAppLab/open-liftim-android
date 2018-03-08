@@ -21,6 +21,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,10 +30,20 @@ import android.widget.ViewSwitcher
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.sync.WeeklyItem
+import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.view.ObservableScrollView
+import com.google.gson.Gson
 import kotterknife.bindView
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class WeeklyFragment : Fragment() {
+    companion object {
+        private const val TAG = "WeeklyFragment"
+        const val EVENT_WEEKLY_TIMETABLE_UPDATED = "WEEKLY_TIMETABLE_UPDATED"
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_weekly, container, false)
@@ -46,6 +57,9 @@ class WeeklyFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        EventBus.getDefault().register(this)
+
         gridVertScroll.onScrollListener = {
             indexVert.scrollTo(0, it)
         }
@@ -62,6 +76,23 @@ class WeeklyFragment : Fragment() {
         } else {
             placeholderContainer.visibility = View.VISIBLE
         }
+    }
+
+    @Suppress("UNUSED")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onUpdated(event: EventMessage) {
+        if (event.type == EVENT_WEEKLY_TIMETABLE_UPDATED) {
+            Log.d(TAG, "Event: Updating weekly timetable...")
+            initializeTimetable()
+        } else {
+            Log.i(TAG, "Not subscribing event $event. Ignoring...")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d(TAG, "Fragment is detached. Unsubscribing event bus...")
+        EventBus.getDefault().unregister(this)
     }
 
     private fun initializeTimetable(): Boolean {
@@ -85,8 +116,10 @@ class WeeklyFragment : Fragment() {
         loadedData.forEach {
             val count = it.minIndex + it.subjects.size - minMinIndex
             if (count > rowCount) rowCount = count
+            Log.d(TAG, Gson().toJson(it))
         }
         if (rowCount <= 0) {
+            Log.e(TAG, "No subject registered. Skipping layout...")
             return false
         }
         grid.layoutManager = GridLayoutManager(context, rowCount,

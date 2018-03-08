@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import android.widget.ViewSwitcher
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter
 import kotterknife.bindView
 
 class InfoFragment : Fragment() {
@@ -49,7 +50,7 @@ class InfoFragment : Fragment() {
         if (count > 0) {
             switcher.showNext()
             list.apply {
-                adapter = InfoRecyclerViewAdapter(activity!!)
+                adapter = SlideInBottomAnimationAdapter(InfoRecyclerViewAdapter(activity!!))
                 addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             }
         } else {

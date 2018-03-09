@@ -120,4 +120,10 @@
     <string name="add_subject">教科を追加</string>
     <string name="start_index">開始時限</string>
     <string name="info_placeholder_text">情報やイベントがありません</string>
+    <string name="restore">復元</string>
+    <string name="specify_date_time">日時を選択</string>
+    <string name="not_specified">指定なし</string>
+    <string name="tomorrow">明日</string>
+    <string name="unset">選択を取消す</string>
+    <string name="add_link_url">リンクのURLを設定</string>
 </resources>

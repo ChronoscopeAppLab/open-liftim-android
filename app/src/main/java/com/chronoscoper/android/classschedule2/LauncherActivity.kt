@@ -112,7 +112,6 @@ class LauncherActivity : BaseActivity() {
             }
 
             override fun onError(e: Throwable) {
-                e.printStackTrace()
                 if (e is InvalidTokenException) {
                     startActivity(Intent(this@LauncherActivity, ReLoginActivity::class.java))
                     finish()
@@ -131,6 +130,7 @@ class LauncherActivity : BaseActivity() {
                 enforceValidToken(LiftimContext.getToken())
             } catch (e: Exception) {
                 it.onError(e)
+                return@create
             }
             startService(Intent(this, TokenLoadService::class.java))
             if (userInfoSyncNeeded) {

@@ -11,9 +11,20 @@ object EditWeeklyTemporary {
                 if (it.subjects == null) {
                     it.subjects = LiftimContext.getGson()
                             .fromJson(it.serializedSubjects, Array<String>::class.java)
+                            ?: arrayOf()
                 }
             }
-            field = value
+            val result = ArrayList<WeeklyItem>(7)
+            for (i in 1..7) {
+                val item = value?.firstOrNull { it.dayOfWeek == i }
+                        ?: WeeklyItem().apply {
+                            dayOfWeek = i
+                            subjects = arrayOf()
+                            shortSubjects = arrayOf()
+                        }
+                result.add(item)
+            }
+            field = result
         }
 
     fun getMerged(liftimCode: Long): List<WeeklyItem> {

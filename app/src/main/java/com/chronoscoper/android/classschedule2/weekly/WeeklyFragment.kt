@@ -100,6 +100,9 @@ class WeeklyFragment : Fragment() {
                 .liftimCodeEq(LiftimContext.getLiftimCode())
                 .orderByDayOfWeekAsc()
                 .toList()
+        if (loadedData.isEmpty()) {
+            return false
+        }
         val data = ArrayList<WeeklyItem>(7)
         var minMinIndex = Integer.MAX_VALUE
         var rowCount = 0
@@ -118,7 +121,7 @@ class WeeklyFragment : Fragment() {
             if (count > rowCount) rowCount = count
             Log.d(TAG, Gson().toJson(it))
         }
-        if (rowCount <= 0) {
+        if (data.isEmpty() || rowCount <= 0) {
             Log.e(TAG, "No subject registered. Skipping layout...")
             return false
         }

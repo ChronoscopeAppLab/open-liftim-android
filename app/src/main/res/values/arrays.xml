@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
    Copyright 2018 Chronoscope
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,11 +12,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
 <resources>
     <array name="info_types">
         <item>@string/type_unspecified</item>
         <item>@string/type_event</item>
         <item>@string/type_information</item>
         <item>@string/type_submission</item>
+    </array>
+
+    <array name="schemes">
+        <item>https</item>
+        <item>http</item>
     </array>
 </resources>

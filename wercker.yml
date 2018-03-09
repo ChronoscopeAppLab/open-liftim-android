@@ -15,9 +15,6 @@ build:
           echo "ENABLE_PROGUARD=true" >> gradle.properties &&
           chmod +x gradlew &&
            ./gradlew --project-cache-dir="$WERCKER_CACHE_DIR" assembleDebug
-  after-steps:
-    - wantedly/pretty-slack-notify:
-        webhook-url: $SLACK_WEBHOOK_URL
 testing:
   steps:
     - script:
@@ -29,6 +26,13 @@ testing:
         name: Run JUit test
         code: |
           chmod +x gradlew; ./gradlew --project-cache-dir="$WERCKER_CACHE_DIR" test
+    - script:
+        name: Run Android Lint
+        code: |
+          ./gradlew lint
+  after-steps:
+    - wantedly/pretty-slack-notify:
+        webhook-url: $SLACK_WEBHOOK_URL
 deploy:
   steps:
     - script:

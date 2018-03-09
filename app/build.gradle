@@ -57,6 +57,14 @@ android {
     sourceSets {
         main.java.srcDirs += '../thirdparty'
     }
+
+    lintOptions {
+        lintConfig rootProject.file('lint.xml')
+        checkDependencies true
+        checkReleaseBuilds false
+        textReport true
+        textOutput 'stdout'
+    }
 }
 
 dependencies {

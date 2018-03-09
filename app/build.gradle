@@ -11,6 +11,7 @@ android {
         versionCode 5
         versionName "1.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        resConfigs 'ja'
     }
 
     signingConfigs {
@@ -48,6 +49,9 @@ android {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
+        exclude 'kotlin/**'
+        exclude 'META-INF/*.kotlin_module'
+        exclude 'META-INF/*.version'
     }
 
     aaptOptions {

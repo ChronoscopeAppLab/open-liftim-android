@@ -31,6 +31,7 @@ import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -99,6 +100,8 @@ class EditWeeklyActivity : BaseActivity() {
                             .execute()
                     val element = hashMapOf<String, WeeklyItem>()
                     weeklyItems.forEachIndexed { index, elem ->
+                        elem.subjects = adapter.fragments[index]?.adapter
+                                ?.subjects?.toTypedArray() ?: arrayOf()
                         elem.serializedSubjects = LiftimContext.getGson().toJson(elem.subjects)
                         elem.liftimCode = liftimCode
                         val shortSubjects = mutableListOf<String>()
@@ -113,9 +116,11 @@ class EditWeeklyActivity : BaseActivity() {
                         element[(index + 1).toString()] = elem
                     }
                     LiftimContext.getOrmaDatabase().prepareInsertIntoWeeklyItem()
-                            .executeAll(weeklyItems)
+                            .executeAll(weeklyItems.slice(0..6))
                     RegisterWeeklyService.start(this, LiftimContext.getGson()
-                            .toJson(element))
+                            .toJson(element).apply {
+                                Log.d("AAAAAA", this)
+                            })
                     EventBus.getDefault()
                             .post(EventMessage(WeeklyFragment.EVENT_WEEKLY_TIMETABLE_UPDATED))
                 }
@@ -292,7 +297,7 @@ class EditWeeklyActivity : BaseActivity() {
                 }
             }
 
-            override fun getItemCount(): Int = data.subjects.size
+            override fun getItemCount(): Int = subjects.size
 
             private inner class DragViewHolder(itemView: View) : RecyclerViewHolder(itemView) {
                 init {

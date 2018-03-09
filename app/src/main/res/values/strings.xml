@@ -124,4 +124,9 @@
     <string name="start_index">Start</string>
     <string name="info_placeholder_text">There\'s no info or event</string>
     <string name="restore">Restore</string>
+    <string name="specify_date_time">Pick date time</string>
+    <string name="not_specified">Not specified</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="unset">Unset</string>
+    <string name="add_link_url">Add link URL</string>
 </resources>

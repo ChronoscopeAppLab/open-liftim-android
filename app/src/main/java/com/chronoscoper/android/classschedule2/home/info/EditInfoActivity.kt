@@ -15,8 +15,6 @@
  */
 package com.chronoscoper.android.classschedule2.home.info
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -24,6 +22,7 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -49,11 +48,14 @@ import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import kotterknife.bindView
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
 class EditInfoActivity : BaseActivity() {
     companion object {
+        private const val TAG = "EditInfoActivity"
         private const val ID = "source_id"
         fun open(context: Context, sourceId: String) {
             context.startActivity(Intent(context, EditInfoActivity::class.java)
@@ -65,15 +67,15 @@ class EditInfoActivity : BaseActivity() {
     private val liftimCodeImage by bindView<ImageView>(R.id.liftim_code_image)
     private val liftimCodeLabel by bindView<TextView>(R.id.liftim_code)
     private val titleInput by bindView<EditText>(R.id.title)
-    private val linkUrlInput by bindView<EditText>(R.id.link_url)
     private val detailInput by bindView<EditText>(R.id.detail)
-    private val dateLabel by bindView<TextView>(R.id.date)
-    private val timeLabel by bindView<TextView>(R.id.time)
+    private val optionDateTime by bindView<View>(R.id.date_time)
+    private val optionLink by bindView<View>(R.id.link_url)
 
     private var isManager = false
 
     private var date: DateTime? = null
     private var time: DateTime? = null
+    private var linkUrl: String? = null
 
     private var sourceId: String? = null
 
@@ -106,25 +108,46 @@ class EditInfoActivity : BaseActivity() {
                 ?: kotlin.run { finish(); return }
         liftimCodeLabel.text = liftimCodeInfo.name
         isManager = liftimCodeInfo.isManager
-        dateLabel.setOnClickListener {
-            val date = date ?: DateTime.now().plusDays(1)
-            DatePickerDialog(this,
-                    DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                        val selectedDate = DateTime(year, month + 1, dayOfMonth,
-                                0, 0)
-                        this.date = selectedDate
-                        dateLabel.text = selectedDate.toString(DateTimeFormat.fullDate())
-                    }, date.year, date.monthOfYear - 1, date.dayOfMonth).show()
+
+        optionDateTime.setOnClickListener {
+            DateTimePickerDialog.newInstance(
+                    date?.toString("yyyy/MM/dd"),
+                    time?.toString("HH:mm"))
+                    .show(supportFragmentManager, null)
         }
-        timeLabel.setOnClickListener {
-            val time = time ?: DateTime.now().plusHours(1)
-            TimePickerDialog(this,
-                    TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                        val selectedTime = DateTime(0, 1, 1, hourOfDay, minute)
-                        this.time = selectedTime
-                        timeLabel.text = selectedTime.toString(DateTimeFormat.shortTime())
-                    }, time.hourOfDay, time.minuteOfHour, true).show()
+
+        optionLink.setOnClickListener {
+            UrlPickerDialog.newInstance(linkUrl).show(supportFragmentManager, null)
         }
+
+        EventBus.getDefault().register(this)
+    }
+
+    @Suppress("UNUSED")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onFieldPicked(event: EventMessage) {
+        if (event.type == DateTimePickerDialog.EVENT_DATE_TIME_PICKED) {
+            Log.d(TAG, "Datetime set ${event.data}")
+            val picked = event.data as? DateTimePickerDialog.PickedDateTime
+            val pickedDate = picked?.date
+            val pickedTime = picked?.time
+            date = pickedDate?.let {
+                DateTime.parse(it, DateTimeFormat.forPattern("yyyy/MM/dd"))
+            }
+            time = pickedTime?.let {
+                DateTime.parse(it, DateTimeFormat.forPattern("HH:mm"))
+            }
+        } else if (event.type == UrlPickerDialog.EVENT_URL_PICKED) {
+            Log.d(TAG, "URL \"${event.data}\" selected.")
+            linkUrl = event.data as? String
+        } else {
+            Log.i(TAG, "Unsubscribing event. Ignoring...")
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 
     private var item: Info? = null
@@ -137,12 +160,11 @@ class EditInfoActivity : BaseActivity() {
         this.item = item
         titleInput.setText(item.title ?: "")
         detailInput.setText(item.detail ?: "")
-        linkUrlInput.setText(item.link ?: "")
+        linkUrl = item.link
         val date = item.date
         if (date != null) {
             try {
                 this.date = DateTime.parse(date, DateTimeFormat.forPattern("yyyy/MM/dd"))
-                dateLabel.text = this.date!!.toString(DateTimeFormat.fullDate())
             } catch (ignore: Exception) {
             }
         }
@@ -150,7 +172,6 @@ class EditInfoActivity : BaseActivity() {
         if (time != null) {
             try {
                 this.time = DateTime.parse(time, DateTimeFormat.forPattern("HH:mm"))
-                timeLabel.text = this.time!!.toString(DateTimeFormat.shortTime())
             } catch (ignore: Exception) {
             }
         }
@@ -208,10 +229,9 @@ class EditInfoActivity : BaseActivity() {
     }
 
     fun createElementFromCurrentState(): Info {
-        var linkUrl = linkUrlInput.text.toString()
-        if (linkUrl.isNotEmpty()
-                && !linkUrl.startsWith("http://")
-                && !linkUrl.startsWith("https://")) {
+        var linkUrl = this.linkUrl
+        if (!linkUrl.isNullOrBlank()
+                && linkUrl?.matches(Regex("^https?://.+")) == false) {
             linkUrl = "http://$linkUrl"
         }
         val result = Info()
@@ -224,7 +244,7 @@ class EditInfoActivity : BaseActivity() {
             date = this@EditInfoActivity.date?.toString("yyyy/MM/dd")
             time = this@EditInfoActivity.time?.toString("HH:mm")
             link =
-                    if (linkUrl.isBlank()) {
+                    if (linkUrl.isNullOrBlank()) {
                         null
                     } else {
                         linkUrl

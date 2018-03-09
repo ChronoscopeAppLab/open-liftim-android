@@ -31,125 +31,90 @@
         android:elevation="5dp"
         app:title="@string/add_info" />
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        tools:ignore="UseCompoundDrawables">
 
-        <requestFocus />
+        <ImageView
+            android:id="@+id/liftim_code_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@null" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/liftim_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="Liftim code" />
+    </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                tools:ignore="UseCompoundDrawables">
+    <EditText
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:hint="@string/title"
+        android:inputType="text"
+        android:maxLines="1"
+        android:padding="8dp" />
 
-                <ImageView
-                    android:id="@+id/liftim_code_image"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:contentDescription="@null" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
 
-                <TextView
-                    android:id="@+id/liftim_code"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    tools:text="Liftim code" />
-            </LinearLayout>
+    <EditText
+        android:id="@+id/detail"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/transparent"
+        android:gravity="top"
+        android:hint="@string/detail"
+        android:inputType="none"
+        android:minLines="5"
+        android:padding="8dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:elevation="8dp"
+        android:gravity="end"
+        android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:hint="@string/title"
-                android:inputType="text"
-                android:maxLines="1"
-                android:padding="8dp" />
+        <ImageButton
+            android:id="@+id/date_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/clickable_background_black"
+            android:contentDescription="@string/specify_date_time"
+            android:padding="10dp"
+            android:src="@drawable/ic_time"
+            android:tooltipText="@string/specify_date_time" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
-
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:drawableEnd="@drawable/ic_pull_down"
-                android:drawableRight="@drawable/ic_pull_down"
-                android:focusable="true"
-                android:padding="8dp"
-                android:text="@string/specify_date"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
-
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:drawableEnd="@drawable/ic_pull_down"
-                android:drawableRight="@drawable/ic_pull_down"
-                android:focusable="true"
-                android:padding="8dp"
-                android:text="@string/specify_time"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
-
-            <EditText
-                android:id="@+id/link_url"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:hint="@string/link_url"
-                android:inputType="textUri"
-                android:maxLines="1"
-                android:padding="8dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
-
-            <EditText
-                android:id="@+id/detail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:gravity="top"
-                android:hint="@string/detail"
-                android:inputType="none"
-                android:minLines="5"
-                android:padding="8dp" />
-        </LinearLayout>
-    </ScrollView>
+        <ImageButton
+            android:id="@+id/link_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/clickable_background_black"
+            android:contentDescription="@string/add_link_url"
+            android:padding="10dp"
+            android:src="@drawable/ic_link_black"
+            android:tooltipText="@string/add_link_url" />
+    </LinearLayout>
 </LinearLayout>

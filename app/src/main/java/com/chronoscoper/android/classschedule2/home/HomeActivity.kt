@@ -127,11 +127,11 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         fab.hide()
     }
 
-    override fun onRestart() {
-        super.onRestart()
+    override fun onResume() {
+        super.onResume()
         Handler().postDelayed({
             if (contentFragment !is ArchiveFragment) fab.show()
-        }, 500)
+        }, 350)
     }
 
     private fun showLiftimCodeName() {

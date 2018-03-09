@@ -56,7 +56,7 @@ class ArchiveAdapter(private val activity: Activity) : RecyclerView.Adapter<Arch
             override fun onNext(t: List<Info>) {
                 data.clear()
                 data.addAll(t)
-                Log.d(TAG,"${t.size} data existing")
+                Log.d(TAG, "${t.size} data existing")
             }
 
             override fun onError(e: Throwable) {
@@ -69,7 +69,6 @@ class ArchiveAdapter(private val activity: Activity) : RecyclerView.Adapter<Arch
                     .selectFromInfo()
                     .liftimCodeEq(LiftimContext.getLiftimCode())
                     .deletedEq(true)
-                    .remoteDeletedEq(true)
                     .orderByDateAsc()
                     .orderByTimeAsc()
                     .orderByTypeAsc()
@@ -147,7 +146,6 @@ class ArchiveAdapter(private val activity: Activity) : RecyclerView.Adapter<Arch
                         PorterDuff.Mode.SRC_IN)
                 text = activity.getString(R.string.class_schedule)
             }
-
         } else {
             holder.apply {
                 title.text = item.title
@@ -178,6 +176,11 @@ class ArchiveAdapter(private val activity: Activity) : RecyclerView.Adapter<Arch
                     }
                 }
             }
+        }
+        if (item.addedBy == Info.REMOTE) {
+            holder.delete.visibility = View.GONE
+        } else {
+            holder.delete.visibility = View.VISIBLE
         }
     }
 

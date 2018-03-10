@@ -22,11 +22,9 @@ import android.os.Build
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.util.Pair
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.info.detail.ViewInfoActivity
@@ -39,6 +37,7 @@ import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.getColorForInfoType
 import com.chronoscoper.android.classschedule2.util.openInCustomTab
+import com.chronoscoper.android.classschedule2.view.PopupMenuCompat
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -290,30 +289,28 @@ class InfoRecyclerViewAdapter(val activity: Activity, private val syncEnabled: B
                 }
             }
             more.setOnClickListener {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    PopupMenu(activity, it, Gravity.TOP or Gravity.END)
-                } else {
-                    PopupMenu(activity, it)
-                }.apply {
-                    inflate(
-                            if (!infoData.link.isNullOrEmpty()) {
-                                R.menu.info_item_action
-                            } else {
-                                R.menu.info_item_action_no_link
-                            })
-                    setOnMenuItemClickListener {
-                        when (it.itemId) {
-                            R.id.item_open_link -> {
-                                openInCustomTab(activity, infoData.link!!)
+                PopupMenuCompat(activity, it)
+                        .apply {
+                            inflate(
+                                    if (!infoData.link.isNullOrEmpty()) {
+                                        R.menu.info_item_action
+                                    } else {
+                                        R.menu.info_item_action_no_link
+                                    })
+                            setOnMenuItemClickListener {
+                                when (it.itemId) {
+                                    R.id.item_open_link -> {
+                                        openInCustomTab(activity, infoData.link!!)
+                                    }
+                                    R.id.item_edit -> {
+                                        EditInfoActivity.open(activity, infoData.id)
+                                    }
+                                }
+                                true
                             }
-                            R.id.item_edit -> {
-                                EditInfoActivity.open(activity, infoData.id)
-                            }
+                            more.setOnTouchListener(dragToOpenListener)
+                            show()
                         }
-                        true
-                    }
-                    show()
-                }
             }
         }
     }
@@ -359,22 +356,21 @@ class InfoRecyclerViewAdapter(val activity: Activity, private val syncEnabled: B
                 notifyItemRemoved(adapterPosition)
             }
             more.setOnClickListener {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    PopupMenu(activity, it, Gravity.TOP or Gravity.END)
-                } else {
-                    PopupMenu(activity, it)
-                }.apply {
-                    inflate(R.menu.info_item_action_no_link)
-                    setOnMenuItemClickListener {
-                        when (it.itemId) {
-                            R.id.item_edit -> {
-                                EditTimetableActivity.openWithSourceTimetable(activity, infoData)
+                PopupMenuCompat(activity, it)
+                        .apply {
+                            inflate(R.menu.info_item_action_no_link)
+                            setOnMenuItemClickListener {
+                                when (it.itemId) {
+                                    R.id.item_edit -> {
+                                        EditTimetableActivity
+                                                .openWithSourceTimetable(activity, infoData)
+                                    }
+                                }
+                                true
                             }
+                            it.setOnTouchListener(dragToOpenListener)
+                            show()
                         }
-                        true
-                    }
-                    show()
-                }
             }
         }
     }

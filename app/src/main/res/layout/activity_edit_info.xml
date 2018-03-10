@@ -21,7 +21,7 @@
     android:background="@android:color/white"
     android:orientation="vertical"
     android:transitionName="@string/t_fab"
-    tools:ignore="UnusedAttribute">
+    tools:ignore="UnusedAttribute, Overdraw">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

@@ -23,7 +23,7 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical"
     android:transitionName="@string/t_fab"
-    tools:ignore="UnusedAttribute">
+    tools:ignore="UnusedAttribute, Overdraw">
 
     <requestFocus />
 

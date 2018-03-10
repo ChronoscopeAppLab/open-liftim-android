@@ -32,7 +32,7 @@ class LiftimApplication : Application() {
 
         initEnvironment()
         migrateIfNeeded()
-        RegisterNotificationChannelIfNeeded()
+        registerNotificationChannelIfNeeded()
     }
 
     private val sharedPrefs by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
@@ -62,7 +62,7 @@ class LiftimApplication : Application() {
         }
     }
 
-    private fun RegisterNotificationChannelIfNeeded() {
+    private fun registerNotificationChannelIfNeeded() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel.register(this)
         }

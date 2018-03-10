@@ -74,7 +74,7 @@
         android:transitionName="@string/t_fab"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_done_white"
+        android:src="@drawable/ic_done_white"
         tools:ignore="UnusedAttribute" />
 
     <Button

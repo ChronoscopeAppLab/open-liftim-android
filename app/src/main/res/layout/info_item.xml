@@ -13,7 +13,6 @@
    limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dashboard_item"
     android:layout_width="match_parent"
@@ -108,5 +107,5 @@
         android:background="@drawable/clickable_background_black"
         android:contentDescription="@string/more_actions"
         android:padding="3dp"
-        app:srcCompat="@drawable/ic_more_vert" />
+        android:src="@drawable/ic_more_vert" />
 </LinearLayout>

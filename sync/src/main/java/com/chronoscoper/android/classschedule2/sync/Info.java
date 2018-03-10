@@ -22,7 +22,6 @@ import com.github.gfx.android.orma.annotation.Column;
 import com.github.gfx.android.orma.annotation.Table;
 
 import org.parceler.Parcel;
-import org.parceler.ParcelProperty;
 
 @Parcel
 @Table("info")

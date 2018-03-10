@@ -61,6 +61,7 @@ class CreateLiftimCodeActivity : BaseActivity() {
 
     private inner class JSIAndroidNative {
         @JavascriptInterface
+        @Suppress("UNUSED")
         fun finish(liftimCode: Long, liftimCodeInfo: String?) {
             if (liftimCode > 0 && liftimCodeInfo != null) {
                 try {

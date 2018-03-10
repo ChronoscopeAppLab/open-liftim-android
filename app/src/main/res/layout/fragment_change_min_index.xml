@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
@@ -15,7 +13,7 @@
         android:background="@drawable/clickable_background_black"
         android:contentDescription="@string/accessibility_increase"
         android:padding="5dp"
-        app:srcCompat="@drawable/ic_increase"/>
+        android:src="@drawable/ic_increase"/>
 
     <EditText
         android:id="@+id/start_time"
@@ -33,5 +31,5 @@
         android:background="@drawable/clickable_background_black"
         android:contentDescription="@string/accessibility_decrease"
         android:padding="5dp"
-        app:srcCompat="@drawable/ic_decrease"/>
+        android:src="@drawable/ic_decrease"/>
 </LinearLayout>

@@ -74,8 +74,7 @@ class JoinLiftimCodeActivity : BaseActivity() {
             val options = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this, doneButton, getString(R.string.t_fab))
                     .toBundle()
-            //TODO: Avoid using restricted API
-            startActivityForResult(
+            (this as Activity).startActivityForResult(
                     Intent(this, JoinWithBarcodeActivity::class.java),
                     RC_BARCODE, options)
         }

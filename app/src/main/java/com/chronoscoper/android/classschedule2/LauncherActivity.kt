@@ -64,18 +64,15 @@ class LauncherActivity : BaseActivity() {
 
         iconForeground.animate().alpha(1f).translationY(-50f)
                 .scaleX(1f).scaleY(1f)
-                .setDuration(500)
+                .setDuration(200)
                 .withEndAction {
+                    animationFinished = true
+                    startMainIfNeeded()
                     iconForeground.animate().translationY(0f)
-                            .setDuration(500)
-                            .withEndAction {
-                                animationFinished = true
-                                startMainIfNeeded()
-                            }
+                            .setDuration(200)
                             .start()
                 }
                 .start()
-
 
         val setupCompleted = prefs.getBoolean(getString(R.string.p_setup_completed), false)
         if (setupCompleted) {

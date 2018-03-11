@@ -15,4 +15,8 @@
  */
 package com.chronoscoper.android.classschedule2.util
 
-data class EventMessage(val type: String, val data: Any? = null)
+data class EventMessage(val type: String, val data: Any? = null) {
+    companion object {
+        fun of(type: String) = EventMessage(type, null)
+    }
+}

@@ -34,7 +34,9 @@ class SettingsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        overridePendingTransition(R.anim.slide_in, R.anim.no_anim)
+        if (intent.action != Intent.ACTION_APPLICATION_PREFERENCES) {
+            overridePendingTransition(R.anim.slide_in, R.anim.no_anim)
+        }
         fragmentManager.beginTransaction()
                 .replace(android.R.id.content, SettingsFragment())
                 .commit()
@@ -42,8 +44,9 @@ class SettingsActivity : BaseActivity() {
 
     override fun finish() {
         super.finish()
-        android.R.anim.slide_in_left
-        overridePendingTransition(R.anim.no_anim, R.anim.slide_out)
+        if (intent.action != Intent.ACTION_APPLICATION_PREFERENCES) {
+            overridePendingTransition(R.anim.no_anim, R.anim.slide_out)
+        }
     }
 
     class SettingsFragment : PreferenceFragment() {

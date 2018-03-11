@@ -19,6 +19,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import com.chronoscoper.android.classschedule2.BaseActivity
+import org.greenrobot.eventbus.EventBus
 
 /**
  * Sets availability of specified component.
@@ -41,6 +43,7 @@ fun setComponentEnabled(context: Context, enable: Boolean, vararg components: Cl
  * Opens Activity as a new task and clear old task
  */
 fun openInNewTask(context: Context, clazz: Class<*>) {
-    context.startActivity(Intent(context, clazz)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION))
+    EventBus.getDefault().post(EventMessage
+            .of(BaseActivity.BroadcastActivityFinisher.EVENT_FINISH_ALL_ACTIVITIES))
+    context.startActivity(Intent(context, clazz))
 }

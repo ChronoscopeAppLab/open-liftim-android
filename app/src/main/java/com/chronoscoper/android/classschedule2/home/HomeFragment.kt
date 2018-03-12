@@ -29,7 +29,9 @@ import android.view.ViewGroup
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.info.InfoFragment
 import com.chronoscoper.android.classschedule2.home.timetable.TimetableFragment
+import com.chronoscoper.android.classschedule2.util.EventMessage
 import kotterknife.bindView
+import org.greenrobot.eventbus.EventBus
 
 class HomeFragment : Fragment(), ViewPager.OnPageChangeListener {
     companion object {
@@ -63,6 +65,18 @@ class HomeFragment : Fragment(), ViewPager.OnPageChangeListener {
         pager.currentItem = page
 
         tabLayout.setupWithViewPager(pager)
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                EventBus.getDefault().post(EventMessage.of(InfoFragment.EVENT_SCROLL_TO_TOP))
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+            }
+        })
     }
 
     var page

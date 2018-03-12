@@ -25,12 +25,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 import com.chronoscoper.android.classschedule2.util.EventMessage
+import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -71,6 +74,7 @@ class TimetableFragment : Fragment() {
     private val infoLabel by bindView<TextView>(R.id.info)
     private val header by bindView<View>(R.id.header)
     private val background by bindView<View>(R.id.background)
+    private val backgroundArt by bindView<ImageView>(R.id.background_art)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -78,6 +82,11 @@ class TimetableFragment : Fragment() {
         EventBus.getDefault().register(this)
         initTimetable()
         setUpBackgroundUpdater()
+
+        Glide.with(this)
+                .load("file:///android_asset/classroom.png")
+                .transition(progressiveFadeInTransition())
+                .into(backgroundArt)
     }
 
     override fun onDetach() {
@@ -129,7 +138,7 @@ class TimetableFragment : Fragment() {
             infoLabel.visibility = View.GONE
         }
         header.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->
-            timetableList.setPadding(0, header.height, 0, timetableList.paddingBottom)
+            timetableList.setPadding(0, v.height, 0, timetableList.paddingBottom)
         }
     }
 
@@ -166,7 +175,7 @@ class TimetableFragment : Fragment() {
         Log.d(TAG, "Calculating background color...")
         val dateTime = DateTime.now()
         val index = dateTime.hourOfDay
-        val offset = dateTime.minuteOfHour.toFloat() / 60f
+        val offset = ((dateTime.hourOfDay % 3) * 60 + dateTime.minuteOfHour).toFloat() / 180f
         return argbEvaluator.evaluate(offset,
                 BACKGROUND_COLORS[index / 3], BACKGROUND_COLORS[index / 3 + 1]) as Int
     }

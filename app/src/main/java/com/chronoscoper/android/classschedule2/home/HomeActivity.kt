@@ -51,6 +51,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private val drawer by bindView<DrawerLayout>(R.id.activity_home)
     private val drawerMenu by bindView<NavigationView>(R.id.drawer_menu)
     private val fab by bindView<FloatingActionButton>(R.id.add)
+    private val toolbar by bindView<Toolbar>(R.id.toolbar)
 
     private var fabAction: Runnable? = null
 
@@ -157,6 +158,11 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             fab.hide()
         } else {
             fab.show()
+        }
+        when (fragment) {
+            is HomeFragment -> toolbar.title = getString(R.string.app_name)
+            is WeeklyFragment -> toolbar.title = getString(R.string.weekly)
+            is ArchiveFragment -> toolbar.title = getString(R.string.archive)
         }
         supportFragmentManager.beginTransaction()
                 .replace(R.id.content, fragment)

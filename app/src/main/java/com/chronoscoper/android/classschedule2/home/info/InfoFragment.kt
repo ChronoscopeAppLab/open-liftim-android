@@ -27,6 +27,7 @@ import android.widget.ViewSwitcher
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.InfoLoader
+import com.chronoscoper.android.classschedule2.util.EventMessage
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -34,10 +35,14 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subscribers.DisposableSubscriber
 import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter
 import kotterknife.bindView
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class InfoFragment : Fragment() {
     companion object {
         private const val TAG = "InfoFragment"
+        const val EVENT_SCROLL_TO_TOP = "INFO_SCROLL_TO_TOP"
     }
 
     override fun onCreateView(
@@ -53,6 +58,8 @@ class InfoFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        EventBus.getDefault().register(this)
 
         if (validInfoCount > 0) {
             Log.d(TAG, "Info found initializing list...")
@@ -88,9 +95,21 @@ class InfoFragment : Fragment() {
         }
     }
 
+    @Suppress("UNUSED")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEvent(event: EventMessage) {
+        if (event.type == EVENT_SCROLL_TO_TOP) {
+            Log.d(TAG, "Info list has scroll by event")
+            list.smoothScrollToPosition(0)
+        } else {
+            Log.i(TAG, "${event.type} is not subscribed. Ignoring...")
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         disposables.clear()
+        EventBus.getDefault().unregister(this)
     }
 
     private fun initView(initialSyncNeeded: Boolean = true) {

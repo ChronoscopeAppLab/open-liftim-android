@@ -106,5 +106,6 @@ dependencies {
     implementation 'org.parceler:parceler-api:1.1.9'
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
     implementation 'org.greenrobot:eventbus:3.1.1'
+    debugImplementation 'com.deploygate:sdk:4.1.0'
     implementation project(':sync')
 }

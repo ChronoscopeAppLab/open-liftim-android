@@ -17,6 +17,7 @@ package com.chronoscoper.android.classschedule2.home.timetable
 
 import android.animation.ArgbEvaluator
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
@@ -28,12 +29,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.transition.Transition
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 import com.chronoscoper.android.classschedule2.util.EventMessage
-import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
+import com.chronoscoper.android.classschedule2.util.layerDrawableOf
+import com.chronoscoper.android.classschedule2.view.ProgressiveFadeInTransition
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -58,9 +65,9 @@ class TimetableFragment : Fragment() {
             return result
         }
 
-        private val BACKGROUND_COLORS = arrayOf(-0xead7b9/*00:00*/, -0xd8b67e/*03:00*/,
-                -0xc79351/*06:00*/, -0x9b3311/*09:00*/, -0x640014/*12:00*/, -0x3e0b01/*15:00*/,
-                -0x2776a1/*18:00*/, -0xc5e693/*21:00*/, -0xead7b9/*00:00 once again!!*/)
+        private val BACKGROUND_COLORS = arrayOf(-15586218/*00:00*/, -15189392/*03:00*/,
+                -12568147/*06:00*/, -13140550/*09:00*/, -13854286/*12:00*/, -15040552/*15:00*/,
+                -2602727/*18:00*/, -16774547/*21:00*/, -15586218/*00:00 once again!!*/)
 
         const val EVENT_TIMETABLE_UPDATED = "TIMETABLE_UPDATED"
     }
@@ -75,6 +82,7 @@ class TimetableFragment : Fragment() {
     private val header by bindView<View>(R.id.header)
     private val background by bindView<View>(R.id.background)
     private val backgroundArt by bindView<ImageView>(R.id.background_art)
+    private val backgroundColor = ColorDrawable()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -85,7 +93,34 @@ class TimetableFragment : Fragment() {
 
         Glide.with(this)
                 .load("file:///android_asset/classroom.png")
-                .transition(progressiveFadeInTransition())
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                            e: GlideException?, model: Any?,
+                            target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                        // ignore
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                            resource: Drawable?, model: Any?, target: Target<Drawable>?,
+                            dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                        val drawable = layerDrawableOf(backgroundColor, resource!!)
+                        ProgressiveFadeInTransition()
+                                .transition(drawable, object : Transition.ViewAdapter {
+                                    override fun getCurrentDrawable(): Drawable? {
+                                        return backgroundArt.drawable
+                                    }
+
+
+                                    override fun setDrawable(drawable: Drawable?) {
+                                        backgroundArt.setImageDrawable(drawable)
+                                    }
+
+                                    override fun getView(): View = backgroundArt
+                                })
+                        return true
+                    }
+                })
                 .into(backgroundArt)
     }
 
@@ -146,13 +181,13 @@ class TimetableFragment : Fragment() {
     private val argbEvaluator = ArgbEvaluator()
 
     private fun setUpBackgroundUpdater() {
-        background.background = ColorDrawable(calculateCurrentColor())
+        backgroundColor.color = calculateCurrentColor()
         val subscriber = object : DisposableObserver<Int>() {
             override fun onComplete() {
             }
 
             override fun onNext(t: Int) {
-                (background.background as ColorDrawable).color = t
+                backgroundColor.color = t
             }
 
             override fun onError(e: Throwable) {

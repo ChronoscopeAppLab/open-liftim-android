@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
    Copyright 2017 Chronoscope
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,6 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light">
@@ -20,5 +22,18 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
+    </style>
+
+    <style name="AppTheme.Translucent" parent="AppTheme.NoActionBar">
+        <item name="android:windowBackground">@color/black_vail</item>
+        <item name="android:statusBarColor">@color/black_vail</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 </resources>

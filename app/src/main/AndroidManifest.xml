@@ -38,8 +38,11 @@
             android:theme="@style/AppTheme.DrawerActivity" />
         <activity
             android:name=".setup.SetupActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".setup.TokenCallbackActivity">
+        <activity
+            android:name=".setup.TokenCallbackActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

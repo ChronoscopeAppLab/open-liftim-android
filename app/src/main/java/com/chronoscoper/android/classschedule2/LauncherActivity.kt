@@ -28,6 +28,7 @@ import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.sync.Subject
 import com.chronoscoper.android.classschedule2.sync.WeeklyItem
 import com.chronoscoper.android.classschedule2.task.AccountInfoLoader
+import com.chronoscoper.android.classschedule2.task.FullSyncTask
 import com.chronoscoper.android.classschedule2.task.InvalidTokenException
 import com.chronoscoper.android.classschedule2.task.SubjectLoader
 import com.chronoscoper.android.classschedule2.task.WeeklyLoader
@@ -131,40 +132,7 @@ class LauncherActivity : BaseActivity() {
             }
             startService(Intent(this, TokenLoadService::class.java))
             if (userInfoSyncNeeded) {
-                val token = LiftimContext.getToken()
-                val accountInfo = AccountInfoLoader(token)
-                        .load()
-                        ?: kotlin.run {
-                            it.onError(Exception())
-                            return@create
-                        }
-                val prefEditor = prefs.edit()
-                prefEditor.apply {
-                    putString(getString(R.string.p_account_name), accountInfo.userName)
-                    putString(getString(R.string.p_account_image_file), accountInfo.imageFile)
-                    putString(getString(R.string.p_account_add_date), accountInfo.addDate)
-                    putBoolean(getString(R.string.p_account_is_available), accountInfo.isAvailable)
-                }
-                prefEditor.apply()
-                backupAndDeleteData()
-                try {
-                    accountInfo.liftimCodes.forEach {
-                        WeeklyLoader(it.liftimCode, token).run()
-                        SubjectLoader(it.liftimCode, token).run()
-                    }
-                } catch (e: Exception) {
-                    restoreData()
-                }
-                val selectedLiftimCode =
-                        prefs.getLong(getString(R.string.p_default_liftim_code), -1)
-                if (db.selectFromLiftimCodeInfo().liftimCodeEq(selectedLiftimCode).count() <= 0) {
-                    val code = db.selectFromLiftimCodeInfo().firstOrNull()?.liftimCode ?: -1
-                    prefs.edit()
-                            .putLong(getString(R.string.p_default_liftim_code), code)
-                            .apply()
-                }
-                prefs.edit().putString(getString(R.string.p_last_user_info_synced),
-                        DateTime.now().toString()).apply()
+                FullSyncTask(this).run()
             }
             it.onComplete()
         }
@@ -174,30 +142,6 @@ class LauncherActivity : BaseActivity() {
         disposables.add(subscriber)
 
         optimizeInfo()
-    }
-
-
-    private var weeklyDataBackup: List<WeeklyItem>? = null
-    private var subjectDataBackup: List<Subject>? = null
-
-    private fun backupAndDeleteData() {
-        val db = LiftimContext.getOrmaDatabase()
-        weeklyDataBackup = db.selectFromWeeklyItem().toList()
-        subjectDataBackup = db.selectFromSubject().toList()
-        db.deleteFromWeeklyItem().execute()
-        db.deleteFromSubject().execute()
-    }
-
-    private fun restoreData() {
-        val db = LiftimContext.getOrmaDatabase()
-        db.deleteFromWeeklyItem().execute()
-        db.deleteFromSubject().execute()
-        weeklyDataBackup?.forEach {
-            db.insertIntoWeeklyItem(it)
-        }
-        subjectDataBackup?.forEach {
-            db.insertIntoSubject(it)
-        }
     }
 
     private val userInfoSyncNeeded: Boolean

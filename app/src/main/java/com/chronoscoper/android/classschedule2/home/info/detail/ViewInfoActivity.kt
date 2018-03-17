@@ -74,7 +74,7 @@ class ViewInfoActivity : BaseActivity() {
         val backButton = LayoutInflater.from(this)
                 .inflate(R.layout.back, toolbar, false)
         backButton.setOnClickListener {
-            animateFinishCompat()
+            animateFinish()
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && savedInstanceState == null) {
             isWindowAnimationNeeded = intent.getBooleanExtra(WINDOW_ANIMATION_NEEDED, false)
@@ -99,7 +99,7 @@ class ViewInfoActivity : BaseActivity() {
         dismissFrame.swipeDismissCallback =
                 object : SwipeDismissFrameLayout.SwipeDismissCallback() {
                     override fun onDismiss() {
-                        animateFinishCompat()
+                        animateFinish()
                     }
                 }
         if (infoType == Info.TYPE_TIMETABLE) {
@@ -172,17 +172,17 @@ class ViewInfoActivity : BaseActivity() {
         }
     }
 
-    override fun animateFinishCompat() {
+    override fun animateFinish() {
         if (isWindowAnimationNeeded) {
             animateToolbar(infoType, true)
             toolbar.removeViewAt(0)
-            super.animateFinishCompat()
+            super.animateFinish()
         } else {
             finish()
         }
     }
 
     override fun onBackPressed() {
-        animateFinishCompat()
+        animateFinish()
     }
 }

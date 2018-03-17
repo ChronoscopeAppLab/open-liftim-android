@@ -173,7 +173,7 @@ class EditTimetableActivity : BaseActivity() {
         when (item.itemId) {
             R.id.options_register_local -> {
                 registerLocal(createElementFromCurrentState())
-                animateFinishCompat()
+                animateFinish()
                 EventBus.getDefault()
                         .post(EventMessage(TimetableFragment.EVENT_TIMETABLE_UPDATED))
             }
@@ -181,7 +181,7 @@ class EditTimetableActivity : BaseActivity() {
                 val element = createElementFromCurrentState()
                 registerLocal(element)
                 registerRemote(element)
-                animateFinishCompat()
+                animateFinish()
                 EventBus.getDefault().let {
                     it.post(EventMessage(TimetableFragment.EVENT_TIMETABLE_UPDATED))
                     it.post(EventMessage(InfoRecyclerViewAdapter.EVENT_ENTRY_UPDATED))

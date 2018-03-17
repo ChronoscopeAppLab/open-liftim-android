@@ -67,7 +67,7 @@ class EditSubjectActivity : BaseActivity() {
         }
     }
 
-    override fun animateFinishCompat() {
+    override fun animateFinish() {
         val result = Subject().apply {
             subject = subjectName.text.toString()
             shortSubject = subjectShortName.text.toString()
@@ -79,7 +79,7 @@ class EditSubjectActivity : BaseActivity() {
         if (position < 0) {
             finish()
         } else {
-            super.animateFinishCompat()
+            super.animateFinish()
         }
     }
 }

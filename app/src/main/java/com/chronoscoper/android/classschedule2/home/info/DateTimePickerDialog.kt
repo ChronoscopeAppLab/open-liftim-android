@@ -151,7 +151,8 @@ class DateTimePickerDialog : DialogFragment() {
                                 if (this@DateTimePickerDialog.date == null) {
                                     DateTime.now().plusDays(1)
                                 } else {
-                                    DateTime.parse(date, DateTimeFormat.forPattern("yyyy/MM/dd"))
+                                    DateTime.parse(this@DateTimePickerDialog.date,
+                                            DateTimeFormat.forPattern("yyyy/MM/dd"))
                                 }
                         DatePickerDialog(context, { _, year, month, dayOfMonth ->
                             val picked = DateTime(year, month + 1, dayOfMonth, 0, 0)
@@ -213,7 +214,7 @@ class DateTimePickerDialog : DialogFragment() {
                     }
                     2 -> {
                         val oldTime =
-                                if (time == null) {
+                                if (this@DateTimePickerDialog.time == null) {
                                     DateTime().withTime(7, 0, 0, 0)
                                 } else {
                                     DateTime.parse(this@DateTimePickerDialog.time,

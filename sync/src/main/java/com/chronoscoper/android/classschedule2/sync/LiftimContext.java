@@ -62,6 +62,8 @@ public final class LiftimContext {
                 .writeOnMainThread(AccessThreadConstraint.WARNING)
                 .build();
         sLiftimCode = liftimCode;
+        sIsManager = sOrmaDatabase.selectFromLiftimCodeInfo().liftimCodeEq(liftimCode)
+                .limit(1).value().isManager;
         sToken = token;
         sBaseUrl = baseUrl;
     }
@@ -103,6 +105,12 @@ public final class LiftimContext {
 
     public static long getLiftimCode() {
         return sLiftimCode;
+    }
+
+    private static boolean sIsManager;
+
+    public static boolean isManager() {
+        return sIsManager;
     }
 
     @NonNull

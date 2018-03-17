@@ -130,4 +130,5 @@
     <string name="unset">Unset</string>
     <string name="add_link_url">Add link URL</string>
     <string name="register_button">Register new one now!</string>
+    <string name="function_restriction_only_manager">Only manager for this class can do it. Please ask current manager to grant management privilege.</string>
 </resources>

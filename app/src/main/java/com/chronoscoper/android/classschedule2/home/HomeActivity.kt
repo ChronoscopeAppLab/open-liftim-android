@@ -36,6 +36,7 @@ import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.archive.ArchiveFragment
+import com.chronoscoper.android.classschedule2.functionrestriction.OnlyManagerActivity
 import com.chronoscoper.android.classschedule2.home.info.EditInfoActivity
 import com.chronoscoper.android.classschedule2.home.timetable.EditTargetDialog
 import com.chronoscoper.android.classschedule2.setting.SettingsActivity
@@ -97,8 +98,14 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
             val activityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))
-            startActivity(Intent(this, EditWeeklyActivity::class.java),
-                    activityOptions.toBundle())
+                    .toBundle()
+            if (LiftimContext.isManager()) {
+                startActivity(Intent(this, EditWeeklyActivity::class.java),
+                        activityOptions)
+            } else {
+                startActivity(Intent(this, OnlyManagerActivity::class.java),
+                        activityOptions)
+            }
         }
     }
 

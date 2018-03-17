@@ -30,10 +30,11 @@ import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.info.InfoFragment
 import com.chronoscoper.android.classschedule2.home.timetable.TimetableFragment
 import com.chronoscoper.android.classschedule2.util.EventMessage
+import com.chronoscoper.android.classschedule2.view.NavDrawerTargetFragment
 import kotterknife.bindView
 import org.greenrobot.eventbus.EventBus
 
-class HomeFragment : Fragment(), ViewPager.OnPageChangeListener {
+class HomeFragment : NavDrawerTargetFragment(), ViewPager.OnPageChangeListener {
     companion object {
         private const val EXTRA_PAGE = "page"
 

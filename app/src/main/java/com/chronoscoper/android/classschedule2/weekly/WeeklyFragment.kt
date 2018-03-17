@@ -17,7 +17,6 @@ package com.chronoscoper.android.classschedule2.weekly
 
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -31,6 +30,7 @@ import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.sync.WeeklyItem
 import com.chronoscoper.android.classschedule2.util.EventMessage
+import com.chronoscoper.android.classschedule2.view.NavDrawerTargetFragment
 import com.chronoscoper.android.classschedule2.view.ObservableScrollView
 import com.google.gson.Gson
 import kotterknife.bindView
@@ -38,7 +38,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class WeeklyFragment : Fragment() {
+class WeeklyFragment : NavDrawerTargetFragment() {
     companion object {
         private const val TAG = "WeeklyFragment"
         const val EVENT_WEEKLY_TIMETABLE_UPDATED = "WEEKLY_TIMETABLE_UPDATED"

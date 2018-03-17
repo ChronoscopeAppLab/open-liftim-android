@@ -19,6 +19,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
 import android.support.annotation.ColorInt
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -78,4 +79,8 @@ fun getDarkerColor(source: Int): Int {
     Color.colorToHSV(source, hsv)
     hsv[2] *= 0.8f
     return Color.HSVToColor(hsv)
+}
+
+fun layerDrawableOf(vararg drawables: Drawable): LayerDrawable {
+    return LayerDrawable(drawables)
 }

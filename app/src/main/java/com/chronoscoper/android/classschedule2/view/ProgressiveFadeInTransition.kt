@@ -21,19 +21,23 @@ import android.animation.ValueAnimator
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.drawable.Drawable
+import android.support.v4.view.animation.FastOutSlowInInterpolator
 import com.bumptech.glide.request.transition.Transition
 
 class ProgressiveFadeInTransition : Transition<Drawable> {
+    private val interpolator = FastOutSlowInInterpolator()
+
     override fun transition(current: Drawable?, adapter: Transition.ViewAdapter?): Boolean {
         current ?: return false
         adapter ?: return false
         val cm = ColorMatrix()
         val animator = ValueAnimator.ofFloat(0f, 1f)
-        animator.duration = 500
+        animator.duration = 2000
         animator.addUpdateListener {
             val updated = it.animatedValue as Float
             cm.setSaturation(updated)
-            cm.setScale(1f, 1f, 1f, updated)
+            cm.setScale(1f, 1f, 1f,
+                    interpolator.getInterpolation(updated))
             current.colorFilter = ColorMatrixColorFilter(cm)
         }
         animator.addListener(object : AnimatorListenerAdapter() {

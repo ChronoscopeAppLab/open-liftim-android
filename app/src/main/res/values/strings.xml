@@ -129,4 +129,5 @@
     <string name="tomorrow">Tomorrow</string>
     <string name="unset">Unset</string>
     <string name="add_link_url">Add link URL</string>
+    <string name="register_button">Register new one now!</string>
 </resources>

@@ -25,7 +25,7 @@ import android.widget.FrameLayout
 class SwipeDismissFrameLayout(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
     : FrameLayout(context, attrs, defStyleAttr) {
     companion object {
-        private const val SCROLL_SENSITIVITY = 0.15f
+        private const val SCROLL_SENSITIVITY = 0.3f
     }
 
     constructor(context: Context) : this(context, null, 0)

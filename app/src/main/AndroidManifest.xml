@@ -114,6 +114,9 @@
         <activity
             android:name=".setting.FeedbackActivity"
             android:label="@string/send_feedback" />
+        <activity
+            android:name=".functionrestriction.OnlyManagerActivity"
+            android:theme="@style/AppTheme.Translucent" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

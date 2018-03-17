@@ -46,12 +46,12 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == android.R.id.home) {
-            animateFinishCompat()
+            animateFinish()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    open fun animateFinishCompat() {
+    open fun animateFinish() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             finishAfterTransition()
         } else {

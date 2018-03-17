@@ -225,7 +225,7 @@ class EditInfoActivity : BaseActivity() {
             element.id = DateTime.now().toString(DateTimeFormat.fullDateTime())
         }
         db.insertIntoInfo(element)
-        animateFinishCompat()
+        animateFinish()
     }
 
     fun createElementFromCurrentState(): Info {
@@ -296,7 +296,7 @@ class EditInfoActivity : BaseActivity() {
                             .toJson(remoteFormatElement))
                 }
                 dismiss()
-                (activity as? BaseActivity)?.animateFinishCompat() ?: activity?.finish()
+                (activity as? BaseActivity)?.animateFinish() ?: activity?.finish()
             }
             cancelButton.setOnClickListener {
                 dismiss()

@@ -125,7 +125,7 @@ class EditWeeklyActivity : BaseActivity() {
                             .post(EventMessage(WeeklyFragment.EVENT_WEEKLY_TIMETABLE_UPDATED))
                 }
             }
-            animateFinishCompat()
+            animateFinish()
             return true
         }
         return super.onOptionsItemSelected(item)

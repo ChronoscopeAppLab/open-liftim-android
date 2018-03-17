@@ -46,7 +46,7 @@ class EditTargetDialog : BaseActivity() {
         }
 
         background.setOnClickListener {
-            animateFinishCompat()
+            animateFinish()
         }
 
         addNew.setOnClickListener {
@@ -82,7 +82,7 @@ class EditTargetDialog : BaseActivity() {
         }
 
         cancel.setOnClickListener {
-            animateFinishCompat()
+            animateFinish()
         }
     }
 }

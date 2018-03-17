@@ -18,29 +18,60 @@ package com.chronoscoper.android.classschedule2.setting
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AlertDialog
+import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LauncherActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.setup.SetupActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import com.chronoscoper.android.classschedule2.task.FullSyncTask
 import com.chronoscoper.android.classschedule2.util.openInNewTask
 import com.chronoscoper.android.classschedule2.util.setComponentEnabled
+import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subscribers.DisposableSubscriber
 import kotterknife.bindView
 
 class ManageAccountActivity : BaseActivity() {
 
     private val userNameLabel by bindView<TextView>(R.id.user_name)
     private val logoutButton by bindView<Button>(R.id.logout)
+    private val updateButton by bindView<View>(R.id.update_account_info)
+    private val progress by bindView<ProgressBar>(R.id.progress)
 
     private val sharedPrefs by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
+
+    private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage_account)
 
         userNameLabel.text = sharedPrefs.getString(getString(R.string.p_account_name), "")
+        updateButton.setOnClickListener {
+            progress.visibility = View.VISIBLE
+            val subscriber = object : DisposableSubscriber<Unit>() {
+                override fun onComplete() {
+                    progress.visibility = View.GONE
+                }
+
+                override fun onNext(t: Unit?) {
+                }
+
+                override fun onError(t: Throwable?) {
+                }
+            }
+            Flowable.defer { Flowable.just(FullSyncTask(this).run()) }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(subscriber)
+            disposables.add(subscriber)
+        }
         logoutButton.setOnClickListener {
             AlertDialog.Builder(this)
                     .setMessage(R.string.logout_warning)
@@ -59,5 +90,10 @@ class ManageAccountActivity : BaseActivity() {
     private fun removeAllData() {
         LiftimContext.getOrmaDatabase().deleteAll()
         sharedPrefs.edit().clear().apply()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
     }
 }

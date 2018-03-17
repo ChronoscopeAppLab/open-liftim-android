@@ -23,11 +23,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.home.HomeActivity
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
+import org.greenrobot.eventbus.EventBus
 
 class TimetableAdapter(context: Context, timetableInfoElement: Info?) :
         RecyclerView.Adapter<RecyclerViewHolder>() {
@@ -40,7 +43,7 @@ class TimetableAdapter(context: Context, timetableInfoElement: Info?) :
     override fun getItemCount(): Int = timetable?.subjects?.size ?: 1
 
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
-        if (holder.itemViewType == ViewType.NORMAL.type) {
+        if (holder.itemViewType == R.layout.timetable_item) {
             val item = timetable?.subjects?.get(position) ?: return
             val view = holder.itemView
             val index = view.findViewById<TextView>(R.id.index)
@@ -64,13 +67,19 @@ class TimetableAdapter(context: Context, timetableInfoElement: Info?) :
                     }
                 }
             }
+        } else {
+            val register = holder.itemView.findViewById<View>(R.id.register)
+            register.setOnClickListener {
+                EventBus.getDefault().post(
+                        EventMessage.of(HomeActivity.EVENT_OPEN_TIMETABLE_EDITOR))
+            }
         }
     }
 
     private val inflater by lazy { LayoutInflater.from(context) }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder =
-            if (viewType == ViewType.NORMAL.type) {
+            if (viewType == R.layout.timetable_item) {
                 RecyclerViewHolder(inflater.inflate(
                         R.layout.timetable_item, parent, false))
             } else {
@@ -78,15 +87,11 @@ class TimetableAdapter(context: Context, timetableInfoElement: Info?) :
                         R.layout.timetable_placeholder, parent, false))
             }
 
-    override fun getItemViewType(position: Int): Int =
-            if (timetable != null) {
-                ViewType.NORMAL.type
-            } else {
-                ViewType.PLACEHOLDER.type
-            }
-
-    private enum class ViewType(val type: Int) {
-        NORMAL(1),
-        PLACEHOLDER(2)
+    override fun getItemViewType(position: Int): Int {
+        return if (timetable != null) {
+            R.layout.timetable_item
+        } else {
+            R.layout.timetable_placeholder
+        }
     }
 }

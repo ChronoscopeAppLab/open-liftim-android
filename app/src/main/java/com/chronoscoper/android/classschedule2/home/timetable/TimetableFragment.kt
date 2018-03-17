@@ -56,14 +56,6 @@ import java.util.concurrent.TimeUnit
 class TimetableFragment : Fragment() {
     companion object {
         private const val TAG = "TimetableFragment"
-        private const val ID = "target_id"
-        fun obtain(id: String): TimetableFragment {
-            val result = TimetableFragment()
-            result.arguments = Bundle().apply {
-                putString(ID, id)
-            }
-            return result
-        }
 
         private val BACKGROUND_COLORS = arrayOf(-15586218/*00:00*/, -15189392/*03:00*/,
                 -12568147/*06:00*/, -13140550/*09:00*/, -13854286/*12:00*/, -15040552/*15:00*/,
@@ -143,7 +135,12 @@ class TimetableFragment : Fragment() {
     private var currentItemId = ""
 
     private fun initTimetable() {
-        val timetable = obtainTargetElement()
+        val timetable = LiftimContext.getOrmaDatabase()
+                .selectFromInfo().typeEq(Info.TYPE_TIMETABLE)
+                .liftimCodeEq(LiftimContext.getLiftimCode())
+                .deletedEq(false)
+                .orderByDateAsc()
+                .firstOrNull()
         timetableList.adapter = TimetableAdapter(context!!, timetable)
         timetableList.addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
@@ -218,23 +215,5 @@ class TimetableFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         disposables.clear()
-    }
-
-    private fun obtainTargetElement(): Info? {
-        val specified = arguments?.getString(ID)
-        return if (specified == null) {
-            LiftimContext.getOrmaDatabase()
-                    .selectFromInfo().typeEq(Info.TYPE_TIMETABLE)
-                    .liftimCodeEq(LiftimContext.getLiftimCode())
-                    .deletedEq(false)
-                    .orderByDateAsc()
-                    .firstOrNull()
-        } else {
-            LiftimContext.getOrmaDatabase()
-                    .selectFromInfo().typeEq(Info.TYPE_TIMETABLE)
-                    .liftimCodeEq(LiftimContext.getLiftimCode())
-                    .idEq(specified)
-                    .firstOrNull()
-        }
     }
 }

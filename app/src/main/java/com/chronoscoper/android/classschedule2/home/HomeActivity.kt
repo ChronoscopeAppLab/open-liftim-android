@@ -42,12 +42,20 @@ import com.chronoscoper.android.classschedule2.setting.SettingsActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
 import com.chronoscoper.android.classschedule2.transition.FabTransformTransition
+import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.showToast
 import com.chronoscoper.android.classschedule2.weekly.EditWeeklyActivity
 import com.chronoscoper.android.classschedule2.weekly.WeeklyFragment
 import kotterknife.bindView
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+    companion object {
+        const val EVENT_OPEN_TIMETABLE_EDITOR = "OPEN_TIMETABLE_EDITOR"
+    }
+
     private val drawer by bindView<DrawerLayout>(R.id.activity_home)
     private val drawerMenu by bindView<NavigationView>(R.id.drawer_menu)
     private val fab by bindView<FloatingActionButton>(R.id.add)
@@ -97,6 +105,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        EventBus.getDefault().register(this)
 
         if (savedInstanceState == null) {
             replaceFragment(HomeFragment())
@@ -133,6 +142,19 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         Handler().postDelayed({
             if (contentFragment !is ArchiveFragment) fab.show()
         }, 350)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Suppress("UNUSED")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEvent(event: EventMessage) {
+        if (event.type == EVENT_OPEN_TIMETABLE_EDITOR) {
+            editTimetableFabAction.run()
+        }
     }
 
     private fun showLiftimCodeName() {

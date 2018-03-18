@@ -24,9 +24,14 @@
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
     </style>
 
-    <style name="AppTheme.Translucent" parent="AppTheme.NoActionBar">
+    <style name="AppTheme.DrawerActivity" parent="AppTheme.NoActionBar">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Translucent">
         <item name="android:windowBackground">@color/black_vail</item>
-        <item name="android:statusBarColor">@color/black_vail</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -35,5 +40,9 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Translucent.Dialog">
+        <item name="android:statusBarColor">@color/black_vail</item>
     </style>
 </resources>

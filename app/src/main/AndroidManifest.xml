@@ -79,23 +79,23 @@
         <activity
             android:name=".home.info.EditInfoActivity"
             android:label="@string/add_info"
-            android:theme="@style/AppTheme.Translucent"
+            android:theme="@style/AppTheme.NoActionBar.Translucent"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".home.timetable.EditTimetableActivity"
             android:label="@string/edit_timetable"
-            android:theme="@style/AppTheme.Translucent"
+            android:theme="@style/AppTheme.NoActionBar.Translucent"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".weekly.EditWeeklyActivity"
             android:label="@string/edit_weekly"
-            android:theme="@style/AppTheme.Translucent"
+            android:theme="@style/AppTheme.NoActionBar.Translucent"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ReLoginActivity" />
         <activity
             android:name=".home.info.detail.ViewInfoActivity"
             android:label="@string/info"
-            android:theme="@style/AppTheme.Translucent" />
+            android:theme="@style/AppTheme.NoActionBar.Translucent" />
         <activity
             android:name=".setup.JoinWithBarcodeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -110,16 +110,16 @@
             android:label="@string/edit_subject" />
         <activity
             android:name=".home.timetable.EditTargetDialog"
-            android:theme="@style/AppTheme.Translucent" />
+            android:theme="@style/AppTheme.NoActionBar.Translucent.Dialog" />
         <activity
             android:name=".setting.manager.DeleteLiftimCodeActivity"
-            android:theme="@style/AppTheme.Translucent" />
+            android:theme="@style/AppTheme.NoActionBar.Translucent.Dialog" />
         <activity
             android:name=".setting.FeedbackActivity"
             android:label="@string/send_feedback" />
         <activity
             android:name=".functionrestriction.OnlyManagerActivity"
-            android:theme="@style/AppTheme.Translucent" />
+            android:theme="@style/AppTheme.NoActionBar.Translucent.Dialog" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

@@ -29,8 +29,10 @@ import android.support.v4.view.ViewPager
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LiftimApplication
@@ -52,8 +54,10 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,
+        DrawerLayout.DrawerListener {
     companion object {
+        private const val TAG = "HomeActivity"
         const val EVENT_OPEN_TIMETABLE_EDITOR = "OPEN_TIMETABLE_EDITOR"
     }
 
@@ -126,6 +130,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val toggle = ActionBarDrawerToggle(this, drawer,
                 toolbar, R.string.open_drawer, R.string.close_drawer)
         drawer.addDrawerListener(toggle)
+        drawer.addDrawerListener(this)
         drawerMenu.setNavigationItemSelectedListener(this)
         toggle.syncState()
 
@@ -137,6 +142,13 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             fabAction?.run()
         }
         showLiftimCodeName()
+
+        // Default status bar icon color is set to white because we want to change drawer icon color
+        // when drawer is opened but SYSTEM_UI_FLAG_LIGHT_STATUS_BAR has no effect if default
+        // status bar icon color is black.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            toolbar.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
     }
 
     override fun onPause() {
@@ -297,4 +309,44 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         drawer.closeDrawer(Gravity.START)
         return true
     }
+
+    // <editor-folding desc="DrawerListener">
+
+    override fun onDrawerStateChanged(newState: Int) {
+        // ignore
+    }
+
+    private var isStatusBarIconDark = true
+
+    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+        Log.d(TAG, "Sliding drawer: $slideOffset")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (slideOffset > 0.5f && isStatusBarIconDark) {
+                Log.d(TAG, "Lighten status bar icon")
+                // We use "toolbar" because drawerView has been gone when drawer closed.
+                toolbar.systemUiVisibility = 0
+                isStatusBarIconDark = false
+            } else if (slideOffset <= 0.5f && !isStatusBarIconDark) {
+                Log.d(TAG, "Darken status bar icon")
+                toolbar.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                isStatusBarIconDark = true
+            }
+        }
+    }
+
+    override fun onDrawerClosed(drawerView: View) {
+        Log.d(TAG, "Drawer closed")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            toolbar.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+    }
+
+    override fun onDrawerOpened(drawerView: View) {
+        Log.d(TAG, "Drawer opened")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            toolbar.systemUiVisibility = 0
+        }
+    }
+
+    // </editor-folding>
 }

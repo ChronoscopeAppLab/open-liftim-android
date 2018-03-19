@@ -110,6 +110,7 @@ class EditTimetableActivity : BaseActivity() {
         liftimCodeLabel.text = liftimCodeInfo.name
         isManager = liftimCodeInfo.isManager
         val target = obtainTargetElement()
+        id = target?.id
         if (target == null) {
             date = DateTime.now(DateTimeZone.getDefault()).plusDays(1)
         } else {
@@ -174,8 +175,10 @@ class EditTimetableActivity : BaseActivity() {
             R.id.options_register_local -> {
                 registerLocal(createElementFromCurrentState())
                 animateFinish()
-                EventBus.getDefault()
-                        .post(EventMessage(TimetableFragment.EVENT_TIMETABLE_UPDATED))
+                EventBus.getDefault().let {
+                    it.post(EventMessage.of(TimetableFragment.EVENT_TIMETABLE_UPDATED))
+                    it.post(EventMessage.of(InfoRecyclerViewAdapter.EVENT_ENTRY_UPDATED))
+                }
             }
             R.id.options_register_remote -> {
                 val element = createElementFromCurrentState()
@@ -183,8 +186,8 @@ class EditTimetableActivity : BaseActivity() {
                 registerRemote(element)
                 animateFinish()
                 EventBus.getDefault().let {
-                    it.post(EventMessage(TimetableFragment.EVENT_TIMETABLE_UPDATED))
-                    it.post(EventMessage(InfoRecyclerViewAdapter.EVENT_ENTRY_UPDATED))
+                    it.post(EventMessage.of(TimetableFragment.EVENT_TIMETABLE_UPDATED))
+                    it.post(EventMessage.of(InfoRecyclerViewAdapter.EVENT_ENTRY_UPDATED))
                 }
             }
             R.id.options_change_min_indx -> {

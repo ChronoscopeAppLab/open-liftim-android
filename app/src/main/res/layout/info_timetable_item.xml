@@ -75,8 +75,7 @@
         android:background="@drawable/clickable_background_black"
         android:contentDescription="@string/delete"
         android:padding="3dp"
-        android:src="@drawable/ic_delete"
-        android:visibility="invisible" />
+        android:src="@drawable/ic_delete" />
 
     <ImageButton
         android:id="@+id/more"

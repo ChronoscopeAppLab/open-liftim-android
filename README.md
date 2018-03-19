@@ -36,7 +36,7 @@ Please note that contents there will be frequently cleared.
 
 ## Roadmap
 
-- Select subjecy from registered subjects in timetable editor.
+- Select subject from registered subjects in timetable editor.
 - Import timetable from weekly timetable.
 - Show registered timetable when timetable's date picked.
 - Delete info completely after 1 month passed.

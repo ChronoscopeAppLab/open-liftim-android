@@ -38,6 +38,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.functionrestriction.getFunctionRestriction
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
@@ -178,7 +179,7 @@ class EditInfoActivity : BaseActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        if (isManager) {
+        if (isManager && getFunctionRestriction(this).addInfo) {
             menuInflater.inflate(R.menu.options_edit_info_manager, menu)
         } else {
             menuInflater.inflate(R.menu.options_edit_info, menu)

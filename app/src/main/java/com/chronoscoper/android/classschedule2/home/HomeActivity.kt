@@ -40,6 +40,7 @@ import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.archive.ArchiveFragment
 import com.chronoscoper.android.classschedule2.functionrestriction.OnlyManagerActivity
+import com.chronoscoper.android.classschedule2.functionrestriction.getFunctionRestriction
 import com.chronoscoper.android.classschedule2.home.info.EditInfoActivity
 import com.chronoscoper.android.classschedule2.home.timetable.EditTargetDialog
 import com.chronoscoper.android.classschedule2.setting.SettingsActivity
@@ -153,16 +154,21 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
+    private var prePauseFabShown: Boolean = true
+
     override fun onPause() {
         super.onPause()
+        prePauseFabShown = fab.isShown
         fab.hide()
     }
 
     override fun onResume() {
         super.onResume()
-        Handler().postDelayed({
-            if (contentFragment !is ArchiveFragment) fab.show()
-        }, 350)
+        if (prePauseFabShown) {
+            Handler().postDelayed({
+                fab.show()
+            }, 350)
+        }
     }
 
     override fun onDestroy() {
@@ -217,15 +223,24 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private var contentFragment: Fragment? = null
 
     private fun replaceFragment(fragment: Fragment) {
-        if (fragment is ArchiveFragment) {
-            fab.hide()
-        } else {
-            fab.show()
-        }
         when (fragment) {
-            is HomeFragment -> toolbar.title = getString(R.string.app_name)
-            is WeeklyFragment -> toolbar.title = getString(R.string.weekly)
-            is ArchiveFragment -> toolbar.title = getString(R.string.archive)
+            is HomeFragment -> {
+                fab.show()
+                toolbar.title = getString(R.string.app_name)
+            }
+            is WeeklyFragment -> {
+                if (LiftimContext.isManager()
+                        && getFunctionRestriction(this).editWeekly) {
+                    fab.show()
+                } else {
+                    fab.hide()
+                }
+                toolbar.title = getString(R.string.weekly)
+            }
+            is ArchiveFragment -> {
+                fab.hide()
+                toolbar.title = getString(R.string.archive)
+            }
         }
         supportFragmentManager.beginTransaction()
                 .replace(R.id.content, fragment)
@@ -236,12 +251,19 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     fun onHomePageChanged(page: Int) {
         when (page) {
             0 -> {
-                drawerMenu.setCheckedItem(R.id.drawer_timetable)
+                fab.show()
                 fabAction = editTimetableFabAction
+                drawerMenu.setCheckedItem(R.id.drawer_timetable)
             }
             1 -> {
+                if ((LiftimContext.isManager() && getFunctionRestriction(this).addInfo)
+                        || getFunctionRestriction(this).addNote) {
+                    fabAction = editInfoFabAction
+                    fab.show()
+                } else {
+                    fab.hide()
+                }
                 drawerMenu.setCheckedItem(R.id.drawer_info)
-                fabAction = editInfoFabAction
             }
         }
     }

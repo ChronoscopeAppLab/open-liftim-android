@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.functionrestriction.getFunctionRestriction
 import com.chronoscoper.android.classschedule2.home.HomeActivity
 import com.chronoscoper.android.classschedule2.setting.manager.LiftimCodeSettingsActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimCodeInfo
@@ -55,6 +56,13 @@ class LiftimCodeChooserFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        if (LiftimContext.getOrmaDatabase().selectFromLiftimCodeInfo().count() >= 1
+                && !getFunctionRestriction(context!!).multiLiftimCode) {
+            joinButton.visibility = View.GONE
+        }
+        if (!getFunctionRestriction(context!!).createLiftimCode) {
+            createButton.visibility = View.GONE
+        }
     }
 
     override fun onResume() {

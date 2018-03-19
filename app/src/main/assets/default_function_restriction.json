@@ -7,7 +7,7 @@
     "change_image": false,
     "rename": false
   },
-  "edit_info": true,
+  "add_info": true,
   "add_note": true,
   "edit_weekly": true
 }

@@ -32,8 +32,8 @@ public class FunctionRestriction {
     public ConfigureLiftimCodeRestriction configureLiftimCode;
 
     @Expose
-    @SerializedName("edit_info")
-    public boolean editInfo;
+    @SerializedName("add_info")
+    public boolean addInfo;
 
     @Expose
     @SerializedName("add_note")

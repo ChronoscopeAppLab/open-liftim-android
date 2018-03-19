@@ -132,4 +132,7 @@
     <string name="register_button">Register new one now!</string>
     <string name="function_restriction_only_manager">Only manager for this class can do it. Please ask current manager to grant management privilege.</string>
     <string name="update_account_info">Update account info</string>
+    <string name="support_finished">Liftim you are using is no longer supported.</string>
+    <string name="server_error">Server has run into critical error</string>
+    <string name="server_maintenance">Server is being maintained</string>
 </resources>

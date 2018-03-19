@@ -29,7 +29,7 @@ import com.chronoscoper.android.classschedule2.task.InfoLoader
 import com.chronoscoper.android.classschedule2.task.LiftimCodeInfoLoader
 import com.chronoscoper.android.classschedule2.task.SubjectLoader
 import com.chronoscoper.android.classschedule2.task.WeeklyLoader
-import com.chronoscoper.android.classschedule2.task.enforceValidToken
+import com.chronoscoper.android.classschedule2.task.enforceValid
 import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -60,7 +60,7 @@ class TokenCallbackActivity : BaseActivity() {
                     .commit()
             return
         }
-        val subscriber = object : DisposableSubscriber<Unit>() {
+        val subscriber = object : DisposableSubscriber<Int>() {
             override fun onError(t: Throwable?) {
                 supportFragmentManager.beginTransaction()
                         .replace(android.R.id.content, TokenLoadFailedFragment())
@@ -68,7 +68,7 @@ class TokenCallbackActivity : BaseActivity() {
                 return
             }
 
-            override fun onNext(t: Unit?) {}
+            override fun onNext(t: Int?) {}
 
             override fun onComplete() {
                 sharedPrefs.edit()
@@ -87,7 +87,7 @@ class TokenCallbackActivity : BaseActivity() {
                 }
             }
         }
-        Flowable.defer { Flowable.just(enforceValidToken(token)) }
+        Flowable.defer { Flowable.just(enforceValid(token)) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber)

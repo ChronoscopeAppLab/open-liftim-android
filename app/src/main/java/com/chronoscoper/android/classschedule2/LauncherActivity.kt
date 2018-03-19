@@ -25,14 +25,9 @@ import com.chronoscoper.android.classschedule2.setting.ManageLiftimCodeActivity
 import com.chronoscoper.android.classschedule2.setup.SetupActivity
 import com.chronoscoper.android.classschedule2.setup.TokenCallbackActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
-import com.chronoscoper.android.classschedule2.sync.Subject
-import com.chronoscoper.android.classschedule2.sync.WeeklyItem
-import com.chronoscoper.android.classschedule2.task.AccountInfoLoader
 import com.chronoscoper.android.classschedule2.task.FullSyncTask
 import com.chronoscoper.android.classschedule2.task.InvalidTokenException
-import com.chronoscoper.android.classschedule2.task.SubjectLoader
-import com.chronoscoper.android.classschedule2.task.WeeklyLoader
-import com.chronoscoper.android.classschedule2.task.enforceValidToken
+import com.chronoscoper.android.classschedule2.task.enforceValid
 import com.chronoscoper.android.classschedule2.util.optimizeInfo
 import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import io.reactivex.Observable
@@ -125,7 +120,9 @@ class LauncherActivity : BaseActivity() {
 
         Observable.create<Unit> {
             try {
-                enforceValidToken(LiftimContext.getToken())
+                val connectivityStatus = enforceValid(LiftimContext.getToken())
+                prefs.edit().putInt(getString(R.string.p_last_sync_status), connectivityStatus)
+                        .apply()
             } catch (e: Exception) {
                 it.onError(e)
                 return@create

@@ -346,14 +346,20 @@ class InfoRecyclerViewAdapter(val activity: Activity, private val syncEnabled: B
             type.background.setColorFilter(getColorForInfoType(infoData.type),
                     PorterDuff.Mode.SRC_IN)
             type.text = activity.getString(R.string.class_schedule)
-            delete.setOnClickListener {
-                LiftimContext.getOrmaDatabase().updateInfo()
-                        .deleted(true)
-                        .liftimCodeEq(LiftimContext.getLiftimCode())
-                        .idEq(infoData.id)
-                        .execute()
-                data.remove(infoData)
-                notifyItemRemoved(adapterPosition)
+            if (infoData.removable) {
+                delete.visibility = View.VISIBLE
+                delete.setOnClickListener {
+                    LiftimContext.getOrmaDatabase().updateInfo()
+                            .deleted(true)
+                            .liftimCodeEq(LiftimContext.getLiftimCode())
+                            .idEq(infoData.id)
+                            .execute()
+                    data.remove(infoData)
+                    notifyItemRemoved(adapterPosition)
+                }
+            } else {
+                delete.visibility = View.INVISIBLE
+                delete.setOnClickListener(null)
             }
             more.setOnClickListener {
                 PopupMenuCompat(activity, it)

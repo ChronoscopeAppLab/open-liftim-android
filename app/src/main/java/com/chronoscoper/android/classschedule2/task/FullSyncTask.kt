@@ -59,6 +59,7 @@ class FullSyncTask(private val context: Context):Runnable {
                     .putLong(context.getString(R.string.p_default_liftim_code), code)
                     .apply()
         }
+        FunctionRestrictionLoader(context).run()
         prefs.edit().putString(context.getString(R.string.p_last_user_info_synced),
                 DateTime.now().toString()).apply()
     }

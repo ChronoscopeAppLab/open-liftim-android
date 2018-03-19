@@ -80,4 +80,7 @@ public interface LiftimService {
 
     @GET("api/v1/token.json")
     Call<Token> getToken(@Query("token") String token);
+
+    @GET("api/v1/function_restriction.json")
+    Call<String> getFunctionRestriction();
 }

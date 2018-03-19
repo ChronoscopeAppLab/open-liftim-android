@@ -29,6 +29,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public final class LiftimContext {
     private static OkHttpClient sOkHttpClient;
@@ -52,6 +53,7 @@ public final class LiftimContext {
         sOkHttpClient = okHttpClientBuilder.build();
         sLiftimService = new Retrofit.Builder()
                 .baseUrl(baseUrl)
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(sGson))
                 .client(sOkHttpClient)
                 .build()

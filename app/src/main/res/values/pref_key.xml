@@ -29,4 +29,5 @@
     <string name="p_last_used_version" translatable="false">last_used_version</string>
     <string name="p_send_feedback" translatable="false">send_feedback</string>
     <string name="p_last_user_info_synced" translatable="false">last_user_info_synced</string>
+    <string name="p_last_sync_status">last_sync_status</string>
 </resources>

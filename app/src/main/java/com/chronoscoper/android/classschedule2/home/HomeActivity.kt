@@ -22,6 +22,7 @@ import android.os.Handler
 import android.preference.PreferenceManager
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -142,6 +143,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             fabAction?.run()
         }
         showLiftimCodeName()
+        showSyncStatusIfNeeded()
 
         // Default status bar icon color is set to white because we want to change drawer icon color
         // when drawer is opened but SYSTEM_UI_FLAG_LIGHT_STATUS_BAR has no effect if default
@@ -166,6 +168,26 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
+    }
+
+    private fun showSyncStatusIfNeeded() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val status = prefs.getInt(getString(R.string.p_last_sync_status), 0)
+        val message: String? =
+                when (status) {
+                    400 -> getString(R.string.support_finished)
+                    503 -> getString(R.string.server_maintenance)
+                    in 500 until 600 -> getString(R.string.server_error)
+                    else -> null
+                }
+        if (message != null) {
+            Snackbar.make(toolbar, message, Snackbar.LENGTH_LONG)
+                    .apply {
+                        setAction(android.R.string.ok, { this.dismiss() })
+                        show()
+                    }
+        }
+        prefs.edit().remove(getString(R.string.p_last_sync_status)).apply()
     }
 
     @Suppress("UNUSED")

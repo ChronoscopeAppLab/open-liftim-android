@@ -29,6 +29,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.functionrestriction.getFunctionRestriction
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import kotterknife.bindView
@@ -46,7 +47,6 @@ class LiftimCodeSettingsActivity : BaseActivity() {
 
     private val liftimCodeImage by bindView<ImageView>(R.id.liftim_code_image)
     private val liftimCodeName by bindView<TextView>(R.id.liftim_code_name)
-    private val liftimCodeNameLabel by bindView<TextInputLayout>(R.id.liftim_code_name_label)
     private val editSubjectListButton by bindView<View>(R.id.edit_subject_list)
     private val deleteLiftimCodeButton by bindView<View>(R.id.delete)
 
@@ -72,12 +72,27 @@ class LiftimCodeSettingsActivity : BaseActivity() {
                 .apply(RequestOptions.circleCropTransform())
                 .transition(progressiveFadeInTransition())
                 .into(liftimCodeImage)
-        liftimCodeName.text = liftimCodeInfo.name
-        editSubjectListButton.setOnClickListener {
-            EditSubjectListActivity.open(this, liftimCode)
+        if (!getFunctionRestriction(this).configureLiftimCode.rename) {
+            liftimCodeName.apply {
+                isClickable = false
+                isFocusable = false
+                isFocusableInTouchMode = false
+            }
         }
-        deleteLiftimCodeButton.setOnClickListener {
-            DeleteLiftimCodeActivity.start(this, liftimCode, RC_DELETE_CODE)
+        liftimCodeName.text = liftimCodeInfo.name
+        if (getFunctionRestriction(this).configureLiftimCode.editSubjectList) {
+            editSubjectListButton.setOnClickListener {
+                EditSubjectListActivity.open(this, liftimCode)
+            }
+        } else {
+            editSubjectListButton.visibility = View.GONE
+        }
+        if (getFunctionRestriction(this).configureLiftimCode.delete) {
+            deleteLiftimCodeButton.setOnClickListener {
+                DeleteLiftimCodeActivity.start(this, liftimCode, RC_DELETE_CODE)
+            }
+        } else {
+            deleteLiftimCodeButton.visibility = View.GONE
         }
     }
 

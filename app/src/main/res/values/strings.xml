@@ -135,4 +135,5 @@
     <string name="support_finished">Liftim you are using is no longer supported.</string>
     <string name="server_error">Server has run into critical error</string>
     <string name="server_maintenance">Server is being maintained</string>
+    <string name="liftim_code_exit_failed">Class is not deleted</string>
 </resources>

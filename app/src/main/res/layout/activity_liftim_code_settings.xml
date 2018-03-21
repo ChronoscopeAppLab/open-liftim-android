@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
    Copyright 2017-2018 Chronoscope
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -49,18 +48,11 @@
                     android:src="@drawable/ic_capture" />
             </FrameLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/liftim_code_name_label"
+            <EditText
+                android:id="@+id/liftim_code_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/liftim_code_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-            </android.support.design.widget.TextInputLayout>
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
         </LinearLayout>
 
         <Button

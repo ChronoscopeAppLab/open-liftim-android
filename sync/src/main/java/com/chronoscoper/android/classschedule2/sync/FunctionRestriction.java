@@ -59,5 +59,9 @@ public class FunctionRestriction {
         @Expose
         @SerializedName("rename")
         public boolean rename;
+
+        @Expose
+        @SerializedName("edit_subject_list")
+        public boolean editSubjectList;
     }
 }

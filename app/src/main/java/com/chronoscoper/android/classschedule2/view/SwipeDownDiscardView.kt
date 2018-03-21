@@ -15,11 +15,17 @@
  */
 package com.chronoscoper.android.classschedule2.view
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Matrix
+import android.graphics.Path
+import android.support.animation.DynamicAnimation
+import android.support.animation.SpringAnimation
+import android.support.animation.SpringForce
+import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.FrameLayout
 
@@ -32,22 +38,29 @@ class SwipeDownDiscardView(context: Context, attrs: AttributeSet?, defStyleAttr:
         private const val TAG = "SwipeDownDiscardView"
     }
 
-    private val canvasMatrix = Matrix()
-
     private var lastY = 0f
     private var totalScroll = 0f
     private var swipeProportion = 0f
     private var maxSwipe = 0
     private var swipeDownward = false
 
+    private var centerX = 0f
+    private var centerY = 0f
+    private val circle = Path()
+    private var radius = 0f
+    private val interpolator = FastOutSlowInInterpolator()
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         maxSwipe = context.resources.displayMetrics.heightPixels / 2
+        centerX = w.toFloat() / 2
+        centerY = h.toFloat() / 2
+        radius = Math.hypot(w.toDouble(), h.toDouble()).toFloat() / 2
+        updateFraction()
     }
 
-    override fun onDraw(canvas: Canvas?) {
-        canvas ?: return
-        canvas.matrix = canvasMatrix
+    override fun onDraw(canvas: Canvas) {
+        canvas.clipPath(circle)
         super.onDraw(canvas)
     }
 
@@ -64,14 +77,13 @@ class SwipeDownDiscardView(context: Context, attrs: AttributeSet?, defStyleAttr:
             swipeDownward = totalScroll > 0
             onSwipeListener?.onSwipe(swipeProportion)
             if (totalScroll > 0) {
-                canvasMatrix.postScale(1 - swipeProportion * 2 / 3, 1 - swipeProportion / 4,
-                        width / 2f, height.toFloat())
-                invalidate()
+                updateFraction()
             }
         } else {
             // Regard as action is done.
             if (swipeDownward && swipeProportion > 0.9f) {
                 // Regard as discarded
+                Log.d(TAG, "Discarded by swipe action")
                 onSwipeListener?.onDiscard()
             } else {
                 animateReturn()
@@ -83,11 +95,28 @@ class SwipeDownDiscardView(context: Context, attrs: AttributeSet?, defStyleAttr:
     var onSwipeListener: OnSwipeListener? = null
 
     private fun animateReturn() {
-        canvasMatrix.reset()
-        invalidate()
-        animate().translationY(0f).start()
+        if (swipeDownward) {
+            ValueAnimator.ofFloat(swipeProportion, 0f).apply {
+                addUpdateListener {
+                    swipeProportion = it.animatedValue as Float
+                    updateFraction()
+                }
+                start()
+            }
+        }
+        SpringAnimation(this, DynamicAnimation.TRANSLATION_Y, 0f)
+                .apply { spring?.dampingRatio = 0.3f }
+                .start()
         swipeProportion = 0f
         totalScroll = 0f
+    }
+
+    private fun updateFraction() {
+        val reverseFraction = interpolator.getInterpolation(1f - swipeProportion)
+        circle.reset()
+        circle.addCircle(centerX, centerY,
+                radius * reverseFraction, Path.Direction.CW)
+        invalidate()
     }
 
     interface OnSwipeListener {

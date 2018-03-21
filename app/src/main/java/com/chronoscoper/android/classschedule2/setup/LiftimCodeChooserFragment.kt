@@ -22,7 +22,6 @@ import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +29,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.chronoscoper.android.classschedule2.LiftimApplication
@@ -41,8 +41,17 @@ import com.chronoscoper.android.classschedule2.sync.LiftimCodeInfo
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.openInNewTask
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
+import com.chronoscoper.android.classschedule2.util.showToast
+import com.chronoscoper.android.classschedule2.view.PopupMenuCompat
+import com.chronoscoper.android.classschedule2.view.ProgressDialog
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
+import java.io.IOException
 
 class LiftimCodeChooserFragment : Fragment() {
     override fun onCreateView(
@@ -63,11 +72,23 @@ class LiftimCodeChooserFragment : Fragment() {
         if (!getFunctionRestriction(context!!).createLiftimCode) {
             createButton.visibility = View.GONE
         }
+
+        list.adapter = LiftimCodeAdapter(activity!!)
+    }
+
+    private val disposables = CompositeDisposable()
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        disposables.clear()
     }
 
     override fun onResume() {
         super.onResume()
-        list.adapter = LiftimCodeAdapter(activity!!)
+        (list.adapter as? LiftimCodeAdapter)?.let {
+            it.reloadEntry()
+            it.notifyDataSetChanged()
+        }
         joinButton.setOnClickListener {
             startActivity(Intent(context, JoinLiftimCodeActivity::class.java))
         }
@@ -76,11 +97,16 @@ class LiftimCodeChooserFragment : Fragment() {
         }
     }
 
-    private class LiftimCodeAdapter(val activity: Activity) :
+    private inner class LiftimCodeAdapter(val activity: Activity) :
             RecyclerView.Adapter<RecyclerViewHolder>() {
         private val data = mutableListOf<LiftimCodeInfo>()
 
         init {
+            reloadEntry()
+        }
+
+        fun reloadEntry() {
+            data.clear()
             data.addAll(LiftimContext.getOrmaDatabase()
                     .selectFromLiftimCodeInfo().toList())
         }
@@ -109,8 +135,20 @@ class LiftimCodeChooserFragment : Fragment() {
                         .initEnvironment()
                 openInNewTask(activity, HomeActivity::class.java)
             }
+            val configureLiftimCodeRestriction = getFunctionRestriction(activity)
+                    .configureLiftimCode
+            if ((LiftimContext.isManager()
+                            && !configureLiftimCodeRestriction.changeImage
+                            && !configureLiftimCodeRestriction.rename
+                            && !configureLiftimCodeRestriction.delete)
+                    || (!LiftimContext.isManager()
+                            && !configureLiftimCodeRestriction.exit)) {
+                more.visibility = View.GONE
+            } else {
+                more.visibility = View.VISIBLE
+            }
             more.setOnClickListener {
-                val menu = PopupMenu(activity, it)
+                val menu = PopupMenuCompat(activity, it)
                 menu.inflate(
                         if (item.isManager) {
                             R.menu.liftim_code_chooser_action_manager
@@ -136,12 +174,51 @@ class LiftimCodeChooserFragment : Fragment() {
                     }
                     true
                 }
+                more.setOnTouchListener(menu.dragToOpenListener)
                 menu.show()
             }
         }
 
         private fun deleteLiftimCode(liftimCode: Long) {
-            //TODO: Implement deleting liftim code
+            childFragmentManager.beginTransaction()
+                    .add(ProgressDialog(), "progress_dialog")
+                    .commit()
+            val subscriber = object : DisposableObserver<Unit>() {
+                override fun onComplete() {
+                    (list.adapter as? LiftimCodeAdapter)?.let {
+                        it.reloadEntry()
+                        it.notifyDataSetChanged()
+                    }
+                }
+
+                override fun onNext(t: Unit) {
+                }
+
+                override fun onError(e: Throwable) {
+                    showToast(this@LiftimCodeChooserFragment.context!!,
+                            getString(R.string.liftim_code_exit_failed), Toast.LENGTH_SHORT)
+                }
+            }
+            Observable.create<Unit> {
+                val response = LiftimContext.getLiftimService()
+                        .deleteLiftimCode(liftimCode, LiftimContext.getToken())
+                        .execute()
+                if (!response.isSuccessful) {
+                    it.onError(IOException())
+                    return@create
+                }
+                val db = LiftimContext.getOrmaDatabase()
+                db.deleteFromLiftimCodeInfo()
+                        .liftimCodeEq(liftimCode).execute()
+                db.deleteFromWeeklyItem().liftimCodeEq(liftimCode).execute()
+                db.deleteFromInfo().liftimCodeEq(liftimCode).execute()
+                db.deleteFromSubject().liftimCodeEq(liftimCode).execute()
+                it.onComplete()
+            }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(subscriber)
+            disposables.add(subscriber)
         }
 
         val inflater: LayoutInflater by lazy { LayoutInflater.from(activity) }

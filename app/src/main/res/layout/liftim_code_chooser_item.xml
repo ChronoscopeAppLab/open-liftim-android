@@ -42,7 +42,6 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         tools:text="Liftim code" />
 
-    <!-- TODO: Temporarily, I make this button's visibility gone. I must release next version rather than implement it:( -->
     <ImageButton
         android:id="@+id/more"
         android:layout_width="wrap_content"
@@ -51,6 +50,5 @@
         android:background="@drawable/clickable_background_black"
         android:contentDescription="@string/more_actions"
         android:padding="5dp"
-        android:src="@drawable/ic_more_vert"
-        android:visibility="gone" />
+        android:src="@drawable/ic_more_vert" />
 </LinearLayout>

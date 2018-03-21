@@ -181,6 +181,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val status = prefs.getInt(getString(R.string.p_last_sync_status), 0)
         val message: String? =
                 when (status) {
+                    -1->getString(R.string.no_connection)
                     400 -> getString(R.string.support_finished)
                     503 -> getString(R.string.server_maintenance)
                     in 500 until 600 -> getString(R.string.server_error)

@@ -37,6 +37,7 @@ import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import org.joda.time.DateTime
+import java.io.IOException
 
 class LauncherActivity : BaseActivity() {
 
@@ -109,6 +110,8 @@ class LauncherActivity : BaseActivity() {
                     startActivity(Intent(this@LauncherActivity, ReLoginActivity::class.java))
                     finish()
                     return
+                } else if (e is IOException) {
+                    prefs.edit().putInt(getString(R.string.p_last_sync_status), -1).apply()
                 }
                 syncFinished = true
                 startMainIfNeeded()

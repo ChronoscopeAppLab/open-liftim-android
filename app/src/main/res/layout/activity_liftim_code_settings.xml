@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
    Copyright 2017-2018 Chronoscope
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -10,6 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -35,6 +38,7 @@
                     android:id="@+id/liftim_code_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/clickable_background_black"
                     android:clickable="true"
                     android:contentDescription="@string/accessibility_change_liftim_code_image"
                     android:focusable="true" />

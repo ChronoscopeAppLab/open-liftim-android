@@ -137,4 +137,6 @@
     <string name="server_maintenance">Server is being maintained</string>
     <string name="liftim_code_exit_failed">Class is not deleted</string>
     <string name="no_connection">No connection</string>
+    <string name="activity_not_found">Your device not support this action.</string>
+    <string name="clip_image">Clip an image</string>
 </resources>

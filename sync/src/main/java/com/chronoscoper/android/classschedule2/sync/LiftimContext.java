@@ -64,8 +64,10 @@ public final class LiftimContext {
                 .writeOnMainThread(AccessThreadConstraint.WARNING)
                 .build();
         sLiftimCode = liftimCode;
-        sIsManager = sOrmaDatabase.selectFromLiftimCodeInfo().liftimCodeEq(liftimCode)
-                .limit(1).value().isManager;
+        if (liftimCode > 0) {
+            sIsManager = sOrmaDatabase.selectFromLiftimCodeInfo().liftimCodeEq(liftimCode)
+                    .limit(1).value().isManager;
+        }
         sToken = token;
         sBaseUrl = baseUrl;
     }

@@ -69,3 +69,17 @@
     public static int e(...);
     public static int wtf(...);
 }
+
+# Remove Kotlin null check
+-assumenosideeffects class kotlin.jvm.internal.Intrinsics {
+    public static void checkExpressionValueIsNotNull(...);
+    public static void checkFieldIsNotNull(...);
+    public static void checkFieldIsNotNull(...);
+    public static void checkNotNull(...);
+    public static void checkNotNullExpressionValue(...);
+    public static void checkParameterIsNotNull(...);
+    public static void checkReturnedValueIsNotNull(...);
+}
+
+-allowaccessmodification
+-mergeinterfacesaggressively

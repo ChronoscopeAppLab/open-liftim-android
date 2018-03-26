@@ -12,6 +12,7 @@ android {
         versionName "1.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs 'ja'
+        multiDexEnabled true
     }
 
     signingConfigs {

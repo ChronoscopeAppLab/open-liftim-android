@@ -16,18 +16,43 @@
 package com.chronoscoper.android.classschedule2.util
 
 import android.graphics.Color
+import android.util.Log
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 
+private const val TAG = "SubjectColor"
+
 fun obtainColorCorrespondsTo(subjectName: String): Int {
-    val colorName = LiftimContext.getOrmaDatabase().selectFromSubject()
+    val db = LiftimContext.getOrmaDatabase()
+    if (db.selectFromColorPaletteV2().count() <= 0) {
+        Log.d(TAG, "V2 has not synced yet. Using v1 color palette...")
+        return loadColorV1(subjectName)
+    } else {
+        Log.d(TAG, "V2 detected. Loading color from v2 color palette")
+        return loadColorV2(subjectName)
+    }
+}
+
+private fun loadColorV1(name: String): Int {
+    val db = LiftimContext.getOrmaDatabase()
+    val colorName = db.selectFromSubject()
             .liftimCodeEq(LiftimContext.getLiftimCode())
-            .subjectEq(subjectName).firstOrNull()?.color ?: return 0xff999999.toInt()
-    val colorRRGGBB = LiftimContext.getOrmaDatabase().selectFromColorPalette()
+            .subjectEq(name).firstOrNull()?.color ?: return 0xff999999.toInt()
+    val colorRRGGBB = db.selectFromColorPalette()
             .nameEq(colorName)
             .firstOrNull()?.color ?: return 0xff999999.toInt()
     return try {
         Color.parseColor(colorRRGGBB)
     } catch (e: IllegalArgumentException) {
+        Log.e(TAG, "Malformed color string. Is it #RRGGBB or #AARRGGBB?", e)
         0xff999999.toInt()
     }
+}
+
+private fun loadColorV2(name: String): Int {
+    val db = LiftimContext.getOrmaDatabase()
+    val colorName = db.selectFromSubject()
+            .liftimCodeEq(LiftimContext.getLiftimCode())
+            .subjectEq(name).firstOrNull()?.color ?: return 0xff999999.toInt()
+    return db.selectFromColorPaletteV2().nameEq(colorName).firstOrNull()?.color
+            ?: 0xff999999.toInt()
 }

@@ -64,6 +64,7 @@ class ManageAccountActivity : BaseActivity() {
                 }
 
                 override fun onError(t: Throwable?) {
+                    progress.visibility = View.GONE
                 }
             }
             Flowable.defer { Flowable.just(FullSyncTask(this).run()) }

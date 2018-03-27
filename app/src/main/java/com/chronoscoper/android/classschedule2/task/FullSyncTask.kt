@@ -24,67 +24,47 @@ import com.chronoscoper.android.classschedule2.sync.WeeklyItem
 import org.joda.time.DateTime
 import java.io.IOException
 
-class FullSyncTask(private val context: Context):Runnable {
+class FullSyncTask(private val context: Context) : Runnable {
     override fun run() {
         val token = LiftimContext.getToken()
-        val accountInfo = AccountInfoLoader(token)
-                .load()
-                ?: kotlin.run {
-                    throw IOException("Error occurred while syncing account info")
-                }
-        val db = LiftimContext.getOrmaDatabase()
-        val prefs=PreferenceManager.getDefaultSharedPreferences(context)
-        val prefEditor = prefs.edit()
-        prefEditor.apply {
-             putString(context.getString(R.string.p_account_name), accountInfo.userName)
-             putString(context.getString(R.string.p_account_image_file), accountInfo.imageFile)
-             putString(context.getString(R.string.p_account_add_date), accountInfo.addDate)
-            putBoolean(context.getString(R.string.p_account_is_available), accountInfo.isAvailable)
-        }
-        prefEditor.apply()
-        backupAndDeleteData()
-        try {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        LiftimContext.getOrmaDatabase().transactionSync {
+            val accountInfo = AccountInfoLoader(token)
+                    .load()
+                    ?: kotlin.run {
+                        throw IOException("Error occurred while syncing account info")
+                    }
+            val db = LiftimContext.getOrmaDatabase()
+            val prefEditor = prefs.edit()
+            prefEditor.apply {
+                putString(context.getString(R.string.p_account_name), accountInfo.userName)
+                putString(context.getString(R.string.p_account_image_file), accountInfo.imageFile)
+                putString(context.getString(R.string.p_account_add_date), accountInfo.addDate)
+                putBoolean(context.getString(R.string.p_account_is_available), accountInfo.isAvailable)
+            }
+            prefEditor.apply()
+            db.deleteFromWeeklyItem().execute()
+            db.deleteFromSubject().execute()
             accountInfo.liftimCodes.forEach {
                 WeeklyLoader(it.liftimCode, token).run()
                 SubjectLoader(it.liftimCode, token).run()
             }
-        } catch (e: Exception) {
-            restoreData()
-        }
-        val selectedLiftimCode =
-                prefs.getLong(context.getString(R.string.p_default_liftim_code), -1)
-        if (db.selectFromLiftimCodeInfo().liftimCodeEq(selectedLiftimCode).count() <= 0) {
-            val code = db.selectFromLiftimCodeInfo().firstOrNull()?.liftimCode ?: -1
-            prefs.edit()
-                    .putLong(context.getString(R.string.p_default_liftim_code), code)
-                    .apply()
+            val selectedLiftimCode =
+                    prefs.getLong(context.getString(R.string.p_default_liftim_code), -1)
+            if (db.selectFromLiftimCodeInfo().liftimCodeEq(selectedLiftimCode).count() <= 0) {
+                val code = db.selectFromLiftimCodeInfo().firstOrNull()?.liftimCode ?: -1
+                prefs.edit()
+                        .putLong(context.getString(R.string.p_default_liftim_code), code)
+                        .apply()
+            }
+            db.deleteFromColorPaletteV2()
+            ColorPaletteLoader().run()
+            db.selectFromSubject().forEach {
+                println("${it.liftimCode} ${it.subject} ${it.color}")
+            }
         }
         FunctionRestrictionLoader(context).run()
         prefs.edit().putString(context.getString(R.string.p_last_user_info_synced),
                 DateTime.now().toString()).apply()
-    }
-
-
-    private var weeklyDataBackup: List<WeeklyItem>? = null
-    private var subjectDataBackup: List<Subject>? = null
-
-    private fun backupAndDeleteData() {
-        val db = LiftimContext.getOrmaDatabase()
-        weeklyDataBackup = db.selectFromWeeklyItem().toList()
-        subjectDataBackup = db.selectFromSubject().toList()
-        db.deleteFromWeeklyItem().execute()
-        db.deleteFromSubject().execute()
-    }
-
-    private fun restoreData() {
-        val db = LiftimContext.getOrmaDatabase()
-        db.deleteFromWeeklyItem().execute()
-        db.deleteFromSubject().execute()
-        weeklyDataBackup?.forEach {
-            db.insertIntoWeeklyItem(it)
-        }
-        subjectDataBackup?.forEach {
-            db.insertIntoSubject(it)
-        }
     }
 }

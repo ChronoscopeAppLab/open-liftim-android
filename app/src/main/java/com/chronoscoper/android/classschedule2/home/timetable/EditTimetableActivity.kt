@@ -15,12 +15,14 @@
  */
 package com.chronoscoper.android.classschedule2.home.timetable
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.DividerItemDecoration
@@ -29,13 +31,13 @@ import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -63,11 +65,15 @@ import org.parceler.Parcels
 
 class EditTimetableActivity : BaseActivity() {
     companion object {
+        private const val TAG = "EditTimetableActivity"
         private const val SOURCE_TIMETABLE = "SOURCE_TIMETABLE"
         fun openWithSourceTimetable(context: Context, source: Info?, options: Bundle? = null) {
             context.startActivity(Intent(context, EditTimetableActivity::class.java)
                     .putExtra(SOURCE_TIMETABLE, Parcels.wrap(source)), options)
         }
+
+        private const val RC_PICK_SUBJECT = 100
+        private const val EXTRA_INDEX = "INDEX"
     }
 
     private val toolbar by bindView<Toolbar>(R.id.toolbar)
@@ -136,7 +142,36 @@ class EditTimetableActivity : BaseActivity() {
         classList.addItemDecoration(
                 DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         fab.setOnClickListener {
-            ClassEditorDialog().show(supportFragmentManager, null)
+            startActivityForResult(Intent(this, SubjectPickerActivity::class.java),
+                    RC_PICK_SUBJECT)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK || data == null) return
+        if (requestCode == RC_PICK_SUBJECT) {
+            val index = data.getIntExtra(EXTRA_INDEX, -1)
+            val subject = data.getStringExtra(SubjectPickerActivity.EXTRA_SUBJECT)
+            val detail = data.getStringExtra(SubjectPickerActivity.EXTRA_DETAIL)
+            val adapter = classList.adapter as ClassAdapter
+            if (index < 0) {
+                adapter.data.add(InfoRemoteModel.SubjectElement().apply {
+                    this.subject = subject
+                    this.detail = detail
+                })
+                adapter.notifyItemInserted(adapter.data.size - 1)
+            } else {
+                try {
+                    adapter.data[index].apply {
+                        this.subject = subject
+                        this.detail = detail
+                    }
+                    adapter.notifyItemChanged(index)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to alter data on specified position", e)
+                }
+            }
         }
     }
 
@@ -322,64 +357,26 @@ class EditTimetableActivity : BaseActivity() {
         }
 
         private fun showClassEditorDialog(index: Int, subject: String, detail: String) {
-            ClassEditorDialog.newInstance(index, subject, detail)
-                    .show(activity.supportFragmentManager, null)
+            val intent = Intent(activity, SubjectPickerActivity::class.java)
+            intent.apply {
+                putExtra(EXTRA_INDEX, index)
+                putExtra(SubjectPickerActivity.EXTRA_SUBJECT, subject)
+                putExtra(SubjectPickerActivity.EXTRA_DETAIL, detail)
+            }
+            activity.startActivityForResult(intent, RC_PICK_SUBJECT)
         }
     }
 
-    class ClassEditorDialog : DialogFragment() {
-        companion object {
-            private const val INDEX = "index"
-            private const val SUBJECT = "subject"
-            private const val DETAIL = "detail"
-            fun newInstance(index: Int, subject: String, detail: String): ClassEditorDialog {
-                return ClassEditorDialog().apply {
-                    isCancelable = false
-                    arguments = Bundle().apply {
-                        putInt(INDEX, index)
-                        putString(SUBJECT, subject)
-                        putString(DETAIL, detail)
-                    }
-                }
-            }
-        }
+    override fun onResume() {
+        super.onResume()
+        Handler().postDelayed({
+            fab.show()
+        }, 350)
+    }
 
-        override fun onCreateView(
-                inflater: LayoutInflater,
-                container: ViewGroup?,
-                savedInstanceState: Bundle?): View? =
-                inflater.inflate(R.layout.fragment_class_editor, container, false)
-
-        private val subjectInput by bindView<EditText>(R.id.subject)
-        private val detailInput by bindView<EditText>(R.id.detail)
-        private val okButton by bindView<Button>(R.id.ok)
-        private val cancelButton by bindView<Button>(R.id.cancel)
-
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
-            subjectInput.setText(arguments?.getString(SUBJECT) ?: "")
-            detailInput.setText(arguments?.getString(DETAIL) ?: "")
-            okButton.setOnClickListener {
-                val adapter = ((activity as? EditTimetableActivity ?: return@setOnClickListener)
-                        .classList.adapter as? ClassAdapter ?: return@setOnClickListener)
-                val element = InfoRemoteModel.SubjectElement().apply {
-                    subject = subjectInput.text.toString()
-                    detail = detailInput.text.toString()
-                }
-                val position = arguments?.getInt(INDEX, -1) ?: -1
-                if (position < 0) {
-                    adapter.data.add(element)
-                    adapter.notifyItemInserted(adapter.itemCount - 1)
-                } else {
-                    adapter.data[position] = element
-                    adapter.notifyItemChanged(position)
-                }
-                dismiss()
-            }
-            cancelButton.setOnClickListener {
-                dismiss()
-            }
-        }
+    override fun onPause() {
+        super.onPause()
+        fab.hide()
     }
 
     class ChangeMinIndexDialog : DialogFragment() {

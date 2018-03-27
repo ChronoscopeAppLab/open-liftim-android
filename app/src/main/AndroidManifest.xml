@@ -124,6 +124,10 @@
         <activity
             android:name=".setting.manager.ImageManipulationActivity"
             android:label="@string/clip_image" />
+        <activity
+            android:name=".home.timetable.SubjectPickerActivity"
+            android:label="@string/edit"
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

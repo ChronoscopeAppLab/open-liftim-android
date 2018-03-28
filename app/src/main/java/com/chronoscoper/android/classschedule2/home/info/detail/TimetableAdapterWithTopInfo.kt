@@ -88,7 +88,7 @@ class TimetableAdapterWithTopInfo(context: Context,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder =
             if (viewType == R.layout.timetable_item) {
                 RecyclerViewHolder(inflater.inflate(
-                        R.layout.timetable_item, parent, false))
+                        R.layout.timetable_item_in_detail, parent, false))
             } else {
                 RecyclerViewHolder(inflater.inflate(
                         R.layout.timetable_info_header, parent, false))

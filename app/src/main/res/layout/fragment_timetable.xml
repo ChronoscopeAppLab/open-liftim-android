@@ -55,12 +55,12 @@
 
                 <TextView
                     android:id="@+id/info"
-                    android:shadowColor="#cc000000"
-                    android:shadowRadius="5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:padding="5dp"
+                    android:shadowColor="#cc000000"
+                    android:shadowRadius="5"
                     android:textColor="#deffffff"
                     android:visibility="gone"
                     tools:text="Info" />
@@ -70,7 +70,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/white_gradient" />
+                android:background="@drawable/black_gradient" />
         </LinearLayout>
     </FrameLayout>
 

@@ -147,13 +147,8 @@ class TimetableFragment : Fragment() {
         timetableList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 val scrolledY = recyclerView?.computeVerticalScrollOffset() ?: return
-                header.scrollY = scrolledY / 20
-                background.alpha =
-                        if (scrolledY > 400) {
-                            100f / 400f
-                        } else {
-                            (500 - scrolledY).toFloat() / 500f
-                        }
+                header.scrollY = scrolledY / 10
+                header.alpha = 1f - (scrolledY / 150f)
             }
         })
         if (timetable != null) {

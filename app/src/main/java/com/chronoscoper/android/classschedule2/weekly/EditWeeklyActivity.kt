@@ -31,7 +31,6 @@ import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -118,9 +117,7 @@ class EditWeeklyActivity : BaseActivity() {
                     LiftimContext.getOrmaDatabase().prepareInsertIntoWeeklyItem()
                             .executeAll(weeklyItems.slice(0..6))
                     RegisterWeeklyService.start(this, LiftimContext.getGson()
-                            .toJson(element).apply {
-                                Log.d("AAAAAA", this)
-                            })
+                            .toJson(element))
                     EventBus.getDefault()
                             .post(EventMessage(WeeklyFragment.EVENT_WEEKLY_TIMETABLE_UPDATED))
                 }
@@ -297,7 +294,7 @@ class EditWeeklyActivity : BaseActivity() {
                 }
             }
 
-            override fun getItemCount(): Int = subjects.size
+            override fun getItemCount(): Int = data.subjects.size
 
             private inner class DragViewHolder(itemView: View) : RecyclerViewHolder(itemView) {
                 init {

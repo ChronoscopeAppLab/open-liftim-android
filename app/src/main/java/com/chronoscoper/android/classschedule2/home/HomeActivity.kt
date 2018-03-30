@@ -34,7 +34,8 @@ import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
@@ -48,9 +49,9 @@ import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
 import com.chronoscoper.android.classschedule2.transition.FabTransformTransition
 import com.chronoscoper.android.classschedule2.util.EventMessage
-import com.chronoscoper.android.classschedule2.util.showToast
 import com.chronoscoper.android.classschedule2.weekly.EditWeeklyActivity
 import com.chronoscoper.android.classschedule2.weekly.WeeklyFragment
+import com.plusassign.odd.OddView
 import kotterknife.bindView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -67,6 +68,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private val drawerMenu by bindView<NavigationView>(R.id.drawer_menu)
     private val fab by bindView<FloatingActionButton>(R.id.add)
     private val toolbar by bindView<Toolbar>(R.id.toolbar)
+    private val eggOverlay by bindView<ViewGroup>(R.id.egg_overlay)
 
     private var fabAction: Runnable? = null
 
@@ -115,6 +117,8 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
+    private var oddView: OddView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -122,6 +126,19 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         if (savedInstanceState == null) {
             replaceFragment(HomeFragment())
+            // green character spawns 10%
+            if (Math.random() < 0.1) {
+                oddView = OddView(this)
+                val dp = resources.displayMetrics.density
+                val size = (250 * dp).toInt()
+                oddView!!.layoutParams = FrameLayout.LayoutParams(size, size)
+                eggOverlay.addView(oddView)
+                oddView!!.visibility = View.INVISIBLE
+                Handler().postDelayed({
+                    oddView!!.visibility = View.VISIBLE
+                    oddView!!.showFace()
+                }, 2000)
+            }
         }
 
         drawerMenu.setCheckedItem(R.id.drawer_timetable)
@@ -143,7 +160,6 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         fab.setOnClickListener {
             fabAction?.run()
         }
-        showLiftimCodeName()
         showSyncStatusIfNeeded()
 
         // Default status bar icon color is set to white because we want to change drawer icon color
@@ -181,7 +197,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val status = prefs.getInt(getString(R.string.p_last_sync_status), 0)
         val message: String? =
                 when (status) {
-                    -1->getString(R.string.no_connection)
+                    -1 -> getString(R.string.no_connection)
                     400 -> getString(R.string.support_finished)
                     503 -> getString(R.string.server_maintenance)
                     in 500 until 600 -> getString(R.string.server_error)
@@ -202,22 +218,6 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     fun onEvent(event: EventMessage) {
         if (event.type == EVENT_OPEN_TIMETABLE_EDITOR) {
             editTimetableFabAction.run()
-        }
-    }
-
-    private fun showLiftimCodeName() {
-        if (!hasWindowFocus()) return
-        Handler().post {
-            val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this@HomeActivity)
-            val defaultLiftimCode = sharedPrefs.getLong(getString(R.string.p_default_liftim_code), -1)
-            if (defaultLiftimCode < 0) {
-                showToast(this, getString(R.string.no_joined_class), Toast.LENGTH_SHORT)
-            } else {
-                val liftimCodeInfo = LiftimContext.getOrmaDatabase().selectFromLiftimCodeInfo()
-                        .liftimCodeEq(defaultLiftimCode)
-                        .firstOrNull() ?: return@post
-                showToast(this, liftimCodeInfo.name, Toast.LENGTH_LONG)
-            }
         }
     }
 

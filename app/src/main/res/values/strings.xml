@@ -80,8 +80,8 @@
     <string name="importance">Importance</string>
     <string name="form_error_info">Please specify title</string>
     <string name="liftim_acronym" translatable="false">Liftim is functional timetable manager</string>
-    <string name="open_source_statement" translatable="false">"We ❤ Open source.\nWe built this app with a lot of awesome open source libraries and source code for this app is available on GitHub. "</string>
-    <string name="open_project_page" translatable="false">Open project page</string>
+    <string name="open_source_statement">Liftim is developed under open source license and the source code is available on GitHub.\nIf you want to contribute to Liftim, please send us pull requests or paches!</string>
+    <string name="open_project_page">Open project page</string>
     <string name="login">Login</string>
     <string name="login_error_description">Failed to login. Please certificate again.</string>
     <string name="link_url">Link URL</string>

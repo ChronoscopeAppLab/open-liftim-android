@@ -18,12 +18,8 @@ package com.chronoscoper.android.classschedule2
 import android.app.Application
 import android.os.Build
 import android.preference.PreferenceManager
-import com.chronoscoper.android.classschedule2.setting.SettingsActivity
-import com.chronoscoper.android.classschedule2.setup.SetupActivity
-import com.chronoscoper.android.classschedule2.setup.TokenCallbackActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.NotificationChannel
-import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import com.squareup.leakcanary.LeakCanary
 
 class LiftimApplication : Application() {
@@ -54,11 +50,6 @@ class LiftimApplication : Application() {
             sharedPrefs.edit()
                     .putInt(getString(R.string.p_last_used_version), BuildConfig.VERSION_CODE)
                     .apply()
-            if (sharedPrefs.getBoolean(getString(R.string.p_setup_completed), false)) {
-                setComponentEnabled(this, true, SettingsActivity::class.java)
-                setComponentEnabled(this, false,
-                        SetupActivity::class.java, TokenCallbackActivity::class.java)
-            }
         }
     }
 

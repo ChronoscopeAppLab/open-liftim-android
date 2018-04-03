@@ -19,9 +19,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
-import com.chronoscoper.android.classschedule2.setup.TokenCallbackActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
-import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import kotterknife.bindView
 
 class ReLoginActivity : BaseActivity() {
@@ -36,6 +34,5 @@ class ReLoginActivity : BaseActivity() {
             startActivity(intent)
             finish()
         }
-        setComponentEnabled(this, true, TokenCallbackActivity::class.java)
     }
 }

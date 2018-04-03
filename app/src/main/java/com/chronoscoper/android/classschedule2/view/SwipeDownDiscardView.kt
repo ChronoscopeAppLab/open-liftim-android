@@ -22,7 +22,6 @@ import android.graphics.Canvas
 import android.graphics.Path
 import android.support.animation.DynamicAnimation
 import android.support.animation.SpringAnimation
-import android.support.animation.SpringForce
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.util.AttributeSet
 import android.util.Log

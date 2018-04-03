@@ -22,7 +22,6 @@ import android.view.View
 import com.chronoscoper.android.classschedule2.home.HomeActivity
 import com.chronoscoper.android.classschedule2.service.TokenLoadService
 import com.chronoscoper.android.classschedule2.setting.ManageLiftimCodeActivity
-import com.chronoscoper.android.classschedule2.setup.IntroductionActivity
 import com.chronoscoper.android.classschedule2.setup.SetupActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.FullSyncTask
@@ -74,6 +73,8 @@ class LauncherActivity : BaseActivity() {
         if (setupCompleted) {
             secondLaunchTime()
         } else {
+            //TODO: enable if you needn't show server address settings
+            //startActivity(Intent(this, IntroductionActivity::class.java))
             startActivity(Intent(this, SetupActivity::class.java))
             finish()
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

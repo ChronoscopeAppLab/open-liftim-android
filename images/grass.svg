@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!--
+   Copyright 2018 Chronoscope
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 744.09448819 1052.3622047"
+   height="297mm"
+   width="210mm">
+  <defs
+     id="defs4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1">
+    <path
+       id="grass_1"
+       d="m 52.527932,482.63617 662.660068,0 -16.16244,-64.64976 -18.18274,22.22335 -6.06092,-90.91373 -34.34519,103.03556 -2.0203,-34.34518 -28.28427,28.28427 -24.24366,-92.93404 -12.12183,92.93404 -4.04061,-40.4061 -14.14214,46.46701 -14.14214,-109.09647 -16.16244,113.13708 -12.12183,-56.56854 -10.10152,46.46702 -22.22336,-105.05587 -24.24366,109.09648 -6.06091,-60.60915 -12.12183,66.67006 -8.08123,-70.71067 -28.28427,62.62945 -10.10152,-78.7919 -20.20305,82.83251 -18.18275,-38.38579 -4.04061,44.44671 -14.14213,-103.03556 -16.16244,96.97464 -14.14214,-48.48732 -6.06092,52.52793 -10.10152,-103.03556 -16.16244,90.91373 -6.06092,-74.75129 -24.24366,76.7716 -8.08122,-40.4061 -6.06091,38.38579 -8.08122,-68.69037 -22.22336,92.93403 -40.4061,-94.95434 2.0203,82.83251 -24.24366,-54.54823 -4.04061,52.52793 -18.18274,-60.60915 -10.10153,64.64976 -2.0203,-46.46702 -14.142141,54.54824 -4.04061,-107.07617 -10.101526,103.03556 -18.182746,-72.73098 z"
+       style="fill:#308326;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="grass_2"
+       d="m 34.345187,793.76315 662.660073,0 -6.06092,-78.7919 -34.34519,50.50763 L 634.3758,662.44332 610.13214,753.35705 581.84787,670.52454 561.64481,771.5398 537.40115,700.82912 501.03566,767.49919 490.93414,611.9357 444.46712,761.43827 426.28437,684.66668 410.12193,767.49919 387.89858,652.3418 365.67522,769.51949 347.49248,712.95095 343.45187,775.58041 315.16759,648.30119 292.94424,763.45858 264.65997,670.52454 230.31478,757.39766 218.19295,682.64637 208.09142,751.33675 171.72593,638.19966 147.48227,769.51949 137.38075,712.95095 115.15739,767.49919 96.974644,674.56515 64.649763,763.45858 46.467017,674.56515 Z"
+       style="fill:#62b158;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
+</svg>

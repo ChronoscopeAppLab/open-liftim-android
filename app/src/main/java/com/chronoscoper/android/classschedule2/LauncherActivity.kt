@@ -22,14 +22,13 @@ import android.view.View
 import com.chronoscoper.android.classschedule2.home.HomeActivity
 import com.chronoscoper.android.classschedule2.service.TokenLoadService
 import com.chronoscoper.android.classschedule2.setting.ManageLiftimCodeActivity
+import com.chronoscoper.android.classschedule2.setup.IntroductionActivity
 import com.chronoscoper.android.classschedule2.setup.SetupActivity
-import com.chronoscoper.android.classschedule2.setup.TokenCallbackActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.FullSyncTask
 import com.chronoscoper.android.classschedule2.task.InvalidTokenException
 import com.chronoscoper.android.classschedule2.task.enforceValid
 import com.chronoscoper.android.classschedule2.util.optimizeInfo
-import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -75,8 +74,6 @@ class LauncherActivity : BaseActivity() {
         if (setupCompleted) {
             secondLaunchTime()
         } else {
-            setComponentEnabled(this, true,
-                    SetupActivity::class.java, TokenCallbackActivity::class.java)
             startActivity(Intent(this, SetupActivity::class.java))
             finish()
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

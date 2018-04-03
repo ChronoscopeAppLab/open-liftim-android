@@ -79,7 +79,7 @@
     <string name="allow_hide_info">クラスメイトが非表示にすることを許可</string>
     <string name="importance">重要度</string>
     <string name="form_error_info">タイトルを入力してください</string>
-    <string name="login">ログイン</string>
+    <string name="login">ログインもしくは登録</string>
     <string name="login_error_description">ログインに失敗しました。もう一度認証してください。</string>
     <string name="link_url">リンクのURL</string>
     <string name="open_link">リンクを開く</string>

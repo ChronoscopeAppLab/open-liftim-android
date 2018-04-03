@@ -25,4 +25,11 @@
         <item>https</item>
         <item>http</item>
     </array>
+
+    <array name="intro_background">
+        <item>#4377df</item>
+        <item>#4c9330</item>
+        <!-- dummy item to avoid ArrayIndexOutOfBoundsException -->
+        <item>#000000</item>
+    </array>
 </resources>

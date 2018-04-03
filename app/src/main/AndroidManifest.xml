@@ -128,6 +128,9 @@
             android:name=".home.timetable.SubjectPickerActivity"
             android:label="@string/edit"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".setup.IntroductionActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!--
+   Copyright 2018 Chronoscope
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 12.7 12.7"
+   height="48"
+   width="48">
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient4638">
+      <stop
+         id="stop4634"
+         offset="0"
+         style="stop-color:#ddffbc;stop-opacity:1" />
+      <stop
+         id="stop4636"
+         offset="1"
+         style="stop-color:#91bc5e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       gradientTransform="matrix(1.0047538,0,0,1.0047538,-0.0094998,-0.72345774)"
+       gradientUnits="userSpaceOnUse"
+       y2="296.93616"
+       x2="9.47616"
+       y1="284.6283"
+       x1="3.3129404"
+       id="linearGradient4640"
+       xlink:href="#linearGradient4638" />
+  </defs>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-284.3)"
+     id="layer1">
+    <circle
+       r="0"
+       cy="291.16815"
+       cx="6.3086362"
+       id="path4485"
+       style="opacity:1;fill:url(#linearGradient4640);fill-opacity:1;stroke:none;stroke-width:1.32810998;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <ellipse
+       ry="6.2455945"
+       rx="6.3479805"
+       cy="290.65976"
+       cx="6.3479805"
+       id="path4485-5"
+       style="opacity:1;fill:#b9e18a;fill-opacity:1;stroke:none;stroke-width:1.30999994;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <rect
+       ry="0.28487676"
+       y="287.36774"
+       x="4.836235"
+       height="5.7119284"
+       width="5.1510558"
+       id="rect4493"
+       style="opacity:1;fill:#d3ffa0;fill-opacity:1;stroke:none;stroke-width:1.12890565;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <rect
+       ry="0.3081193"
+       y="287.36627"
+       x="2.4972823"
+       height="7.554882"
+       width="1.4594657"
+       id="rect4493-4"
+       style="opacity:1;fill:#d3ffa0;fill-opacity:1;stroke:none;stroke-width:0.69108111;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <rect
+       ry="0.25565585"
+       y="293.8566"
+       x="2.4994287"
+       height="1.3392749"
+       width="7.4840546"
+       id="rect4493-2"
+       style="opacity:1;fill:#d3ffa0;fill-opacity:1;stroke:none;stroke-width:0.65890306;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       id="path4487"
+       d="m 9.4740616,293.67101 c 0,1.55141 -1.4243785,2.8091 -3.1814274,2.8091 -1.7570588,0 -3.1814328,-1.25769 -3.1814328,-2.8091 0,-1.55146 3.1814328,-6.66749 3.1814328,-6.66749 0,0 3.1814274,5.11603 3.1814274,6.66749 z"
+       style="opacity:1;fill:#3c873c;fill-opacity:1;stroke:none;stroke-width:5.57196474;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+  </g>
+</svg>

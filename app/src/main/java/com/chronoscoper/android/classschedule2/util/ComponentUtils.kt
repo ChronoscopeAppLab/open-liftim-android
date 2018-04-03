@@ -15,29 +15,10 @@
  */
 package com.chronoscoper.android.classschedule2.util
 
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import com.chronoscoper.android.classschedule2.BaseActivity
 import org.greenrobot.eventbus.EventBus
-
-/**
- * Sets availability of specified component.
- */
-fun setComponentEnabled(context: Context, enable: Boolean, vararg components: Class<*>) {
-    val pm = context.packageManager
-    val valueToSet =
-            if (enable) {
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-            } else {
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-            }
-    components.forEach {
-        val componentName = ComponentName(context, it)
-        pm.setComponentEnabledSetting(componentName, valueToSet, PackageManager.DONT_KILL_APP)
-    }
-}
 
 /**
  * Opens Activity as a new task and clear old task

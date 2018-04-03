@@ -25,11 +25,9 @@ import android.widget.TextView
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LauncherActivity
 import com.chronoscoper.android.classschedule2.R
-import com.chronoscoper.android.classschedule2.setup.SetupActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.FullSyncTask
 import com.chronoscoper.android.classschedule2.util.openInNewTask
-import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -79,8 +77,6 @@ class ManageAccountActivity : BaseActivity() {
                     .setPositiveButton(R.string.logout, { _, _ ->
                         removeAllData()
                         openInNewTask(this, LauncherActivity::class.java)
-                        setComponentEnabled(this, true, SetupActivity::class.java)
-                        setComponentEnabled(this, false, SettingsActivity::class.java)
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .show()

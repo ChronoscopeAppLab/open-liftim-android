@@ -19,8 +19,6 @@ import android.content.Context
 import android.preference.PreferenceManager
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
-import com.chronoscoper.android.classschedule2.sync.Subject
-import com.chronoscoper.android.classschedule2.sync.WeeklyItem
 import org.joda.time.DateTime
 import java.io.IOException
 

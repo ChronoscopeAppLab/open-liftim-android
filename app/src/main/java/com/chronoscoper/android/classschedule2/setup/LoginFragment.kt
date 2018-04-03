@@ -25,7 +25,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
-import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import kotterknife.bindView
 
 class LoginFragment : BaseSetupFragment() {
@@ -48,7 +47,6 @@ class LoginFragment : BaseSetupFragment() {
             val intent = Intent(Intent.ACTION_VIEW,
                     Uri.parse(LiftimContext.getApiUrl("auth")))
             startActivity(intent)
-            setComponentEnabled(context!!, true, TokenCallbackActivity::class.java)
             activity!!.finish()
         }
     }

@@ -28,7 +28,6 @@ import android.widget.Button
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
-import com.chronoscoper.android.classschedule2.util.setComponentEnabled
 import com.prolificinteractive.parallaxpager.ParallaxContainer
 import com.prolificinteractive.parallaxpager.ParallaxContextWrapper
 import kotterknife.bindView
@@ -86,6 +85,7 @@ class IntroductionActivity : BaseActivity() {
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onLoginButtonClicked(view: View) {
         PreferenceManager.getDefaultSharedPreferences(this).edit()
                 .putBoolean(getString(R.string.p_setup_completed), true)
@@ -93,7 +93,6 @@ class IntroductionActivity : BaseActivity() {
         val intent = Intent(Intent.ACTION_VIEW,
                 Uri.parse(LiftimContext.getApiUrl("auth")))
         startActivity(intent)
-        setComponentEnabled(this, true, TokenCallbackActivity::class.java)
         finish()
     }
 }

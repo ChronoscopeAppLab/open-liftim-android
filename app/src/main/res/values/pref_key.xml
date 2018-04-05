@@ -14,7 +14,6 @@
 -->
 
 <resources>
-    <string name="p_setup_completed" translatable="false">setup_completed</string>
     <string name="p_sync_url" translatable="false">sync_url</string>
     <string name="p_default_liftim_code" translatable="false">default_liftim_code</string>
     <string name="p_account_token" translatable="false">account_token</string>

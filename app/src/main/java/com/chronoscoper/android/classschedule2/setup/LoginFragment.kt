@@ -34,16 +34,9 @@ class LoginFragment : BaseSetupFragment() {
 
     private val loginButton by bindView<Button>(R.id.login)
 
-    private val sharedPrefs by lazy {
-        PreferenceManager.getDefaultSharedPreferences(context)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         loginButton.setOnClickListener {
-            sharedPrefs.edit()
-                    .putBoolean(getString(R.string.p_setup_completed), true)
-                    .apply()
             val intent = Intent(Intent.ACTION_VIEW,
                     Uri.parse(LiftimContext.getApiUrl("auth")))
             startActivity(intent)

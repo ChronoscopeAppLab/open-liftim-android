@@ -69,7 +69,8 @@ class LauncherActivity : BaseActivity() {
                 }
                 .start()
 
-        val setupCompleted = prefs.getBoolean(getString(R.string.p_setup_completed), false)
+        val setupCompleted = prefs.getString(getString(R.string.p_account_token),
+                null) != null
         if (setupCompleted) {
             secondLaunchTime()
         } else {

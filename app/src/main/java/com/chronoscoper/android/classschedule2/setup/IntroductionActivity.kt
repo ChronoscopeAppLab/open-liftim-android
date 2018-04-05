@@ -21,7 +21,6 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.support.v4.view.ViewPager
 import android.view.View
 import android.widget.Button
@@ -50,7 +49,8 @@ class IntroductionActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_introduction)
 
-        val pageIds = intArrayOf(R.layout.introduction_page_0, R.layout.introduction_page_1)
+        val pageIds = intArrayOf(R.layout.introduction_page_0, R.layout.introduction_page_1,
+                R.layout.introduction_page_2, R.layout.introduction_page_3)
 
         parallaxContainer.setupChildren(layoutInflater, *pageIds)
         val colors = resources.getIntArray(R.array.intro_background)

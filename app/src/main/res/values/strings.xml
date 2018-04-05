@@ -143,4 +143,6 @@
     <string name="get_started">Let\'s get started to set up</string>
     <string name="next">Next</string>
     <string name="skip">Skip</string>
+    <string name="introduction_wherever">Check or Share timetable no matter where you are</string>
+    <string name="introduction_no_forget">There\'s no concern to forget. You can take note in Liftim</string>
 </resources>

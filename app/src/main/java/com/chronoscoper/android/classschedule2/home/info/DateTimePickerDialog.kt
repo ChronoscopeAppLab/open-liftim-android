@@ -159,6 +159,7 @@ class DateTimePickerDialog : DialogFragment() {
                             this@DateTimePickerDialog.date = picked.toString("yyyy/MM/dd")
                             dateAdapterEntry[0] = picked.toString(DateTimeFormat.mediumDate())
                             dateAdapter.notifyDataSetChanged()
+                            timeSpinner.visibility = View.VISIBLE
                         }, oldDate.year, oldDate.monthOfYear - 1, oldDate.dayOfMonth)
                                 .show()
                     }

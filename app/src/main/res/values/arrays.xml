@@ -28,6 +28,8 @@
 
     <array name="intro_background">
         <item>#4377df</item>
+        <item>#000458</item>
+        <item>#dcd800</item>
         <item>#4c9330</item>
         <!-- dummy item to avoid ArrayIndexOutOfBoundsException -->
         <item>#000000</item>

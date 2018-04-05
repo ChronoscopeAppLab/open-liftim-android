@@ -126,6 +126,22 @@
     <string name="tomorrow">明日</string>
     <string name="unset">選択を取消す</string>
     <string name="add_link_url">リンクのURLを設定</string>
-    <string name="open_source_statement">Liftimはオープンソースで開発されており、GitHubからソースコードをいつでも入手可能です。\nLiftimの開発に貢献したい方はプルリクエストやパッチを是非お寄せください！</string>
+    <string name="open_source_statement">Android版Liftimはオープンソースで開発されており、GitHubからソースコードをいつでも入手可能です。\nLiftimの開発に貢献したい方はプルリクエストやパッチを是非お寄せください！</string>
     <string name="open_project_page">プロジェクトのページを開く</string>
+    <string name="register_button">今すぐ時間割を登録！</string>
+    <string name="function_restriction_only_manager">このクラスの管理者のみが実行できます。クラスの管理者に管理の特権を付与するように頼んでみてください。</string>
+    <string name="update_account_info">アカウント情報を更新</string>
+    <string name="support_finished">このバージョンのLiftimのサポートは終了しました。</string>
+    <string name="server_error">現在サーバーで問題が発生しています。</string>
+    <string name="server_maintenance">サーバーはメンテナンス中です。しばらくお待ちください。</string>
+    <string name="liftim_code_exit_failed">クラスは削除されていません</string>
+    <string name="no_connection">サーバーに接続できません。</string>
+    <string name="activity_not_found">ご利用の端末ではサポートされていません。</string>
+    <string name="clip_image">画像を切り抜き</string>
+    <string name="welcome">Liftimへようこそ</string>
+    <string name="get_started">さあ、セットアップを始めましょう</string>
+    <string name="next">次へ</string>
+    <string name="skip">スキップ</string>
+    <string name="introduction_wherever">どこにいても時間割をチェック、シェア。</string>
+    <string name="introduction_no_forget">忘れる心配はありません。Liftimにメモできます。</string>
 </resources>

@@ -58,10 +58,10 @@ class UrlPickerDialog : DialogFragment() {
         if (oldUrl != null) {
             if (oldUrl.startsWith("https://")) {
                 scheme.setSelection(0)
-                url.setText(oldUrl.substring(7)) // since "https://" consists with 8 chars
+                url.setText(oldUrl.substring(8)) // since "https://" consists with 8 chars
             } else if (oldUrl.startsWith("http://")) {
                 scheme.setSelection(1)
-                url.setText(oldUrl.substring(6)) // since "http://" consists with 7 chars
+                url.setText(oldUrl.substring(7)) // since "http://" consists with 7 chars
             } else {
                 Log.e(TAG, "Malformed url $oldUrl; " +
                         "Regard as nothing was selected previously.")
@@ -82,7 +82,7 @@ class UrlPickerDialog : DialogFragment() {
                         } else {
                             "https"
                         }
-                EventBus.getDefault().post(EventMessage(TAG, "$scheme://$url"))
+                EventBus.getDefault().post(EventMessage(EVENT_URL_PICKED, "$scheme://$url"))
             }
             dismiss()
         }

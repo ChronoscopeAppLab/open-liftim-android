@@ -87,9 +87,6 @@ class IntroductionActivity : BaseActivity() {
 
     @Suppress("UNUSED_PARAMETER")
     fun onLoginButtonClicked(view: View) {
-        PreferenceManager.getDefaultSharedPreferences(this).edit()
-                .putBoolean(getString(R.string.p_setup_completed), true)
-                .apply()
         val intent = Intent(Intent.ACTION_VIEW,
                 Uri.parse(LiftimContext.getApiUrl("auth")))
         startActivity(intent)

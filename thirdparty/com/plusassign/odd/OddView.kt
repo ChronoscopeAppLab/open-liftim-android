@@ -30,7 +30,9 @@ import android.view.View
 import android.view.ViewPropertyAnimator
 
 /**
- * Oh my goodness. What a odd character he is! Ah, he's staring at me... Who on earth is him?
+ * Oh my goodness! What an odd character he is! Ah, he's staring at me... Who on earth is him?
+ *
+ * OddView from https://gist.github.com/KoFuk/72ce736517ea0d07ed21f5458b92b27c
  */
 class OddView(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
     : View(context, attrs, defStyleAttr) {
@@ -149,6 +151,7 @@ class OddView(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
      * Provides action that show face from parent's bottom and look around.
      */
     fun showFace() {
+        ensureVisible()
         transformEye(CoordinateHolder(wf * 25 / 44, hf * 2 / 11),
                 CoordinateHolder(wf * 17 / 44, hf * 2 / 11))
         transformArm(CoordinateHolder(wf * 9 / 11, hf * 6 / 11),
@@ -174,7 +177,9 @@ class OddView(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
                     eyeAnimator!!.addListener(object : AnimatorListenerAdapter() {
                         override fun onAnimationEnd(animation: Animator?) {
                             if (!isTouchMoved) {
-                                animate().translationY(parent.height.toFloat()).setDuration(100).start()
+                                animate().translationY(parent.height.toFloat()).setDuration(100).withEndAction {
+                                    ensureGone()
+                                }.start()
                             }
                         }
                     })
@@ -190,8 +195,11 @@ class OddView(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
     fun jump() {
         initializePose()
         invalidate()
+        ensureVisible()
         animate().translationY((parent as View).height.toFloat() / 2).withEndAction {
-            animate().translationY((parent as View).height.toFloat()).start()
+            animate().translationY((parent as View).height.toFloat()).withEndAction {
+                ensureGone()
+            }.start()
         }.start()
     }
 
@@ -256,6 +264,7 @@ class OddView(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
             moveX = translationX
             moveY = translationY
         } else if (event.action == MotionEvent.ACTION_MOVE) {
+            animate().cancel()
             moveX += event.x - lastX
             moveY += event.y - lastY
             translationX = moveX
@@ -275,7 +284,9 @@ class OddView(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
                 animate().translationY((parent as View).height.toFloat()).setDuration(100).withEndAction {
                     // let's look out once again
                     animate().translationY((parent as View).height - height.toFloat() / 5).withEndAction {
-                        animate().translationY((parent as View).height.toFloat()).setStartDelay(500).start()
+                        animate().translationY((parent as View).height.toFloat()).setStartDelay(500).withEndAction {
+                            ensureGone()
+                        }.start()
                     }.setStartDelay(800).start()
                 }.start()
             }
@@ -286,6 +297,7 @@ class OddView(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
     private val struggleAnimators = mutableListOf<Animator>()
 
     private fun struggle() {
+        ensureVisible()
         transformEye(CoordinateHolder(wf * 9 / 22, hf * 2 / 11),
                 CoordinateHolder(wf * 13 / 22, hf * 2 / 11))
         val armR = ValueAnimator.ofFloat(wf * 10 / 11, wf * 7 / 11).apply {
@@ -337,4 +349,12 @@ class OddView(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
     }
 
     private data class CoordinateHolder(val x: Float, val y: Float)
+
+    private fun ensureVisible() {
+        visibility = VISIBLE
+    }
+
+    private fun ensureGone() {
+        visibility = GONE
+    }
 }

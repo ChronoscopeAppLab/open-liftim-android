@@ -45,5 +45,5 @@ please ping me and implement!
 
 ## License
 
-This project is licensed under the Apache License Version 2.
+All files but noted are licensed under the Apache License Version 2.
 Please see [LICENSE](LICENSE) file for more details.

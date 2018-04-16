@@ -144,4 +144,5 @@
     <string name="skip">スキップ</string>
     <string name="introduction_wherever">どこにいても時間割をチェック、シェア。</string>
     <string name="introduction_no_forget">忘れる心配はありません。Liftimにメモできます。</string>
+    <string name="import_weekly">一週間の時間割からインポート</string>
 </resources>

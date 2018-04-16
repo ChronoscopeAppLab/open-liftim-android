@@ -32,6 +32,7 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
+import io.plaidapp.util.AnimUtils
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class FabTransformTransition : Transition() {
@@ -93,7 +94,7 @@ class FabTransformTransition : Transition() {
             endView.translationY = translateY
         }
         val fabColor = ColorDrawable(color)
-        fabColor.setBounds(sceneRoot.left,sceneRoot.top,sceneRoot.right,sceneRoot.bottom)
+        fabColor.setBounds(sceneRoot.left, sceneRoot.top, sceneRoot.right, sceneRoot.bottom)
         fabColor.alpha = if (toFab) {
             0
         } else {
@@ -155,7 +156,7 @@ class FabTransformTransition : Transition() {
                 endView.overlay.clear()
             }
         })
-        return animatorSet
+        return AnimUtils.NoPauseAnimator(animatorSet)
     }
 
     private fun captureValues(transitionValues: TransitionValues) {

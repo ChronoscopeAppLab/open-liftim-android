@@ -183,6 +183,7 @@ class EditTimetableActivity : BaseActivity() {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({
                                 (classList.adapter as? ClassAdapter)?.let { adapter ->
+                                    adapter.data.clear()
                                     it.subjects.forEachIndexed { index, subject ->
                                         adapter.data.add(index, InfoRemoteModel.SubjectElement()
                                                 .apply {

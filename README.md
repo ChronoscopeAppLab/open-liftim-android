@@ -38,6 +38,7 @@ Please note that contents there will be frequently cleared.
 
 - Show registered timetable when timetable's date picked.
 - Delete info completely after 1 month passed.
+- Implement database access in another thread.
 
 If you have skill to implement these and you intend to implement,
 please ping me and implement!

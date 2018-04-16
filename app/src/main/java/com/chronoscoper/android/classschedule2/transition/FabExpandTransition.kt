@@ -29,6 +29,7 @@ import android.transition.TransitionValues
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
+import io.plaidapp.util.AnimUtils
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class FabExpandTransition : Transition() {
@@ -121,7 +122,7 @@ class FabExpandTransition : Transition() {
                 }
             }
         })
-        return animatorSet
+        return AnimUtils.NoPauseAnimator(animatorSet)
     }
 
     private fun captureValues(transitionValues: TransitionValues) {

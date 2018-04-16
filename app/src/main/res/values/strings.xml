@@ -145,4 +145,5 @@
     <string name="skip">Skip</string>
     <string name="introduction_wherever">Check or Share timetable no matter where you are</string>
     <string name="introduction_no_forget">There\'s no concern to forget. You can take note in Liftim</string>
+    <string name="import_weekly">Import from weekly timetable</string>
 </resources>

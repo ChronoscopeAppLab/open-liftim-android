@@ -36,7 +36,6 @@ Please note that contents there will be frequently cleared.
 
 ## Roadmap
 
-- Import timetable from weekly timetable. <- IMPORTANT!
 - Show registered timetable when timetable's date picked.
 - Delete info completely after 1 month passed.
 

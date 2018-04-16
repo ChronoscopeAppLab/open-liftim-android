@@ -55,7 +55,11 @@ import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
 import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
+import com.chronoscoper.android.classschedule2.view.PopupMenuCompat
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import org.greenrobot.eventbus.EventBus
 import org.joda.time.DateTime
@@ -83,6 +87,7 @@ class EditTimetableActivity : BaseActivity() {
     private val info by bindView<EditText>(R.id.info)
     private val classList by bindView<RecyclerView>(R.id.list)
     private val fab by bindView<FloatingActionButton>(R.id.fab)
+    private val importWeekly by bindView<View>(R.id.import_weekly)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_edit_timetable)
@@ -99,6 +104,7 @@ class EditTimetableActivity : BaseActivity() {
     private var date: DateTime? = null
     private var isManager = false
     private var id: String? = null
+    private val compositeDisposable = CompositeDisposable()
 
     private fun initialize() {
         val liftimCode = LiftimContext.getLiftimCode()
@@ -145,6 +151,61 @@ class EditTimetableActivity : BaseActivity() {
             startActivityForResult(Intent(this, SubjectPickerActivity::class.java),
                     RC_PICK_SUBJECT)
         }
+
+        val importPopup = PopupMenuCompat(this, importWeekly)
+        importPopup.inflate(R.menu.import_weekly)
+        importWeekly.setOnTouchListener(importPopup.dragToOpenListener)
+        importPopup.setOnMenuItemClickListener {
+            var dayOfWeek = 0
+            when (it.itemId) {
+                R.id.sunday -> dayOfWeek = 1
+                R.id.monday -> dayOfWeek = 2
+                R.id.tuesday -> dayOfWeek = 3
+                R.id.wednesday -> dayOfWeek = 4
+                R.id.thursday -> dayOfWeek = 5
+                R.id.friday -> dayOfWeek = 6
+                R.id.saturday -> dayOfWeek = 7
+            }
+            compositeDisposable.add(
+                    LiftimContext.getOrmaDatabase()
+                            .selectFromWeeklyItem()
+                            .liftimCodeEq(LiftimContext.getLiftimCode())
+                            .dayOfWeekEq(dayOfWeek)
+                            .executeAsObservable()
+                            .firstOrError()
+                            .map {
+                                it.subjects = LiftimContext.getGson()
+                                        .fromJson(it.serializedSubjects,
+                                                Array<String>::class.java)
+                                return@map it
+                            }
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                                (classList.adapter as? ClassAdapter)?.let { adapter ->
+                                    it.subjects.forEachIndexed { index, subject ->
+                                        adapter.data.add(index, InfoRemoteModel.SubjectElement()
+                                                .apply {
+                                                    this.subject = subject
+                                                })
+                                        adapter.minIndex = it.minIndex
+                                        adapter.notifyDataSetChanged()
+                                    }
+                                }
+                            }, {
+                                Log.e(TAG, "Timetable for specified day-of-week not found", it)
+                            })
+            )
+            true
+        }
+        importWeekly.setOnClickListener {
+            importPopup.show()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

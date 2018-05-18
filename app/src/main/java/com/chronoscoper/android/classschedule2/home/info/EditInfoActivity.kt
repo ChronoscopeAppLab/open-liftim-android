@@ -17,7 +17,6 @@ package com.chronoscoper.android.classschedule2.home.info
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
@@ -43,7 +42,6 @@ import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.RegisterInfoService
-import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
 import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import kotterknife.bindView
@@ -64,7 +62,6 @@ class EditInfoActivity : BaseActivity() {
         }
     }
 
-    private val toolbar by bindView<Toolbar>(R.id.toolbar)
     private val liftimCodeImage by bindView<ImageView>(R.id.liftim_code_image)
     private val liftimCodeLabel by bindView<TextView>(R.id.liftim_code)
     private val titleInput by bindView<EditText>(R.id.title)
@@ -81,13 +78,9 @@ class EditInfoActivity : BaseActivity() {
     private var sourceId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(R.layout.activity_edit_info)
-        setSupportActionBar(toolbar)
         super.onCreate(savedInstanceState)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.sharedElementEnterTransition = FabExpandTransition()
-        }
+        setContentView(R.layout.activity_edit_info)
+        overridePendingTransition(R.anim.slide_in, R.anim.no_anim)
 
         val id = intent.getStringExtra(ID)
         if (id != null) {
@@ -122,6 +115,11 @@ class EditInfoActivity : BaseActivity() {
         }
 
         EventBus.getDefault().register(this)
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.no_anim, R.anim.slide_out)
     }
 
     @Suppress("UNUSED")

@@ -17,7 +17,6 @@ package com.chronoscoper.android.classschedule2.weekly
 
 import android.content.Context
 import android.graphics.PorterDuff
-import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.DialogFragment
@@ -46,7 +45,6 @@ import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.sync.WeeklyItem
 import com.chronoscoper.android.classschedule2.task.RegisterWeeklyService
-import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
 import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.util.removedAt
@@ -67,9 +65,7 @@ class EditWeeklyActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         super.onCreate(savedInstanceState)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.sharedElementEnterTransition = FabExpandTransition()
-        }
+        overridePendingTransition(R.anim.slide_in, R.anim.no_anim)
 
         EditWeeklyTemporary.weeklyItems = LiftimContext.getOrmaDatabase()
                 .selectFromWeeklyItem()
@@ -81,6 +77,11 @@ class EditWeeklyActivity : BaseActivity() {
         tabs.tabMode = TabLayout.MODE_SCROLLABLE
         tabs.tabGravity = TabLayout.GRAVITY_FILL
         tabs.setupWithViewPager(pager)
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.no_anim, R.anim.slide_out)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

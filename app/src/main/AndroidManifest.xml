@@ -79,17 +79,15 @@
         <activity
             android:name=".home.info.EditInfoActivity"
             android:label="@string/add_info"
-            android:theme="@style/AppTheme.NoActionBar.Translucent"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".home.timetable.EditTimetableActivity"
             android:label="@string/edit_timetable"
-            android:theme="@style/AppTheme.NoActionBar.Translucent"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".weekly.EditWeeklyActivity"
             android:label="@string/edit_weekly"
-            android:theme="@style/AppTheme.NoActionBar.Translucent"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ReLoginActivity" />
         <activity

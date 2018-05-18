@@ -146,4 +146,6 @@
     <string name="introduction_wherever">Check or Share timetable no matter where you are</string>
     <string name="introduction_no_forget">There\'s no concern to forget. You can take note in Liftim</string>
     <string name="import_weekly">Import from weekly timetable</string>
+    <string name="old_android">Devices older than Android 5.0 is no longer supported. You won\'t receive updates any more.</string>
+    <string name="important_notice">Important Notice</string>
 </resources>

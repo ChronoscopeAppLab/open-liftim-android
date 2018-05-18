@@ -145,4 +145,6 @@
     <string name="introduction_wherever">どこにいても時間割をチェック、シェア。</string>
     <string name="introduction_no_forget">忘れる心配はありません。Liftimにメモできます。</string>
     <string name="import_weekly">一週間の時間割からインポート</string>
+    <string name="important_notice">重要なお知らせ</string>
+    <string name="old_android">Android 5.0未満のAndroidはサポートされなくなったため、これ以降のアプリの更新はご利用いただけません。</string>
 </resources>

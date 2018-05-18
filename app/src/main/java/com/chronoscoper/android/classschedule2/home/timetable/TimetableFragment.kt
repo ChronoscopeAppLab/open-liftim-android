@@ -18,6 +18,7 @@ package com.chronoscoper.android.classschedule2.home.timetable
 import android.animation.ArgbEvaluator
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
@@ -26,6 +27,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewStub
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -68,6 +70,7 @@ class TimetableFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_timetable, container, false)
 
+    private val oldAndroidViewStub by bindView<ViewStub>(R.id.old_android_view_stub)
     private val timetableList by bindView<RecyclerView>(R.id.timetable_list)
     private val dateLabel by bindView<TextView>(R.id.date)
     private val infoLabel by bindView<TextView>(R.id.info)
@@ -114,6 +117,10 @@ class TimetableFragment : Fragment() {
                     }
                 })
                 .into(backgroundArt)
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            oldAndroidViewStub.inflate()
+        }
     }
 
     override fun onDetach() {

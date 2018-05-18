@@ -20,7 +20,6 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.FloatingActionButton
@@ -51,7 +50,6 @@ import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.RegisterInfoService
-import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
 import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
@@ -80,7 +78,6 @@ class EditTimetableActivity : BaseActivity() {
         private const val EXTRA_INDEX = "INDEX"
     }
 
-    private val toolbar by bindView<Toolbar>(R.id.toolbar)
     private val liftimCodeImage by bindView<ImageView>(R.id.liftim_code_image)
     private val liftimCodeLabel by bindView<TextView>(R.id.liftim_code)
     private val dateLabel by bindView<TextView>(R.id.date)
@@ -90,15 +87,16 @@ class EditTimetableActivity : BaseActivity() {
     private val importWeekly by bindView<View>(R.id.import_weekly)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(R.layout.activity_edit_timetable)
-        setSupportActionBar(toolbar)
         super.onCreate(savedInstanceState)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.sharedElementEnterTransition = FabExpandTransition()
-        }
+        setContentView(R.layout.activity_edit_timetable)
+        overridePendingTransition(R.anim.slide_in, R.anim.no_anim)
 
         initialize()
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.no_anim, R.anim.slide_out)
     }
 
     private var date: DateTime? = null

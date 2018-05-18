@@ -18,14 +18,11 @@ package com.chronoscoper.android.classschedule2.home.timetable
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.content.ContextCompat
 import android.view.View
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
-import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
 import com.chronoscoper.android.classschedule2.transition.FabTransformTransition
 import kotterknife.bindView
 
@@ -50,34 +47,18 @@ class EditTargetDialog : BaseActivity() {
         }
 
         addNew.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                it.transitionName = getString(R.string.t_fab)
-                FabExpandTransition.configure(
-                        ContextCompat.getColor(this, R.color.colorAccent))
-            }
-            val activityOptions = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation(this, it, getString(R.string.t_fab))
-            startActivity(Intent(this, EditTimetableActivity::class.java),
-                    activityOptions.toBundle())
+            startActivity(Intent(this, EditTimetableActivity::class.java))
             finish()
         }
 
         editExisting.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                it.transitionName = getString(R.string.t_fab)
-                FabExpandTransition.configure(
-                        ContextCompat.getColor(this, R.color.colorAccent))
-            }
-            val activityOptions = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation(this, it, getString(R.string.t_fab))
-                    .toBundle()
             val source = LiftimContext.getOrmaDatabase().selectFromInfo()
                     .liftimCodeEq(LiftimContext.getLiftimCode())
                     .typeEq(Info.TYPE_TIMETABLE)
                     .deletedEq(false)
                     .orderByDateDesc()
                     .firstOrNull()
-            EditTimetableActivity.openWithSourceTimetable(this, source, activityOptions)
+            EditTimetableActivity.openWithSourceTimetable(this, source)
             finish()
         }
 

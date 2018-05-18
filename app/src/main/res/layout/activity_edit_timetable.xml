@@ -18,11 +18,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    android:transitionName="@string/t_fab"
     tools:ignore="UnusedAttribute, Overdraw">
 
     <FrameLayout
@@ -36,15 +34,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:elevation="5dp"
-                app:title="@string/edit_timetable"
-                tools:ignore="UnusedAttribute" />
 
             <LinearLayout
                 android:layout_width="match_parent"

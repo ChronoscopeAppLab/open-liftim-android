@@ -46,7 +46,6 @@ import com.chronoscoper.android.classschedule2.home.info.EditInfoActivity
 import com.chronoscoper.android.classschedule2.home.timetable.EditTargetDialog
 import com.chronoscoper.android.classschedule2.setting.SettingsActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
-import com.chronoscoper.android.classschedule2.transition.FabExpandTransition
 import com.chronoscoper.android.classschedule2.transition.FabTransformTransition
 import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.weekly.EditWeeklyActivity
@@ -74,10 +73,8 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private val editTimetableFabAction by lazy {
         Runnable {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                FabTransformTransition.configure(
-                        ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
-            }
+            FabTransformTransition.configure(
+                    ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
             val activityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))
             startActivity(Intent(this, EditTargetDialog::class.java),
@@ -87,30 +84,18 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private val editInfoFabAction by lazy {
         Runnable {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                FabExpandTransition.configure(
-                        ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
-            }
-            val activityOptions = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))
-            startActivity(Intent(this, EditInfoActivity::class.java),
-                    activityOptions.toBundle())
+            startActivity(Intent(this, EditInfoActivity::class.java))
         }
     }
 
     private val editWeeklyFabAction by lazy {
         Runnable {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                FabExpandTransition.configure(
-                        ContextCompat.getColor(this@HomeActivity, R.color.colorAccent))
-            }
-            val activityOptions = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))
-                    .toBundle()
             if (LiftimContext.isManager()) {
-                startActivity(Intent(this, EditWeeklyActivity::class.java),
-                        activityOptions)
+                startActivity(Intent(this, EditWeeklyActivity::class.java))
             } else {
+                val activityOptions = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(this, fab, getString(R.string.t_fab))
+                        .toBundle()
                 startActivity(Intent(this, OnlyManagerActivity::class.java),
                         activityOptions)
             }

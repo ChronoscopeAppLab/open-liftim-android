@@ -145,6 +145,9 @@
         <service android:name=".service.NotificationPublishService" />
         <service android:name=".task.RegisterWeeklyService" />
         <service android:name=".service.TokenLoadService" />
+        <service
+            android:name=".job.UpdateAccountInfoService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <receiver android:name=".receiver.ServiceTriggerReceiver">
             <intent-filter>

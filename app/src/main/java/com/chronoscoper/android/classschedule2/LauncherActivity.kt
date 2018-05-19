@@ -38,12 +38,7 @@ import org.joda.time.DateTime
 import java.io.IOException
 
 class LauncherActivity : BaseActivity() {
-
-    private val prefs by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
     private val iconForeground by bindView<View>(R.id.icon_foreground)
-
-    private var animationFinished = false
-    private var syncFinished = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,18 +56,19 @@ class LauncherActivity : BaseActivity() {
                 .scaleX(1f).scaleY(1f)
                 .setDuration(200)
                 .withEndAction {
-                    animationFinished = true
-                    startMainIfNeeded()
                     iconForeground.animate().translationY(0f)
                             .setDuration(200)
                             .start()
                 }
                 .start()
 
-        val setupCompleted = prefs.getString(getString(R.string.p_account_token),
+        val setupCompleted = PreferenceManager.getDefaultSharedPreferences(this)
+                .getString(getString(R.string.p_account_token),
                 null) != null
         if (setupCompleted) {
-            secondLaunchTime()
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         } else {
             //TODO: enable if you needn't show server address settings
             //startActivity(Intent(this, IntroductionActivity::class.java))
@@ -80,95 +76,5 @@ class LauncherActivity : BaseActivity() {
             finish()
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
-    }
-
-    private fun startMainIfNeeded() {
-        if (animationFinished && syncFinished) {
-            startActivity(Intent(this, HomeActivity::class.java))
-            finish()
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-        }
-    }
-
-    private val disposables = CompositeDisposable()
-
-    private fun secondLaunchTime() {
-        val db = LiftimContext.getOrmaDatabase()
-        if (db.selectFromLiftimCodeInfo().count() == 0) {
-            noLiftimCode()
-            return
-        }
-        val subscriber = object : DisposableObserver<Unit>() {
-            override fun onComplete() {
-                syncFinished = true
-                startMainIfNeeded()
-            }
-
-            override fun onError(e: Throwable) {
-                if (e is InvalidTokenException) {
-                    startActivity(Intent(this@LauncherActivity, ReLoginActivity::class.java))
-                    finish()
-                    return
-                } else if (e is IOException) {
-                    prefs.edit().putInt(getString(R.string.p_last_sync_status), -1).apply()
-                }
-                syncFinished = true
-                startMainIfNeeded()
-            }
-
-            override fun onNext(t: Unit) {
-            }
-        }
-
-        Observable.create<Unit> {
-            try {
-                val connectivityStatus = enforceValid(LiftimContext.getToken())
-                prefs.edit().putInt(getString(R.string.p_last_sync_status), connectivityStatus)
-                        .apply()
-            } catch (e: Exception) {
-                it.onError(e)
-                return@create
-            }
-            startService(Intent(this, TokenLoadService::class.java))
-            if (userInfoSyncNeeded) {
-                FullSyncTask(this).run()
-            }
-            it.onComplete()
-        }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber)
-        disposables.add(subscriber)
-
-        optimizeInfo()
-    }
-
-    private val userInfoSyncNeeded: Boolean
-        get() {
-            val lastSynced = prefs.getString(
-                    getString(R.string.p_last_user_info_synced), null)
-                    ?: return true
-            val dateTime = try {
-                DateTime.parse(lastSynced)
-            } catch (e: Exception) {
-                return true
-            }
-            return dateTime.plusDays(3).isBeforeNow
-        }
-
-    private fun noLiftimCode() {
-        startActivity(Intent(this, ManageLiftimCodeActivity::class.java))
-        finish()
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        secondLaunchTime()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        disposables.clear()
     }
 }

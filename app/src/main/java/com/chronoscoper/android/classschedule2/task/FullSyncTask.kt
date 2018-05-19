@@ -17,12 +17,17 @@ package com.chronoscoper.android.classschedule2.task
 
 import android.content.Context
 import android.preference.PreferenceManager
+import android.util.Log
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import org.joda.time.DateTime
 import java.io.IOException
 
 class FullSyncTask(private val context: Context) : Runnable {
+    companion object {
+        private const val TAG = "FullSync"
+    }
+
     override fun run() {
         val token = LiftimContext.getToken()
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -41,9 +46,11 @@ class FullSyncTask(private val context: Context) : Runnable {
                 putBoolean(context.getString(R.string.p_account_is_available), accountInfo.isAvailable)
             }
             prefEditor.apply()
+            db.deleteFromLiftimCodeInfo().execute()
             db.deleteFromWeeklyItem().execute()
             db.deleteFromSubject().execute()
             accountInfo.liftimCodes.forEach {
+                LiftimCodeInfoLoader(it.liftimCode, token, it.isManager).run()
                 WeeklyLoader(it.liftimCode, token).run()
                 SubjectLoader(it.liftimCode, token).run()
             }
@@ -58,7 +65,7 @@ class FullSyncTask(private val context: Context) : Runnable {
             db.deleteFromColorPaletteV2()
             ColorPaletteLoader().run()
             db.selectFromSubject().forEach {
-                println("${it.liftimCode} ${it.subject} ${it.color}")
+                Log.d(TAG, "${it.liftimCode} ${it.subject} ${it.color}")
             }
         }
         FunctionRestrictionLoader(context).run()

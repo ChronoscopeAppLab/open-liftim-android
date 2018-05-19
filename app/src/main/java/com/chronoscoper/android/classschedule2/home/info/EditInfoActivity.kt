@@ -20,7 +20,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -43,6 +42,7 @@ import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.RegisterInfoService
 import com.chronoscoper.android.classschedule2.util.EventMessage
+import com.chronoscoper.android.classschedule2.util.isNetworkConnected
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import kotterknife.bindView
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
@@ -140,7 +140,7 @@ class EditInfoActivity : BaseActivity() {
             Log.d(TAG, "URL \"${event.data}\" selected.")
             linkUrl = event.data as? String
         } else {
-            Log.i(TAG, "Unsubscribing event. Ignoring...")
+            Log.i(TAG, "Not subscribing event. Ignoring...")
         }
     }
 
@@ -279,6 +279,15 @@ class EditInfoActivity : BaseActivity() {
             val element = (activity as? EditInfoActivity)?.createElementFromCurrentState()
                     ?: throw IllegalStateException("Must be added to EditInfoActivity")
             okButton.setOnClickListener {
+                if (!isNetworkConnected(context!!)) {
+                    AlertDialog.Builder(context!!)
+                            .setTitle(R.string.network_disconnected)
+                            .setMessage(R.string.network_disconnected_message)
+                            .setPositiveButton(R.string.retry,
+                                    { _, _ -> okButton.performClick() })
+                            .show()
+                    return@setOnClickListener
+                }
                 it.isEnabled = false
                 val remoteFormatElement = InfoRemoteModel.InfoBody()
                 remoteFormatElement.apply {

@@ -24,6 +24,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
@@ -46,6 +47,7 @@ import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.sync.WeeklyItem
 import com.chronoscoper.android.classschedule2.task.RegisterWeeklyService
 import com.chronoscoper.android.classschedule2.util.EventMessage
+import com.chronoscoper.android.classschedule2.util.isNetworkConnected
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.util.removedAt
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
@@ -92,41 +94,54 @@ class EditWeeklyActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         item ?: return false
         if (item.itemId == R.id.options_done) {
-            LiftimContext.executeBackground {
-                EditWeeklyTemporary.weeklyItems?.let { weeklyItems ->
-                    val liftimCode = LiftimContext.getLiftimCode()
-                    LiftimContext.getOrmaDatabase().deleteFromWeeklyItem()
-                            .liftimCodeEq(liftimCode)
-                            .execute()
-                    val element = hashMapOf<String, WeeklyItem>()
-                    weeklyItems.forEachIndexed { index, elem ->
-                        elem.subjects = adapter.fragments[index]?.adapter
-                                ?.subjects?.toTypedArray() ?: arrayOf()
-                        elem.serializedSubjects = LiftimContext.getGson().toJson(elem.subjects)
-                        elem.liftimCode = liftimCode
-                        val shortSubjects = mutableListOf<String>()
-                        elem.subjects.forEach { subject ->
-                            val shortName = LiftimContext.getOrmaDatabase().selectFromSubject()
-                                    .liftimCodeEq(liftimCode)
-                                    .subjectEq(subject)
-                                    .firstOrNull()?.shortSubject
-                            shortSubjects.add(shortName ?: subject)
-                        }
-                        elem.shortSubjects = shortSubjects.toTypedArray()
-                        element[(index + 1).toString()] = elem
-                    }
-                    LiftimContext.getOrmaDatabase().prepareInsertIntoWeeklyItem()
-                            .executeAll(weeklyItems.slice(0..6))
-                    RegisterWeeklyService.start(this, LiftimContext.getGson()
-                            .toJson(element))
-                    EventBus.getDefault()
-                            .post(EventMessage(WeeklyFragment.EVENT_WEEKLY_TIMETABLE_UPDATED))
-                }
-            }
-            animateFinish()
+            registerInBackgroundAndFinish()
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun registerInBackgroundAndFinish(){
+        if (!isNetworkConnected(this)){
+            AlertDialog.Builder(this)
+                    .setTitle(R.string.network_disconnected)
+                    .setMessage(R.string.network_disconnected_message)
+                    .setPositiveButton(R.string.retry,
+                            { _, _ -> registerInBackgroundAndFinish() })
+                    .show()
+            return
+        }
+        LiftimContext.executeBackground {
+            EditWeeklyTemporary.weeklyItems?.let { weeklyItems ->
+                val liftimCode = LiftimContext.getLiftimCode()
+                LiftimContext.getOrmaDatabase().deleteFromWeeklyItem()
+                        .liftimCodeEq(liftimCode)
+                        .execute()
+                val element = hashMapOf<String, WeeklyItem>()
+                weeklyItems.forEachIndexed { index, elem ->
+                    elem.subjects = adapter.fragments[index]?.adapter
+                            ?.subjects?.toTypedArray() ?: arrayOf()
+                    elem.serializedSubjects = LiftimContext.getGson().toJson(elem.subjects)
+                    elem.liftimCode = liftimCode
+                    val shortSubjects = mutableListOf<String>()
+                    elem.subjects.forEach { subject ->
+                        val shortName = LiftimContext.getOrmaDatabase().selectFromSubject()
+                                .liftimCodeEq(liftimCode)
+                                .subjectEq(subject)
+                                .firstOrNull()?.shortSubject
+                        shortSubjects.add(shortName ?: subject)
+                    }
+                    elem.shortSubjects = shortSubjects.toTypedArray()
+                    element[(index + 1).toString()] = elem
+                }
+                LiftimContext.getOrmaDatabase().prepareInsertIntoWeeklyItem()
+                        .executeAll(weeklyItems.slice(0..6))
+                RegisterWeeklyService.start(this, LiftimContext.getGson()
+                        .toJson(element))
+                EventBus.getDefault()
+                        .post(EventMessage(WeeklyFragment.EVENT_WEEKLY_TIMETABLE_UPDATED))
+            }
+        }
+        animateFinish()
     }
 
     fun updateData(dayOfWeek: Int, index: Int, subject: String) {

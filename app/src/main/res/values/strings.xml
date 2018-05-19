@@ -148,4 +148,6 @@
     <string name="import_weekly">Import from weekly timetable</string>
     <string name="old_android">Devices older than Android 5.0 is no longer supported. You won\'t receive updates any more.</string>
     <string name="important_notice">Important Notice</string>
+    <string name="network_disconnected">Network disconnected</string>
+    <string name="network_disconnected_message">Please retry with your phone connected to the Internet.</string>
 </resources>

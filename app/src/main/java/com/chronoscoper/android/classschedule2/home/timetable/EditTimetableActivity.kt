@@ -24,9 +24,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.DialogFragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.Editable
 import android.text.TextWatcher
@@ -51,6 +51,7 @@ import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.RegisterInfoService
 import com.chronoscoper.android.classschedule2.util.EventMessage
+import com.chronoscoper.android.classschedule2.util.isNetworkConnected
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
 import com.chronoscoper.android.classschedule2.view.PopupMenuCompat
@@ -306,6 +307,15 @@ class EditTimetableActivity : BaseActivity() {
     }
 
     private fun registerRemote(info: Info) {
+        if (!isNetworkConnected(this)) {
+            AlertDialog.Builder(this)
+                    .setTitle(R.string.network_disconnected)
+                    .setMessage(R.string.network_disconnected_message)
+                    .setPositiveButton(R.string.retry,
+                            { _, _ -> registerRemote(info) })
+                    .show()
+            return
+        }
         val content = InfoRemoteModel.InfoBody()
         content.apply {
             id = info.id

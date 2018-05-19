@@ -29,6 +29,7 @@ import android.widget.TextView
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.info.detail.ViewInfoActivity
 import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
+import com.chronoscoper.android.classschedule2.home.timetable.TimetableFragment
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.IncrementalInfoLoader
@@ -71,6 +72,7 @@ class InfoRecyclerViewAdapter(val activity: Activity, private val syncEnabled: B
         }
 
         override fun onComplete() {
+            EventBus.getDefault().post(EventMessage.of(TimetableFragment.EVENT_TIMETABLE_UPDATED))
             initView()
         }
     }

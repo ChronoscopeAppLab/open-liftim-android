@@ -20,6 +20,7 @@ import android.app.job.JobService
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.FullSyncTask
 import com.chronoscoper.android.classschedule2.task.TokenReloadTask
+import com.chronoscoper.android.classschedule2.util.optimizeInfo
 
 class UpdateAccountInfoService : JobService() {
     override fun onStopJob(params: JobParameters?): Boolean = false

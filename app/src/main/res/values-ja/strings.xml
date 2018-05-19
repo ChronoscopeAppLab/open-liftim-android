@@ -147,4 +147,6 @@
     <string name="import_weekly">一週間の時間割からインポート</string>
     <string name="important_notice">重要なお知らせ</string>
     <string name="old_android">Android 5.0未満のAndroidはサポートされなくなったため、これ以降のアプリの更新はご利用いただけません。</string>
+    <string name="network_disconnected">インターネットに接続していません</string>
+    <string name="network_disconnected_message">インターネットに接続してもう一度お試しください。</string>
 </resources>

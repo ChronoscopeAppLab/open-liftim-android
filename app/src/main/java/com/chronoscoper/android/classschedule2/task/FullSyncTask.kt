@@ -29,6 +29,7 @@ class FullSyncTask(private val context: Context) : Runnable {
     }
 
     override fun run() {
+        TokenReloadTask(context).run()
         val token = LiftimContext.getToken()
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         LiftimContext.getOrmaDatabase().transactionSync {

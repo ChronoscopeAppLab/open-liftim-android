@@ -17,20 +17,29 @@ package com.chronoscoper.android.classschedule2.job
 
 import android.app.job.JobParameters
 import android.app.job.JobService
+import android.util.Log
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.FullSyncTask
 import com.chronoscoper.android.classschedule2.task.TokenReloadTask
-import com.chronoscoper.android.classschedule2.util.optimizeInfo
+import java.io.IOException
 
 class UpdateAccountInfoService : JobService() {
+    companion object {
+        private const val TAG = "AccountInfoUpdater"
+    }
+
     override fun onStopJob(params: JobParameters?): Boolean = false
 
     override fun onStartJob(params: JobParameters?): Boolean {
         val db = LiftimContext.getOrmaDatabase()
         if (db.selectFromLiftimCodeInfo().count() > 0) {
             LiftimContext.executeBackground {
-                TokenReloadTask(this).run()
-                FullSyncTask(this).run()
+                try {
+                    TokenReloadTask(this).run()
+                    FullSyncTask(this).run()
+                } catch (e: IOException) {
+                    Log.e(TAG, "Error in account info updater", e)
+                }
             }
         }
         return true

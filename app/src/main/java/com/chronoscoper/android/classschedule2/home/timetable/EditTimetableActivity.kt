@@ -279,12 +279,7 @@ class EditTimetableActivity : BaseActivity() {
             R.id.options_register_remote -> {
                 val element = createElementFromCurrentState()
                 registerLocal(element)
-                registerRemote(element)
-                animateFinish()
-                EventBus.getDefault().let {
-                    it.post(EventMessage.of(TimetableFragment.EVENT_TIMETABLE_UPDATED))
-                    it.post(EventMessage.of(InfoRecyclerViewAdapter.EVENT_ENTRY_UPDATED))
-                }
+                registerRemoteAndExit(element)
             }
             R.id.options_change_min_indx -> {
                 ChangeMinIndexDialog().show(supportFragmentManager, null)
@@ -306,13 +301,13 @@ class EditTimetableActivity : BaseActivity() {
         LiftimContext.getOrmaDatabase().insertIntoInfo(info)
     }
 
-    private fun registerRemote(info: Info) {
+    private fun registerRemoteAndExit(info: Info) {
         if (!isNetworkConnected(this)) {
             AlertDialog.Builder(this)
                     .setTitle(R.string.network_disconnected)
                     .setMessage(R.string.network_disconnected_message)
                     .setPositiveButton(R.string.retry,
-                            { _, _ -> registerRemote(info) })
+                            { _, _ -> registerRemoteAndExit(info) })
                     .show()
             return
         }
@@ -329,6 +324,11 @@ class EditTimetableActivity : BaseActivity() {
             removable = info.removable
         }
         RegisterInfoService.start(this, LiftimContext.getGson().toJson(content))
+        animateFinish()
+        EventBus.getDefault().let {
+            it.post(EventMessage.of(TimetableFragment.EVENT_TIMETABLE_UPDATED))
+            it.post(EventMessage.of(InfoRecyclerViewAdapter.EVENT_ENTRY_UPDATED))
+        }
     }
 
     class ClassAdapter(

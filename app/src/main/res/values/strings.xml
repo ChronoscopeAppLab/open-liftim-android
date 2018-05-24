@@ -83,7 +83,7 @@
     <string name="open_source_statement">Liftim for Android is developed under open source license and the source code is available on GitHub.\nIf you want to contribute to Liftim, please send us pull requests or paches!</string>
     <string name="open_project_page">Open project page</string>
     <string name="login">Sign in or Sign up</string>
-    <string name="login_error_description">Failed to login. Please certificate again.</string>
+    <string name="login_error_description">Unable to login to Liftim because login info is old. Please certificate again.</string>
     <string name="link_url">Link URL</string>
     <string name="open_link">Open link</string>
     <string name="login_message">To use Liftim, please login. By logging in, you can get a space to share timetable or information with your classmates.</string>
@@ -109,7 +109,7 @@
     <string name="edit_existing_timetable">Edit existing timetable</string>
     <string name="add_new_timetable">Add new timetable</string>
     <string name="select_target">Select a target</string>
-    <string name="login_failed">Failed to login to Liftim</string>
+    <string name="login_failed">Unable to login</string>
     <string name="notification_login_content">Tap here to login to liftim again</string>
     <string name="liftim_code_deleted_title">Previously selected class has deleted</string>
     <string name="liftim_code_deleted_content">Please check which class you are now</string>

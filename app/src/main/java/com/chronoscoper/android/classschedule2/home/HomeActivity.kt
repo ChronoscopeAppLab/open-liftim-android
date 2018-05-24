@@ -111,8 +111,8 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         if (savedInstanceState == null) {
             replaceFragment(HomeFragment())
-            // green character spawns 10%
-            if (Math.random() < 0.1) {
+            // green character spawns 0.5%
+            if (Math.random() < 0.005) {
                 oddView = OddView(this)
                 val dp = resources.displayMetrics.density
                 val size = (250 * dp).toInt()

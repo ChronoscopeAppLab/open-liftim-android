@@ -20,22 +20,8 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
 import com.chronoscoper.android.classschedule2.home.HomeActivity
-import com.chronoscoper.android.classschedule2.service.TokenLoadService
-import com.chronoscoper.android.classschedule2.setting.ManageLiftimCodeActivity
 import com.chronoscoper.android.classschedule2.setup.SetupActivity
-import com.chronoscoper.android.classschedule2.sync.LiftimContext
-import com.chronoscoper.android.classschedule2.task.FullSyncTask
-import com.chronoscoper.android.classschedule2.task.InvalidTokenException
-import com.chronoscoper.android.classschedule2.task.enforceValid
-import com.chronoscoper.android.classschedule2.util.optimizeInfo
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableObserver
-import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
-import org.joda.time.DateTime
-import java.io.IOException
 
 class LauncherActivity : BaseActivity() {
     private val iconForeground by bindView<View>(R.id.icon_foreground)

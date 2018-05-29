@@ -8,12 +8,12 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.support.annotation.MainThread
+import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.widget.ImageView
 
 class ImageClipRangeView(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
-    : ImageView(context, attrs, defStyleAttr) {
+    : AppCompatImageView(context, attrs, defStyleAttr) {
     constructor(context: Context) : this(context, null, 0)
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0)
 

@@ -14,6 +14,7 @@
 -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -38,7 +39,7 @@
                     android:id="@+id/liftim_code_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/clickable_background_black"
+                    android:background="?android:selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:contentDescription="@string/accessibility_change_liftim_code_image"
                     android:focusable="true" />
@@ -56,7 +57,9 @@
                 android:id="@+id/liftim_code_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:inputType="text"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                tools:ignore="LabelFor" />
         </LinearLayout>
 
         <Button

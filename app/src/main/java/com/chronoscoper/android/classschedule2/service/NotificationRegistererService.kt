@@ -20,7 +20,6 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import com.chronoscoper.android.classschedule2.sync.Info
@@ -63,13 +62,8 @@ class NotificationRegistererService : Service() {
                             NotificationPublishService.createPublisherIntent(this,
                                     info.liftimCode, info.id),
                             PendingIntent.FLAG_CANCEL_CURRENT)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                                notificationDateTime.millis, pendingIntent)
-                    } else {
-                        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                                notificationDateTime.millis, pendingIntent)
-                    }
+                    alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                            notificationDateTime.millis, pendingIntent)
                 }
         return START_NOT_STICKY
     }

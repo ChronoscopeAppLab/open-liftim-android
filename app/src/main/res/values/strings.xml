@@ -150,4 +150,5 @@
     <string name="important_notice">Important Notice</string>
     <string name="network_disconnected">Network disconnected</string>
     <string name="network_disconnected_message">Please retry with your phone connected to the Internet.</string>
+    <string name="add_more_info">Add more info</string>
 </resources>

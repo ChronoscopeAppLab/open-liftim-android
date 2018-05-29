@@ -18,7 +18,6 @@
     <color name="textColorPrimary">#232323</color>
     <color name="textColorSecondary">#282828</color>
     <color name="colorPrimaryDarkText">#395916</color>
-    <color name="clickEffectDark">#3c000000</color>
     <color name="black_vail">#5e000000</color>
     <color name="zebra_light">#f4f4f4</color>
     <color name="zebra_dark">#dedede</color>

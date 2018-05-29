@@ -46,9 +46,6 @@ class PopupMenuCompat(context: Context, private val anchor: View) {
     }
 
     val dragToOpenListener: View.OnTouchListener?
-        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            popup.dragToOpenListener
-        } else {
-            null
-        }
+        get() = popup.dragToOpenListener
+
 }

@@ -35,7 +35,6 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_join"
             android:drawableStart="@drawable/ic_join"
             android:text="@string/join_class" />
 
@@ -44,7 +43,6 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_create_liftim_code"
             android:drawableStart="@drawable/ic_create_liftim_code"
             android:text="@string/create_liftim_code" />
     </LinearLayout>

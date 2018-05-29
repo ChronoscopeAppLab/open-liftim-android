@@ -30,8 +30,6 @@
         android:layout_gravity="center_vertical"
         android:contentDescription="@string/move_item"
         android:paddingEnd="10dp"
-        android:paddingLeft="0dp"
-        android:paddingRight="10dp"
         android:paddingStart="0dp"
         android:src="@drawable/ic_drag_handle" />
 

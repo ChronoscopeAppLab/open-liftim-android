@@ -18,7 +18,6 @@ package com.chronoscoper.android.classschedule2.home.timetable
 import android.animation.ArgbEvaluator
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
@@ -117,10 +116,6 @@ class TimetableFragment : Fragment() {
                     }
                 })
                 .into(backgroundArt)
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            oldAndroidViewStub.inflate()
-        }
     }
 
     override fun onDetach() {

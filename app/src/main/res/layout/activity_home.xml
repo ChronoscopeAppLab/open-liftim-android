@@ -49,6 +49,14 @@
             </LinearLayout>
 
             <FrameLayout
+                android:id="@+id/editor_container"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/bottom_sheet_background"
+                android:elevation="16dp" />
+
+            <FrameLayout
                 android:id="@+id/egg_overlay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -58,7 +66,7 @@
             android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom|center"
             android:layout_margin="20dp"
             android:src="@drawable/ic_add"
             android:transitionName="@string/t_fab"

@@ -17,17 +17,14 @@ package com.chronoscoper.android.classschedule2.home.timetable
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
-import android.support.constraint.ConstraintSet
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
+import android.view.View
 import android.widget.EditText
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
@@ -41,38 +38,17 @@ class SubjectPickerActivity : BaseActivity() {
         const val EXTRA_DETAIL = "DETAIL"
     }
 
-    private val openConstraint = ConstraintSet()
-    private val closedConstraint = ConstraintSet()
-
-    private val container by bindView<ConstraintLayout>(R.id.container)
     private val subject by bindView<EditText>(R.id.subject)
     private val detail by bindView<EditText>(R.id.detail)
     private val list by bindView<RecyclerView>(R.id.list)
+    private val addInfo by bindView<View>(R.id.add_info)
 
     private val subjectAdapter by lazy { SubjectAdapter(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(R.anim.slide_in, R.anim.no_anim)
-        setContentView(R.layout.activity_subject_picker_close)
-        openConstraint.clone(this, R.layout.activity_subject_picker_open)
-        closedConstraint.clone(this, R.layout.activity_subject_picker_close)
-        subject.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                openConstraint.applyTo(container)
-                list.scrollToPosition(0)
-            } else {
-                closedConstraint.applyTo(container)
-            }
-        }
-        subject.setOnKeyListener { _, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_ENTER
-                    && event.action == MotionEvent.ACTION_UP) {
-                detail.requestFocus()
-                return@setOnKeyListener true
-            }
-            return@setOnKeyListener false
-        }
+        setContentView(R.layout.activity_subject_picker)
         subject.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (s == null) return
@@ -83,6 +59,11 @@ class SubjectPickerActivity : BaseActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+        addInfo.setOnClickListener {
+            it.visibility = View.GONE
+            detail.visibility = View.VISIBLE
+            detail.requestFocus()
+        }
         list.adapter = SlideInBottomAnimationAdapter(subjectAdapter)
         list.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         subjectAdapter.onSelectedListener = {
@@ -90,12 +71,11 @@ class SubjectPickerActivity : BaseActivity() {
             subject.setText(it)
             detail.requestFocus()
         }
-        intent.getStringExtra(EXTRA_SUBJECT)?.let {
-            subject.setText(it)
-            container.requestFocus()
-        } ?: subject.requestFocus()
         intent.getStringExtra(EXTRA_DETAIL)?.let {
+            if (it.isEmpty()) return
             detail.setText(it)
+            addInfo.visibility = View.GONE
+            detail.visibility = View.VISIBLE
         }
     }
 

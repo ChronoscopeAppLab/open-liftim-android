@@ -71,6 +71,9 @@ class SubjectPickerActivity : BaseActivity() {
             subject.setText(it)
             detail.requestFocus()
         }
+        intent.getStringExtra(EXTRA_SUBJECT)?.let {
+            subject.setText(it)
+        }
         intent.getStringExtra(EXTRA_DETAIL)?.let {
             if (it.isEmpty()) return
             detail.setText(it)

@@ -25,7 +25,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import com.chronoscoper.android.classschedule2.BaseActivity
+import com.chronoscoper.android.classschedule2.BuildConfig
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.library.licenseviewer.LicenseViewer
 import kotterknife.bindView
@@ -91,6 +93,7 @@ class SettingsActivity : BaseActivity() {
                 savedInstanceState: Bundle?): View? =
                 inflater.inflate(R.layout.fragment_app_info, container, false)
 
+        private val version by bindView<TextView>(R.id.version)
         private val openProjectPageButton by bindView<Button>(R.id.open_project_page)
 
         override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -100,6 +103,7 @@ class SettingsActivity : BaseActivity() {
                         Uri.parse("https://github.com/ChronoscopeAppLab/open-liftim-android")))
                 dismiss()
             }
+            version.text = BuildConfig.VERSION_NAME
         }
     }
 }

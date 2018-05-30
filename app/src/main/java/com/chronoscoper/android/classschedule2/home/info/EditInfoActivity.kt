@@ -15,6 +15,7 @@
  */
 package com.chronoscoper.android.classschedule2.home.info
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -32,6 +33,7 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Switch
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.chronoscoper.android.classschedule2.BaseActivity
@@ -40,10 +42,12 @@ import com.chronoscoper.android.classschedule2.functionrestriction.getFunctionRe
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
-import com.chronoscoper.android.classschedule2.task.RegisterInfoService
+import com.chronoscoper.android.classschedule2.task.RegisterProgressActivity
+import com.chronoscoper.android.classschedule2.task.RegisterTemporary
 import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.isNetworkConnected
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
+import com.chronoscoper.android.classschedule2.util.showToast
 import kotterknife.bindView
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
 import org.greenrobot.eventbus.EventBus
@@ -60,6 +64,8 @@ class EditInfoActivity : BaseActivity() {
             context.startActivity(Intent(context, EditInfoActivity::class.java)
                     .putExtra(ID, sourceId))
         }
+
+        internal const val RC_REGISTER = 101
     }
 
     private val liftimCodeImage by bindView<ImageView>(R.id.liftim_code_image)
@@ -115,6 +121,19 @@ class EditInfoActivity : BaseActivity() {
         }
 
         EventBus.getDefault().register(this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_REGISTER) {
+            if (resultCode == Activity.RESULT_OK) {
+                registerLocal()
+                EventBus.getDefault().post(
+                        EventMessage.of(InfoRecyclerViewAdapter.EVENT_ENTRY_UPDATED))
+            } else {
+                showToast(this, getString(R.string.register_failed), Toast.LENGTH_SHORT)
+            }
+        }
     }
 
     override fun finish() {
@@ -300,11 +319,12 @@ class EditInfoActivity : BaseActivity() {
                     link = element.link
                     type = typeSpinner.selectedItemPosition
                     removable = removableSwitch.isChecked
-                    RegisterInfoService.start(context!!, LiftimContext.getGson()
-                            .toJson(remoteFormatElement))
+
+                    RegisterTemporary.save(context!!, RegisterTemporary.TARGET_INFO,
+                            LiftimContext.getGson().toJson(remoteFormatElement))
+                    activity!!.startActivityForResult(
+                            Intent(context!!, RegisterProgressActivity::class.java), RC_REGISTER)
                 }
-                dismiss()
-                (activity as? BaseActivity)?.animateFinish() ?: activity?.finish()
             }
             cancelButton.setOnClickListener {
                 dismiss()

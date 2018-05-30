@@ -15,7 +15,9 @@
  */
 package com.chronoscoper.android.classschedule2.weekly
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.design.widget.TabLayout
@@ -41,20 +43,27 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.sync.WeeklyItem
-import com.chronoscoper.android.classschedule2.task.RegisterWeeklyService
+import com.chronoscoper.android.classschedule2.task.RegisterProgressActivity
+import com.chronoscoper.android.classschedule2.task.RegisterTemporary
 import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.isNetworkConnected
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.util.removedAt
+import com.chronoscoper.android.classschedule2.util.showToast
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import kotterknife.bindView
 import org.greenrobot.eventbus.EventBus
 
 class EditWeeklyActivity : BaseActivity() {
+    companion object {
+        private const val TAG = "EditWeekly"
+        private const val RC_REGISTER = 101
+    }
 
     private val toolbar by bindView<Toolbar>(R.id.toolbar)
     private val tabs by bindView<TabLayout>(R.id.tabs)
@@ -100,8 +109,8 @@ class EditWeeklyActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun registerInBackgroundAndFinish(){
-        if (!isNetworkConnected(this)){
+    private fun registerInBackgroundAndFinish() {
+        if (!isNetworkConnected(this)) {
             AlertDialog.Builder(this)
                     .setTitle(R.string.network_disconnected)
                     .setMessage(R.string.network_disconnected_message)
@@ -110,38 +119,51 @@ class EditWeeklyActivity : BaseActivity() {
                     .show()
             return
         }
-        LiftimContext.executeBackground {
-            EditWeeklyTemporary.weeklyItems?.let { weeklyItems ->
-                val liftimCode = LiftimContext.getLiftimCode()
-                LiftimContext.getOrmaDatabase().deleteFromWeeklyItem()
-                        .liftimCodeEq(liftimCode)
-                        .execute()
-                val element = hashMapOf<String, WeeklyItem>()
-                weeklyItems.forEachIndexed { index, elem ->
-                    elem.subjects = adapter.fragments[index]?.adapter
-                            ?.subjects?.toTypedArray() ?: arrayOf()
-                    elem.serializedSubjects = LiftimContext.getGson().toJson(elem.subjects)
-                    elem.liftimCode = liftimCode
-                    val shortSubjects = mutableListOf<String>()
-                    elem.subjects.forEach { subject ->
-                        val shortName = LiftimContext.getOrmaDatabase().selectFromSubject()
-                                .liftimCodeEq(liftimCode)
-                                .subjectEq(subject)
-                                .firstOrNull()?.shortSubject
-                        shortSubjects.add(shortName ?: subject)
-                    }
-                    elem.shortSubjects = shortSubjects.toTypedArray()
-                    element[(index + 1).toString()] = elem
+
+        EditWeeklyTemporary.weeklyItems?.let { weeklyItems ->
+            val liftimCode = LiftimContext.getLiftimCode()
+            LiftimContext.getOrmaDatabase().deleteFromWeeklyItem()
+                    .liftimCodeEq(liftimCode)
+                    .execute()
+            val element = hashMapOf<String, WeeklyItem>()
+            weeklyItems.forEachIndexed { index, elem ->
+                elem.subjects = adapter.fragments[index]?.adapter
+                        ?.subjects?.toTypedArray() ?: arrayOf()
+                elem.serializedSubjects = LiftimContext.getGson().toJson(elem.subjects)
+                elem.liftimCode = liftimCode
+                val shortSubjects = mutableListOf<String>()
+                elem.subjects.forEach { subject ->
+                    val shortName = LiftimContext.getOrmaDatabase().selectFromSubject()
+                            .liftimCodeEq(liftimCode)
+                            .subjectEq(subject)
+                            .firstOrNull()?.shortSubject
+                    shortSubjects.add(shortName ?: subject)
                 }
-                LiftimContext.getOrmaDatabase().prepareInsertIntoWeeklyItem()
-                        .executeAll(weeklyItems.slice(0..6))
-                RegisterWeeklyService.start(this, LiftimContext.getGson()
-                        .toJson(element))
+                elem.shortSubjects = shortSubjects.toTypedArray()
+                element[(index + 1).toString()] = elem
+            }
+            LiftimContext.getOrmaDatabase().prepareInsertIntoWeeklyItem()
+                    .executeAll(weeklyItems.slice(0..6))
+
+            RegisterTemporary.save(this,
+                    RegisterTemporary.TARGET_WEEKLY, LiftimContext.getGson().toJson(element))
+            startActivityForResult(
+                    Intent(this, RegisterProgressActivity::class.java),
+                    RC_REGISTER)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_REGISTER) {
+            if (resultCode == Activity.RESULT_OK) {
                 EventBus.getDefault()
                         .post(EventMessage(WeeklyFragment.EVENT_WEEKLY_TIMETABLE_UPDATED))
+                finish()
+            } else {
+                showToast(this, getString(R.string.register_failed), Toast.LENGTH_SHORT)
             }
         }
-        animateFinish()
     }
 
     fun updateData(dayOfWeek: Int, index: Int, subject: String) {

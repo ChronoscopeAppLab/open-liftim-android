@@ -41,6 +41,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.chronoscoper.android.classschedule2.BaseActivity
@@ -49,11 +50,13 @@ import com.chronoscoper.android.classschedule2.home.info.InfoRecyclerViewAdapter
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
-import com.chronoscoper.android.classschedule2.task.RegisterInfoService
+import com.chronoscoper.android.classschedule2.task.RegisterProgressActivity
+import com.chronoscoper.android.classschedule2.task.RegisterTemporary
 import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.isNetworkConnected
 import com.chronoscoper.android.classschedule2.util.obtainColorCorrespondsTo
 import com.chronoscoper.android.classschedule2.util.progressiveFadeInTransition
+import com.chronoscoper.android.classschedule2.util.showToast
 import com.chronoscoper.android.classschedule2.view.PopupMenuCompat
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -76,6 +79,7 @@ class EditTimetableActivity : BaseActivity() {
         }
 
         private const val RC_PICK_SUBJECT = 100
+        private const val RC_REGISTER = 101
         private const val EXTRA_INDEX = "INDEX"
     }
 
@@ -103,6 +107,7 @@ class EditTimetableActivity : BaseActivity() {
     private var date: DateTime? = null
     private var isManager = false
     private var id: String? = null
+    private var registeredByRemote: Boolean = false
     private val compositeDisposable = CompositeDisposable()
 
     private fun initialize() {
@@ -122,6 +127,7 @@ class EditTimetableActivity : BaseActivity() {
         isManager = liftimCodeInfo.isManager
         val target = obtainTargetElement()
         id = target?.id
+        registeredByRemote = target?.addedBy == Info.REMOTE
         if (target == null) {
             date = DateTime.now(DateTimeZone.getDefault()).plusDays(1)
         } else {
@@ -210,8 +216,8 @@ class EditTimetableActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK || data == null) return
         if (requestCode == RC_PICK_SUBJECT) {
+            if (resultCode != Activity.RESULT_OK || data == null) return
             val index = data.getIntExtra(EXTRA_INDEX, -1)
             val subject = data.getStringExtra(SubjectPickerActivity.EXTRA_SUBJECT)
             val detail = data.getStringExtra(SubjectPickerActivity.EXTRA_DETAIL)
@@ -233,6 +239,17 @@ class EditTimetableActivity : BaseActivity() {
                     Log.e(TAG, "Failed to alter data on specified position", e)
                 }
             }
+        } else if (requestCode == RC_REGISTER) {
+            if (resultCode == Activity.RESULT_OK) {
+                registerLocal(infoTmp!!.apply { addedBy = Info.REMOTE })
+                animateFinish()
+                EventBus.getDefault().let {
+                    it.post(EventMessage.of(TimetableFragment.EVENT_TIMETABLE_UPDATED))
+                    it.post(EventMessage.of(InfoRecyclerViewAdapter.EVENT_ENTRY_UPDATED))
+                }
+            } else {
+                showToast(this, getString(R.string.register_failed), Toast.LENGTH_SHORT)
+            }
         }
     }
 
@@ -253,7 +270,7 @@ class EditTimetableActivity : BaseActivity() {
         return Info()
                 .apply {
                     liftimCode = LiftimContext.getLiftimCode()
-                    id = this@EditTimetableActivity.id
+                    id = if (registeredByRemote) this@EditTimetableActivity.id else null
                     title = ""
                     detail = info.text.toString()
                     weight = 1
@@ -264,6 +281,9 @@ class EditTimetableActivity : BaseActivity() {
                     addedBy = Info.LOCAL
                 }
     }
+
+    //TODO: BAD data flow
+    private var infoTmp: Info? = null
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         item ?: return true
@@ -278,8 +298,8 @@ class EditTimetableActivity : BaseActivity() {
             }
             R.id.options_register_remote -> {
                 val element = createElementFromCurrentState()
-                registerLocal(element)
-                registerRemoteAndExit(element)
+                infoTmp = element
+                registerRemote(element)
             }
             R.id.options_change_min_indx -> {
                 ChangeMinIndexDialog().show(supportFragmentManager, null)
@@ -301,13 +321,13 @@ class EditTimetableActivity : BaseActivity() {
         LiftimContext.getOrmaDatabase().insertIntoInfo(info)
     }
 
-    private fun registerRemoteAndExit(info: Info) {
+    private fun registerRemote(info: Info) {
         if (!isNetworkConnected(this)) {
             AlertDialog.Builder(this)
                     .setTitle(R.string.network_disconnected)
                     .setMessage(R.string.network_disconnected_message)
                     .setPositiveButton(R.string.retry,
-                            { _, _ -> registerRemoteAndExit(info) })
+                            { _, _ -> registerRemote(info) })
                     .show()
             return
         }
@@ -323,12 +343,10 @@ class EditTimetableActivity : BaseActivity() {
                     .fromJson(info.timetable, InfoRemoteModel.Timetable::class.java)
             removable = info.removable
         }
-        RegisterInfoService.start(this, LiftimContext.getGson().toJson(content))
-        animateFinish()
-        EventBus.getDefault().let {
-            it.post(EventMessage.of(TimetableFragment.EVENT_TIMETABLE_UPDATED))
-            it.post(EventMessage.of(InfoRecyclerViewAdapter.EVENT_ENTRY_UPDATED))
-        }
+        RegisterTemporary.save(this, RegisterTemporary.TARGET_INFO,
+                LiftimContext.getGson().toJson(content))
+        startActivityForResult(Intent(this, RegisterProgressActivity::class.java),
+                RC_REGISTER)
     }
 
     class ClassAdapter(

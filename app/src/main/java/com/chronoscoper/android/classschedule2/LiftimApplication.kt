@@ -20,15 +20,26 @@ import android.preference.PreferenceManager
 import android.support.multidex.MultiDexApplication
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.NotificationChannel
+import com.chronoscoper.android.classschedule2.util.div
 import com.squareup.leakcanary.LeakCanary
 
 class LiftimApplication : MultiDexApplication() {
+    companion object {
+        private const val TAG = "Application"
+        const val REGISTER_TMP_NAME = "register_tmp.json"
+    }
+
     override fun onCreate() {
         super.onCreate()
 
         initEnvironment()
         migrateIfNeeded()
         registerNotificationChannelIfNeeded()
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        (cacheDir / REGISTER_TMP_NAME).delete()
     }
 
     private val sharedPrefs by lazy { PreferenceManager.getDefaultSharedPreferences(this) }

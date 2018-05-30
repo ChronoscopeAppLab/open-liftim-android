@@ -13,7 +13,7 @@
    limitations under the License.
 -->
 
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/background"
     android:layout_width="match_parent"
@@ -73,4 +73,4 @@
                 android:text="@string/cancel" />
         </LinearLayout>
     </FrameLayout>
-</merge>
+</FrameLayout>

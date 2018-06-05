@@ -152,4 +152,6 @@
     <string name="network_disconnected_message">Please retry with your phone connected to the Internet.</string>
     <string name="add_more_info">Add more info</string>
     <string name="register_failed">Failed to register. Please try again.</string>
+    <string name="item_delete_manager_warning">Item will be deleted parmanently and no one won\'t be able to see it after deleted.</string>
+    <string name="delete_failed">Failed to delete info. Please try again.</string>
 </resources>

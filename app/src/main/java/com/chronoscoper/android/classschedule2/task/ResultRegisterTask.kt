@@ -33,22 +33,27 @@ class ResultRegisterTask {
                     .fromJson(tmpFile.readText(),
                             RegisterTemporary::class.java)
             tmpFile.delete()
-            val res = when {
-                config.target == RegisterTemporary.TARGET_INFO ->
+            val res = when (config.target) {
+                RegisterTemporary.TARGET_INFO ->
                     LiftimContext.getLiftimService()
                             .registerInfo(LiftimContext.getLiftimCode(),
                                     LiftimContext.getToken(), config.data)
                             .execute()
-                config.target == RegisterTemporary.TARGET_WEEKLY ->
+                RegisterTemporary.TARGET_WEEKLY ->
                     LiftimContext.getLiftimService()
                             .registerWeekly(LiftimContext.getLiftimCode(),
+                                    LiftimContext.getToken(), config.data)
+                            .execute()
+                RegisterTemporary.TARGET_DELETE_INFO ->
+                    LiftimContext.getLiftimService()
+                            .deleteInfo(LiftimContext.getLiftimCode(),
                                     LiftimContext.getToken(), config.data)
                             .execute()
                 else -> return false
             }
             if (!res.isSuccessful) {
-                Log.e(TAG, "Failed in task(${res.code()}). " +
-                        "Server says \"${res.raw().body()?.string()}\"")
+                Log.e(TAG, "Failed in task(${res.code()}). ")
+                Log.e(TAG, "Server says \"${res.raw().body()?.string()}\"")
                 return false
             }
         } catch (e: Exception) {

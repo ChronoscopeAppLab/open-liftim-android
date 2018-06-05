@@ -89,7 +89,7 @@
         android:background="?android:selectableItemBackgroundBorderless"
         android:contentDescription="@string/delete"
         android:padding="3dp"
-        android:src="@drawable/ic_delete"
+        android:src="@drawable/ic_done"
         android:visibility="invisible" />
 
     <ImageButton

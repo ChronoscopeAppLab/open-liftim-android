@@ -21,6 +21,7 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import com.chronoscoper.android.classschedule2.job.UpdateAccountInfoService
 
 class ServiceTriggerReceiver : BroadcastReceiver() {
@@ -28,15 +29,18 @@ class ServiceTriggerReceiver : BroadcastReceiver() {
         if (context == null || intent == null) return
         val action = intent.action
         if (action == Intent.ACTION_MY_PACKAGE_REPLACED) {
-            val info = JobInfo.Builder(1,
+            val jobBuilder = JobInfo.Builder(1,
                     ComponentName(context, UpdateAccountInfoService::class.java))
-                    .setPersisted(true)
                     .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
                     .setRequiresCharging(true)
-                    .setPeriodic(1000 * 60 * 60 * 24)
-                    .build()
+                    .setPersisted(true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                jobBuilder.setPeriodic(1000 * 60 * 60 * 24, 1000 * 60 * 60 * 5)
+            } else {
+                jobBuilder.setPeriodic(1000 * 60 * 60 * 24)
+            }
             val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-            scheduler.schedule(info)
+            scheduler.schedule(jobBuilder.build())
         }
     }
 }

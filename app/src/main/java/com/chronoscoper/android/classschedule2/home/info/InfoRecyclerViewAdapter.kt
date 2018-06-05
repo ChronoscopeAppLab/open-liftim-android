@@ -17,16 +17,21 @@ package com.chronoscoper.android.classschedule2.home.info
 
 import android.app.Activity
 import android.app.ActivityOptions
+import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Build
+import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.util.Pair
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.R
+import com.chronoscoper.android.classschedule2.home.HomeActivity
 import com.chronoscoper.android.classschedule2.home.info.detail.ViewInfoActivity
 import com.chronoscoper.android.classschedule2.home.timetable.EditTimetableActivity
 import com.chronoscoper.android.classschedule2.home.timetable.TimetableFragment
@@ -34,11 +39,12 @@ import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.IncrementalInfoLoader
 import com.chronoscoper.android.classschedule2.task.InfoLoader
+import com.chronoscoper.android.classschedule2.task.RegisterProgressActivity
+import com.chronoscoper.android.classschedule2.task.RegisterTemporary
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 import com.chronoscoper.android.classschedule2.util.EventMessage
 import com.chronoscoper.android.classschedule2.util.getColorForInfoType
 import com.chronoscoper.android.classschedule2.util.openInCustomTab
-import com.chronoscoper.android.classschedule2.view.PopupMenuCompat
 import com.chronoscoper.android.classschedule2.view.RecyclerViewHolder
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -290,29 +296,56 @@ class InfoRecyclerViewAdapter(val activity: Activity, private val syncEnabled: B
                     setOnClickListener(null)
                 }
             }
-            more.setOnClickListener {
-                PopupMenuCompat(activity, it)
-                        .apply {
-                            inflate(
-                                    if (!infoData.link.isNullOrEmpty()) {
-                                        R.menu.info_item_action
-                                    } else {
-                                        R.menu.info_item_action_no_link
-                                    })
-                            setOnMenuItemClickListener {
-                                when (it.itemId) {
-                                    R.id.item_open_link -> {
-                                        openInCustomTab(activity, infoData.link!!)
-                                    }
-                                    R.id.item_edit -> {
-                                        EditInfoActivity.open(activity, infoData.id)
-                                    }
-                                }
-                                true
+            if (infoData.link.isNullOrEmpty()
+                    && infoData.addedBy == Info.REMOTE
+                    && !LiftimContext.isManager()) {
+                more.visibility = View.GONE
+            } else {
+                more.visibility = View.VISIBLE
+                val popup = PopupMenu(activity, more, Gravity.NO_GRAVITY,
+                        0, android.R.style.Widget_Material_PopupMenu_Overflow)
+                popup.apply {
+                    inflate(R.menu.info_item_action)
+                    if (infoData.link.isNullOrEmpty()) {
+                        menu.findItem(R.id.item_open_link).isVisible = false
+                    }
+                    if (infoData.addedBy == Info.REMOTE && !LiftimContext.isManager()) {
+                        menu.findItem(R.id.item_edit).isVisible = false
+                        menu.findItem(R.id.item_delete).isVisible = false
+                    }
+                    setOnMenuItemClickListener {
+                        when (it.itemId) {
+                            R.id.item_open_link -> {
+                                openInCustomTab(activity, infoData.link!!)
                             }
-                            more.setOnTouchListener(dragToOpenListener)
-                            show()
+                            R.id.item_edit -> {
+                                EditInfoActivity.open(activity, infoData.id)
+                            }
+                            R.id.item_delete -> {
+                                AlertDialog.Builder(activity)
+                                        .setMessage(R.string.item_delete_manager_warning)
+                                        .setPositiveButton(R.string.delete, { _, _ ->
+                                            RegisterTemporary.save(activity,
+                                                    RegisterTemporary.TARGET_DELETE_INFO,
+                                                    infoData.id)
+                                            activity.startActivityForResult(
+                                                    Intent(activity,
+                                                            RegisterProgressActivity::class.java),
+                                                    HomeActivity.RC_DELETE_INFO)
+                                            LiftimContext.getOrmaDatabase()
+                                                    .deleteFromInfo()
+                                                    .idEq(infoData.id)
+                                                    .execute()
+                                        })
+                                        .setNegativeButton(android.R.string.cancel, null)
+                                        .show()
+                            }
                         }
+                        true
+                    }
+                    more.setOnTouchListener(dragToOpenListener)
+                }
+                more.setOnClickListener { popup.show() }
             }
         }
     }
@@ -363,22 +396,46 @@ class InfoRecyclerViewAdapter(val activity: Activity, private val syncEnabled: B
                 delete.visibility = View.INVISIBLE
                 delete.setOnClickListener(null)
             }
-            more.setOnClickListener {
-                PopupMenuCompat(activity, it)
-                        .apply {
-                            inflate(R.menu.info_item_action_no_link)
-                            setOnMenuItemClickListener {
-                                when (it.itemId) {
-                                    R.id.item_edit -> {
-                                        EditTimetableActivity
-                                                .openWithSourceTimetable(activity, infoData)
-                                    }
-                                }
-                                true
+            if (LiftimContext.isManager()) {
+                more.visibility = View.VISIBLE
+                val popup = PopupMenu(activity, more, Gravity.NO_GRAVITY,
+                        0, android.R.style.Widget_Material_PopupMenu_Overflow)
+                popup.apply {
+                    inflate(R.menu.info_item_action)
+                    menu.findItem(R.id.item_open_link).isVisible = false
+                    setOnMenuItemClickListener {
+                        when (it.itemId) {
+                            R.id.item_edit -> {
+                                EditTimetableActivity
+                                        .openWithSourceTimetable(activity, infoData)
                             }
-                            it.setOnTouchListener(dragToOpenListener)
-                            show()
+                            R.id.item_delete -> {
+                                AlertDialog.Builder(activity)
+                                        .setMessage(R.string.item_delete_manager_warning)
+                                        .setPositiveButton(R.string.delete, { _, _ ->
+                                            RegisterTemporary.save(activity,
+                                                    RegisterTemporary.TARGET_DELETE_INFO,
+                                                    infoData.id)
+                                            activity.startActivityForResult(
+                                                    Intent(activity,
+                                                            RegisterProgressActivity::class.java),
+                                                    HomeActivity.RC_DELETE_INFO)
+                                            LiftimContext.getOrmaDatabase()
+                                                    .deleteFromInfo()
+                                                    .idEq(infoData.id)
+                                                    .execute()
+                                        })
+                                        .setNegativeButton(android.R.string.cancel, null)
+                                        .show()
+                            }
                         }
+                        true
+                    }
+                    more.setOnTouchListener(dragToOpenListener)
+                }
+                more.setOnClickListener { popup.show() }
+            } else {
+                more.visibility = View.GONE
             }
         }
     }

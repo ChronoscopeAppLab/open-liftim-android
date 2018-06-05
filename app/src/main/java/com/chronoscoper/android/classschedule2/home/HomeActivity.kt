@@ -15,6 +15,7 @@
  */
 package com.chronoscoper.android.classschedule2.home
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -36,6 +37,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.Toast
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LiftimApplication
 import com.chronoscoper.android.classschedule2.R
@@ -43,11 +45,13 @@ import com.chronoscoper.android.classschedule2.archive.ArchiveFragment
 import com.chronoscoper.android.classschedule2.functionrestriction.OnlyManagerActivity
 import com.chronoscoper.android.classschedule2.functionrestriction.getFunctionRestriction
 import com.chronoscoper.android.classschedule2.home.info.EditInfoActivity
+import com.chronoscoper.android.classschedule2.home.info.InfoRecyclerViewAdapter
 import com.chronoscoper.android.classschedule2.home.timetable.EditTargetDialog
 import com.chronoscoper.android.classschedule2.setting.SettingsActivity
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.transition.FabTransformTransition
 import com.chronoscoper.android.classschedule2.util.EventMessage
+import com.chronoscoper.android.classschedule2.util.showToast
 import com.chronoscoper.android.classschedule2.weekly.EditWeeklyActivity
 import com.chronoscoper.android.classschedule2.weekly.WeeklyFragment
 import com.plusassign.odd.OddView
@@ -61,6 +65,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     companion object {
         private const val TAG = "HomeActivity"
         const val EVENT_OPEN_TIMETABLE_EDITOR = "OPEN_TIMETABLE_EDITOR"
+        const val RC_DELETE_INFO = 100
     }
 
     private val drawer by bindView<DrawerLayout>(R.id.activity_home)
@@ -169,6 +174,18 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             Handler().postDelayed({
                 fab.show()
             }, 350)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_DELETE_INFO) {
+            if (resultCode == Activity.RESULT_OK) {
+                EventBus.getDefault()
+                        .post(EventMessage.of(InfoRecyclerViewAdapter.EVENT_ENTRY_UPDATED))
+            } else {
+                showToast(this, getString(R.string.delete_failed), Toast.LENGTH_SHORT)
+            }
         }
     }
 

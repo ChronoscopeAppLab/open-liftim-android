@@ -22,6 +22,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -55,6 +56,13 @@ public interface LiftimService {
             @Field("liftim_code") long liftimCode,
             @Field("token") String token,
             @Field(value = "content", encoded = true) String content);
+
+    @FormUrlEncoded
+    @HTTP(method = "DELETE", path = "api/v1/info.json", hasBody = true)
+    Call<Void> deleteInfo(
+            @Field("liftim_code") long liftimCode,
+            @Field("token") String token,
+            @Field(value = "id", encoded = true) String id);
 
     @GET("api/v1/weekly.json")
     Call<HashMap<String, WeeklyItem>> getWeekly(

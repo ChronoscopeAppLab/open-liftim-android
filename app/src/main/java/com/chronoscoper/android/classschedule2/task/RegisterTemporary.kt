@@ -28,6 +28,7 @@ data class RegisterTemporary(@Expose val target: Int, @Expose val data: String) 
         private const val TAG = "RegisterTmp"
         const val TARGET_INFO = 1
         const val TARGET_WEEKLY = 2
+        const val TARGET_DELETE_INFO = 3
 
         fun save(context: Context, target: Int, data: String) {
             val content = LiftimContext.getGson().toJson(RegisterTemporary(target, data))

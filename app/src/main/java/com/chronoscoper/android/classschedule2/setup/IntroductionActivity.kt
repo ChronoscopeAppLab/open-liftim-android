@@ -22,6 +22,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import com.chronoscoper.android.classschedule2.BaseActivity
@@ -87,9 +88,17 @@ class IntroductionActivity : BaseActivity() {
 
     @Suppress("UNUSED_PARAMETER")
     fun onLoginButtonClicked(view: View) {
-        val intent = Intent(Intent.ACTION_VIEW,
-                Uri.parse(LiftimContext.getApiUrl("auth")))
-        startActivity(intent)
+        try {
+            val intent = Intent(Intent.ACTION_VIEW,
+                    Uri.parse(LiftimContext.getApiUrl("auth")))
+                    .setClassName("com.android.chrome",
+                            "com.google.android.apps.chrome.Main")
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.e(TAG, "Chrome isn't installed. Using system default...")
+            startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse(LiftimContext.getApiUrl("auth"))))
+        }
         finish()
     }
 }

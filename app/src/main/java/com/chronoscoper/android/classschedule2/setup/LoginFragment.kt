@@ -18,7 +18,7 @@ package com.chronoscoper.android.classschedule2.setup
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.preference.PreferenceManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +28,10 @@ import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import kotterknife.bindView
 
 class LoginFragment : BaseSetupFragment() {
+    companion object {
+        private const val TAG = "Login"
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_login, container, false)
@@ -37,9 +41,17 @@ class LoginFragment : BaseSetupFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         loginButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW,
-                    Uri.parse(LiftimContext.getApiUrl("auth")))
-            startActivity(intent)
+            try {
+                val intent = Intent(Intent.ACTION_VIEW,
+                        Uri.parse(LiftimContext.getApiUrl("auth")))
+                        .setClassName("com.android.chrome",
+                                "com.google.android.apps.chrome.Main")
+                startActivity(intent)
+            } catch (e: Exception) {
+                Log.e(TAG, "Chrome isn't installed. Using system default...")
+                startActivity(Intent(Intent.ACTION_VIEW,
+                        Uri.parse(LiftimContext.getApiUrl("auth"))))
+            }
             activity!!.finish()
         }
     }

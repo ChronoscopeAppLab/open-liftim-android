@@ -152,4 +152,6 @@
     <string name="add_more_info">詳細情報を追加</string>
     <string name="register_failed">登録できませんでした。もう一度お試しください。</string>
     <string name="item_delete_manager_warning">選択した情報は完全に削除され、誰も見ることができなくなります。</string>
+    <string name="delete_failed">削除できませんでした。もう一度お試しください。</string>
+    <string name="manager_home_notification">あなたはこのクラスの管理者です。</string>
 </resources>

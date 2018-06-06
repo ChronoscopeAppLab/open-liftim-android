@@ -42,12 +42,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <ViewStub
-                    android:id="@+id/old_android_view_stub"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout="@layout/old_android" />
-
                 <TextView
                     android:id="@+id/date"
                     android:layout_width="match_parent"

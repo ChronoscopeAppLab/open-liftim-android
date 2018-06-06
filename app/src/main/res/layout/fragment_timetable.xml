@@ -40,7 +40,14 @@
                 android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 android:orientation="vertical">
+
+                <ViewStub
+                    android:id="@+id/manager_view_stub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout="@layout/manager" />
 
                 <TextView
                     android:id="@+id/date"

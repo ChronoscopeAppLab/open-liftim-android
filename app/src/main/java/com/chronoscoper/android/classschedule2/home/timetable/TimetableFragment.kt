@@ -76,6 +76,7 @@ class TimetableFragment : Fragment() {
     private val background by bindView<View>(R.id.background)
     private val backgroundArt by bindView<ImageView>(R.id.background_art)
     private val backgroundColor = ColorDrawable()
+    private val managerViewStub by bindView<ViewStub>(R.id.manager_view_stub)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -83,6 +84,12 @@ class TimetableFragment : Fragment() {
         EventBus.getDefault().register(this)
         initTimetable()
         setUpBackgroundUpdater()
+
+        if (savedInstanceState == null) {
+            if (LiftimContext.isManager()) {
+                managerViewStub.inflate()
+            }
+        }
 
         Glide.with(this)
                 .load("file:///android_asset/classroom.png")
@@ -129,7 +136,7 @@ class TimetableFragment : Fragment() {
             Log.d(TAG, "Event: Updating timetable UI...")
             initTimetable()
         } else {
-            Log.i(TAG, "Event: Not subscribing event $event. Ignoreing...")
+            Log.i(TAG, "Event: Not subscribing event $event. Ignoring...")
         }
     }
 

@@ -16,8 +16,10 @@
 package com.chronoscoper.android.classschedule2.setup
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.webkit.CookieManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebSettings
@@ -31,6 +33,7 @@ import kotterknife.bindView
 
 class CreateLiftimCodeActivity : BaseActivity() {
     private val webView by bindView<WebView>(R.id.web)
+    private val progressBar by bindView<View>(R.id.progress)
 
     @SuppressLint("SetJavaScriptEnabled", "AddJavascriptInterface")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +41,17 @@ class CreateLiftimCodeActivity : BaseActivity() {
         setContentView(R.layout.activity_create_liftim_code)
         initCookie()
         webView.loadUrl(LiftimContext.getApiUrl("pages/create_liftim_code"))
-        webView.webViewClient = WebViewClient()
+        webView.webViewClient = object : WebViewClient() {
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                super.onPageStarted(view, url, favicon)
+                progressBar.visibility = View.VISIBLE
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                progressBar.visibility = View.GONE
+            }
+        }
         webView.settings.apply {
             javaScriptEnabled = true
             cacheMode = WebSettings.LOAD_NO_CACHE

@@ -132,6 +132,9 @@
             android:name=".task.RegisterProgressActivity"
             android:configChanges="screenSize"
             android:theme="@style/AppTheme.NoActionBar.Translucent" />
+        <activity
+            android:name=".setting.manager.InvitationActivity"
+            android:label="@string/invite" />
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

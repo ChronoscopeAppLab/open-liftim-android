@@ -94,4 +94,10 @@ public interface LiftimService {
 
     @GET("api/v1/function_restriction.json")
     Call<String> getFunctionRestriction();
+
+    @GET("api/v1/invitation.json")
+    Call<Invitation> getInvitationNumber(
+            @Query("liftim_code") long liftimCode,
+            @Query("token") String token,
+            @Query("reissue") boolean reissue);
 }

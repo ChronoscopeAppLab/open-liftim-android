@@ -155,4 +155,8 @@
     <string name="item_delete_manager_warning">Item will be deleted parmanently and no one won\'t be able to see it after deleted.</string>
     <string name="delete_failed">Failed to delete info. Please try again.</string>
     <string name="manager_home_notification">You are a manager for this class.</string>
+    <string name="invite">Invite</string>
+    <string name="barcode">Barcode</string>
+    <string name="invitaton_number_deadline">This invitation number will be valid until %1$s</string>
+    <string name="invitation_load_fail">Unable to load invitation number</string>
 </resources>

@@ -21,4 +21,6 @@
     <color name="black_vail">#5e000000</color>
     <color name="zebra_light">#f4f4f4</color>
     <color name="zebra_dark">#dedede</color>
+    <color name="barcode_bg">#e1ffbf</color>
+    <color name="barcode_fg">#7dc22e</color>
 </resources>

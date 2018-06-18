@@ -15,12 +15,13 @@
  */
 package com.chronoscoper.android.classschedule2.setting
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AlertDialog
 import android.view.View
+import android.view.animation.LinearInterpolator
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.TextView
 import com.chronoscoper.android.classschedule2.BaseActivity
 import com.chronoscoper.android.classschedule2.LauncherActivity
@@ -40,7 +41,6 @@ class ManageAccountActivity : BaseActivity() {
     private val userNameLabel by bindView<TextView>(R.id.user_name)
     private val logoutButton by bindView<Button>(R.id.logout)
     private val updateButton by bindView<View>(R.id.update_account_info)
-    private val progress by bindView<ProgressBar>(R.id.progress)
 
     private val sharedPrefs by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
 
@@ -52,17 +52,28 @@ class ManageAccountActivity : BaseActivity() {
 
         userNameLabel.text = sharedPrefs.getString(getString(R.string.p_account_name), "")
         updateButton.setOnClickListener {
-            progress.visibility = View.VISIBLE
+            it.isClickable = false
+            val anim = ObjectAnimator.ofFloat(it, View.ROTATION, 0f, 360f)
+            anim.repeatCount = ObjectAnimator.INFINITE
+            anim.repeatMode = ObjectAnimator.RESTART
+            anim.interpolator = LinearInterpolator()
+            anim.duration = 1500
+            anim.start()
+            it.rotation
             val subscriber = object : DisposableSubscriber<Unit>() {
                 override fun onComplete() {
-                    progress.visibility = View.GONE
+                    anim.cancel()
+                    it.animate().rotation(360f).start()
+                    it.isClickable = true
                 }
 
                 override fun onNext(t: Unit?) {
                 }
 
                 override fun onError(t: Throwable?) {
-                    progress.visibility = View.GONE
+                    anim.cancel()
+                    it.animate().rotation(360f).start()
+                    it.isClickable = true
                 }
             }
             Flowable.defer { Flowable.just(FullSyncTask(this).run()) }

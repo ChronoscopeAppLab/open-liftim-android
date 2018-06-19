@@ -135,6 +135,27 @@
         <activity
             android:name=".setting.manager.InvitationActivity"
             android:label="@string/invite" />
+        <!-- You have to uncomment this section if you have any specific url to invite class mate -->
+        <!--
+        <activity
+            android:name=".setup.InvitationUrlActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/join_class"
+            android:screenOrientation="locked"
+            android:theme="@style/AppTheme.NoActionBar.Translucent.Dialog">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="example.com"
+                    android:path="/join"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        -->
 
         <!-- DO NOT rename or delete this activity-alias as it's the main entry point for this app -->
         <activity-alias

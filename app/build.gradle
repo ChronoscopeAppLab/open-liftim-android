@@ -93,7 +93,6 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.github.bumptech.glide:glide:4.6.1'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.chronoscoper.library:cameraview:0.1@aar'
     implementation "com.android.support:palette-v7:$SUPPORT_LIB_VERSION"
     implementation 'com.github.gfx.android.orma:orma:4.2.5'
     implementation 'com.google.zxing:core:3.3.3'

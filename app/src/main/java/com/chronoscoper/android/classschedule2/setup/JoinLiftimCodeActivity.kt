@@ -48,7 +48,6 @@ class JoinLiftimCodeActivity : BaseActivity() {
     }
 
     private val invitationNumberInput by bindView<EditText>(R.id.invitation_number)
-    private val joinWithBarcodeButton by bindView<Button>(R.id.join_with_barcode)
     private val doneButton by bindView<View>(R.id.done)
     private val status by bindView<TextView>(R.id.status)
 
@@ -68,15 +67,6 @@ class JoinLiftimCodeActivity : BaseActivity() {
             status.text = getString(R.string.join_progress)
             it.isEnabled = false
             tryToJoin(invitationNumber)
-        }
-
-        joinWithBarcodeButton.setOnClickListener {
-            val options = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation(this, doneButton, getString(R.string.t_fab))
-                    .toBundle()
-            (this as Activity).startActivityForResult(
-                    Intent(this, JoinWithBarcodeActivity::class.java),
-                    RC_BARCODE, options)
         }
     }
 

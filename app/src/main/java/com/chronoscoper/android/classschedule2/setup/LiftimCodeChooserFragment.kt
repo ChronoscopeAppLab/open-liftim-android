@@ -154,6 +154,15 @@ class LiftimCodeChooserFragment : Fragment() {
                 popup.inflate(R.menu.liftim_code_chooser_action)
                 if (LiftimContext.isManager()) {
                     popup.menu.findItem(R.id.delete).isVisible = false
+                    val configureRestriction = getFunctionRestriction(context!!).configureLiftimCode
+                    if (!configureRestriction.invite) {
+                        popup.menu.findItem(R.id.invite).isVisible = false
+                    }
+                    if (!(configureRestriction.changeImage
+                                    || configureLiftimCodeRestriction.rename
+                                    || configureLiftimCodeRestriction.delete)) {
+                        popup.menu.findItem(R.id.settings).isVisible = false
+                    }
                 } else {
                     arrayOf(R.id.settings, R.id.invite)
                             .forEach { popup.menu.findItem(it).isVisible = false }

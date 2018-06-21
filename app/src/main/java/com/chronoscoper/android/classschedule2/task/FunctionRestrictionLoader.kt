@@ -24,6 +24,9 @@ class FunctionRestrictionLoader(private val context: Context) : Runnable {
         try {
             val response = LiftimContext.getLiftimService().functionRestriction.execute()
             if (!response.isSuccessful) {
+                if (response.code() == 404) {
+                    context.getFileStreamPath("function_restriction.json").delete()
+                }
                 return
             }
             val data = response.body() ?: return

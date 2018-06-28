@@ -63,7 +63,8 @@ class ManageAccountActivity : BaseActivity() {
             val subscriber = object : DisposableSubscriber<Unit>() {
                 override fun onComplete() {
                     anim.cancel()
-                    it.animate().rotation(360f).start()
+                    val toRotation = if (it.rotation <= 180f) { 180f } else { 360f }
+                    it.animate().rotation(toRotation).start()
                     it.isClickable = true
                 }
 

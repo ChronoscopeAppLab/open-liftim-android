@@ -31,8 +31,10 @@ class ServiceTriggerReceiver : BroadcastReceiver() {
         if (action == Intent.ACTION_MY_PACKAGE_REPLACED) {
             val jobBuilder = JobInfo.Builder(1,
                     ComponentName(context, UpdateAccountInfoService::class.java))
-                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
-                    .setRequiresCharging(true)
+                    // Although the javadoc says that's defaulted to false, it seems that
+                    // it's better to set `false' explicitly, probably because of Android system's
+                    // cache(in previous version, we set it to `true'.)
+                    .setRequiresCharging(false)
                     .setPersisted(true)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 jobBuilder.setPeriodic(1000 * 60 * 60 * 24, 1000 * 60 * 60 * 5)

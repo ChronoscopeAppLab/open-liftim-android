@@ -156,7 +156,7 @@
     <string name="delete_failed">Failed to delete info. Please try again.</string>
     <string name="manager_home_notification">You are a manager for this class.</string>
     <string name="invite">Invite</string>
-    <string name="barcode">Barcode</string>
+    <string name="barcode">QR Code</string>
     <string name="invitaton_number_deadline">This invitation number will be valid until %1$s</string>
     <string name="invitation_load_fail">Unable to load invitation number</string>
     <string name="join_confirm">Will join Liftim class with following invitation number: %1$s</string>

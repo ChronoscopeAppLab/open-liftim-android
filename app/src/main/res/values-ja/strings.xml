@@ -154,4 +154,10 @@
     <string name="item_delete_manager_warning">選択した情報は完全に削除され、誰も見ることができなくなります。</string>
     <string name="delete_failed">削除できませんでした。もう一度お試しください。</string>
     <string name="manager_home_notification">あなたはこのクラスの管理者です。</string>
+    <string name="invite">招待</string>
+    <string name="barcode">QRコード</string>
+    <string name="invitaton_number_deadline">この招待番号は%1$sまで有効です</string>
+    <string name="invitation_load_fail">招待番号を読み込めません</string>
+    <string name="join_confirm">招待番号 %1$s でLiftimのクラスに参加します</string>
+    <string name="joined">クラスに参加しました</string>
 </resources>

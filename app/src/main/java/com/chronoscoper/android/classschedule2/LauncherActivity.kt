@@ -20,7 +20,14 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
 import com.chronoscoper.android.classschedule2.home.HomeActivity
+import com.chronoscoper.android.classschedule2.setting.ManageLiftimCodeActivity
 import com.chronoscoper.android.classschedule2.setup.SetupActivity
+import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import com.chronoscoper.android.classschedule2.task.TokenReloadTask
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 
 class LauncherActivity : BaseActivity() {
@@ -50,11 +57,9 @@ class LauncherActivity : BaseActivity() {
 
         val setupCompleted = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(getString(R.string.p_account_token),
-                null) != null
+                        null) != null
         if (setupCompleted) {
-            startActivity(Intent(this, HomeActivity::class.java))
-            finish()
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            launchMainWhenTokenUpdated()
         } else {
             //TODO: enable if you needn't show server address settings
             //startActivity(Intent(this, IntroductionActivity::class.java))
@@ -62,5 +67,34 @@ class LauncherActivity : BaseActivity() {
             finish()
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
+    }
+
+    private val compositeDisposable = CompositeDisposable()
+
+    private fun launchMainWhenTokenUpdated() {
+        compositeDisposable.add(
+                Single.defer { Single.just(TokenReloadTask(this).run()) }
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ launchMain() }, { launchMain() })
+        )
+    }
+
+    private fun launchMain() {
+        val db = LiftimContext.getOrmaDatabase()
+        if (db.selectFromLiftimCodeInfo().count() == 0) {
+            startActivity(Intent(this, ManageLiftimCodeActivity::class.java))
+            finish()
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        } else {
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
     }
 }

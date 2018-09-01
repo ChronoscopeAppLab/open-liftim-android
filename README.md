@@ -36,6 +36,7 @@ Please note that contents there will be frequently cleared.
 
 ## Roadmap
 
+- **Rewrite with Dart with Flutter**
 - Show registered timetable when timetable's date picked.
 - Delete info completely after 1 month passed.
 - Implement database access in another thread.

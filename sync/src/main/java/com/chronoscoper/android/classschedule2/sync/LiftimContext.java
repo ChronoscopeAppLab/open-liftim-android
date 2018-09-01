@@ -22,10 +22,13 @@ import com.github.gfx.android.orma.AccessThreadConstraint;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -50,6 +53,7 @@ public final class LiftimContext {
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             okHttpClientBuilder.addInterceptor(loggingInterceptor);
         }
+        okHttpClientBuilder.addNetworkInterceptor(new Interceptor());
         sOkHttpClient = okHttpClientBuilder.build();
         sLiftimService = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -133,5 +137,15 @@ public final class LiftimContext {
 
     public static void executeBackground(@NonNull Runnable task) {
         sThreadPool.execute(task);
+    }
+
+    private static class Interceptor implements okhttp3.Interceptor {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request r = chain.request().newBuilder()
+                    .header("X-Liftim-Api-Key", BuildConfig.LIFTIM_API_KEY)
+                    .build();
+            return chain.proceed(r);
+        }
     }
 }

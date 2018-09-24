@@ -66,6 +66,12 @@ class SettingsActivity : BaseActivity() {
                         startActivity(Intent(activity, ManageLiftimCodeActivity::class.java))
                         false
                     }
+            findPreference(getString(R.string.p_terms_of_service))
+                    .setOnPreferenceClickListener {
+                        startActivity(Intent(Intent.ACTION_VIEW,
+                                Uri.parse(getString(R.string.terms_url))))
+                        false
+                    }
             findPreference(getString(R.string.p_send_feedback))
                     .setOnPreferenceClickListener {
                         startActivity(Intent(activity, FeedbackActivity::class.java))

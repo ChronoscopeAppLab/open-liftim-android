@@ -161,4 +161,7 @@
     <string name="invitation_load_fail">Unable to load invitation number</string>
     <string name="join_confirm">Will join Liftim class with following invitation number: %1$s</string>
     <string name="joined">Successfully joined the class.</string>
+    <string name="terms_url" translatable="false">https://lifti.me/terms/</string>
+    <string name="terms_of_service">Terms of service</string>
+    <string name="terms_description">By logging in, you\'ll be regarded as accept the terms of service.</string>
 </resources>

@@ -160,4 +160,6 @@
     <string name="invitation_load_fail">招待番号を読み込めません</string>
     <string name="join_confirm">招待番号 %1$s でLiftimのクラスに参加します</string>
     <string name="joined">クラスに参加しました</string>
+    <string name="terms_of_service">利用規約</string>
+    <string name="terms_description">ログインすると利用規約に同意したと見なされます。</string>
 </resources>

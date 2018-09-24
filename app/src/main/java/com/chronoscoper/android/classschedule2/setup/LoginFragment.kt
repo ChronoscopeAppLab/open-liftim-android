@@ -37,6 +37,7 @@ class LoginFragment : BaseSetupFragment() {
             inflater.inflate(R.layout.fragment_login, container, false)
 
     private val loginButton by bindView<Button>(R.id.login)
+    private val termsButton by bindView<Button>(R.id.terms)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -53,6 +54,10 @@ class LoginFragment : BaseSetupFragment() {
                         Uri.parse(LiftimContext.getApiUrl("auth"))))
             }
             activity!!.finish()
+        }
+        termsButton.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse(getString(R.string.terms_url))))
         }
     }
 }

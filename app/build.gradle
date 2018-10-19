@@ -7,8 +7,8 @@ android {
         applicationId "com.chronoscoper.android.classschedule2.open"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 17
-        versionName "1.9.4"
+        versionCode 18
+        versionName "1.9.5 RC 1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs 'ja'
         multiDexEnabled true

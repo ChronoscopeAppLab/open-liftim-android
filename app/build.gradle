@@ -114,5 +114,6 @@ dependencies {
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-phoenix:0.9.23'
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-crash:0.9.23'
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-shared-preferences:0.9.23'
+    implementation 'com.evernote:android-job:1.2.6'
     implementation project(':sync')
 }

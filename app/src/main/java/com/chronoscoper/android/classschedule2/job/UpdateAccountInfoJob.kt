@@ -15,33 +15,29 @@
  */
 package com.chronoscoper.android.classschedule2.job
 
-import android.app.job.JobParameters
-import android.app.job.JobService
 import android.util.Log
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.task.FullSyncTask
 import com.chronoscoper.android.classschedule2.task.TokenReloadTask
+import com.evernote.android.job.Job
 import java.io.IOException
 
-class UpdateAccountInfoService : JobService() {
+class UpdateAccountInfoJob : Job() {
     companion object {
-        private const val TAG = "AccountInfoUpdater"
+        const val TAG = "UpdateAccountInfoJob"
     }
 
-    override fun onStopJob(params: JobParameters?): Boolean = false
-
-    override fun onStartJob(params: JobParameters?): Boolean {
+    override fun onRunJob(params: Params): Result {
         val db = LiftimContext.getOrmaDatabase()
         if (db.selectFromLiftimCodeInfo().count() > 0) {
-            LiftimContext.executeBackground {
-                try {
-                    TokenReloadTask(this).run()
-                    FullSyncTask(this).run()
-                } catch (e: IOException) {
-                    Log.e(TAG, "Error in account info updater", e)
-                }
+            try {
+                Log.d(TAG, "STARTED!!!!")
+                TokenReloadTask(context).run()
+                FullSyncTask(context).run()
+            } catch (e: IOException) {
+                Log.e(TAG, "Error in account info updater", e)
             }
         }
-        return true
+        return Result.SUCCESS
     }
 }

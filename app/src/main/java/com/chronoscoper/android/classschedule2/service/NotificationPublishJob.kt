@@ -23,7 +23,10 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
 import com.chronoscoper.android.classschedule2.R
 import com.chronoscoper.android.classschedule2.home.info.detail.ViewInfoActivity
+import com.chronoscoper.android.classschedule2.sync.Info
+import com.chronoscoper.android.classschedule2.sync.InfoRemoteModel
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
+import com.chronoscoper.android.classschedule2.util.DateTimeUtils
 import com.chronoscoper.android.classschedule2.util.NotificationChannel
 import com.evernote.android.job.Job
 
@@ -51,12 +54,43 @@ class NotificationPublishJob : Job() {
         val notification = NotificationCompat.Builder(
                 context, NotificationChannel.getChannelIdByType(info.type))
                 .apply {
-                    if (params.extras.getBoolean(TIME_SPECIFIED, false)) {
-                        setContentTitle(context.getString(R.string.notification_time_specified_title))
-                        setContentText(info.title)
+                    if (info.type == Info.TYPE_TIMETABLE) {
+                        setContentTitle(context.getString(R.string.info_title_timetable,
+                                DateTimeUtils.getParsedDateExpression(info.date)))
+                        val contentBuilder = StringBuilder()
+                        val oneLineContentBuilder = StringBuilder()
+                        try {
+                            LiftimContext.getGson()
+                                    .fromJson(info.timetable,
+                                            InfoRemoteModel.Timetable::class.java)?.let {
+                                        it.subjects.forEachIndexed { index, elem ->
+                                            contentBuilder.append(index + it.subjectMinIndex)
+                                                    .append(". ")
+                                                    .append(elem)
+                                            if (oneLineContentBuilder.isNotEmpty()) {
+                                                oneLineContentBuilder.append(
+                                                        context.getString(R.string.separater))
+                                            }
+                                            oneLineContentBuilder.append(elem)
+                                        }
+                                    }
+                        } catch (e: Exception) {
+                           return Result.FAILURE
+                        }
+                        setContentText(oneLineContentBuilder.toString())
+                        setStyle(NotificationCompat.BigTextStyle()
+                                .bigText(contentBuilder.toString()))
                     } else {
-                        setContentTitle(context.getString(R.string.notification_title))
-                        setContentText(info.title)
+                        if (params.extras.getBoolean(TIME_SPECIFIED, false)) {
+                            setContentTitle(context.getString(R.string.notification_time_specified_title))
+                            setContentText(info.title)
+                        } else {
+                            setContentTitle(context.getString(R.string.notification_title))
+                            setContentText(info.title)
+                        }
+                        if (!info.detail.isNullOrEmpty()) {
+                            setStyle(NotificationCompat.BigTextStyle().bigText(info.detail))
+                        }
                     }
                     setSmallIcon(R.drawable.ic_notification)
                     color = ContextCompat.getColor(context, R.color.colorPrimary)
@@ -66,9 +100,6 @@ class NotificationPublishJob : Job() {
                     setContentIntent(pendingIntent)
                     setAutoCancel(true)
                     setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
-                    if (!info.detail.isNullOrEmpty()) {
-                        setStyle(NotificationCompat.BigTextStyle().bigText(info.detail))
-                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         setGroup(GROUP_KEY)
                     }

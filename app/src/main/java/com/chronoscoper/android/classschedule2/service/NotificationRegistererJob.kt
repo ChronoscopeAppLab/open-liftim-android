@@ -35,7 +35,6 @@ class NotificationRegistererJob : Job() {
         val baseDate = DateTime.now().withTime(7, 0, 0, 0)
 
         LiftimContext.getOrmaDatabase().selectFromInfo()
-                .typeNotEq(Info.TYPE_TIMETABLE)
                 .dateEq(DateTimeUtils.getToday())
                 .filterNotNull()
                 .forEachIndexed { index, info ->

@@ -164,4 +164,5 @@
     <string name="terms_description">By logging in, you\'ll be regarded as accept the terms of service.</string>
     <string name="notification_time_specified_title">Event will soon begin</string>
     <string name="notification_title">Event in Liftim</string>
+    <string name="separater">,</string>
 </resources>

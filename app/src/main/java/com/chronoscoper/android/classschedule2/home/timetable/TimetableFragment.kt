@@ -19,6 +19,7 @@ import android.animation.ArgbEvaluator
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Looper
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
@@ -188,6 +189,9 @@ class TimetableFragment : Fragment() {
             }
 
             override fun onNext(t: Int) {
+                // On some device, this clause causes ViewRootImpl$CalledFromWrongThreadException
+                // thus, I determine whether called on main thread or not and avoid crashing.
+                if (Looper.myLooper() != Looper.getMainLooper()) return
                 backgroundColor.color = t
             }
 

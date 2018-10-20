@@ -72,11 +72,6 @@ class SettingsActivity : BaseActivity() {
                                 Uri.parse(getString(R.string.terms_url))))
                         false
                     }
-            findPreference(getString(R.string.p_send_feedback))
-                    .setOnPreferenceClickListener {
-                        startActivity(Intent(activity, FeedbackActivity::class.java))
-                        false
-                    }
             findPreference(getString(R.string.p_oss_license))
                     .setOnPreferenceClickListener {
                         LicenseViewer.open(activity, getString(R.string.open_source_license))

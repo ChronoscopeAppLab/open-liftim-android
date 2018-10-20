@@ -110,9 +110,6 @@
             android:name=".setting.manager.DeleteLiftimCodeActivity"
             android:theme="@style/AppTheme.NoActionBar.Translucent.Dialog" />
         <activity
-            android:name=".setting.FeedbackActivity"
-            android:label="@string/send_feedback" />
-        <activity
             android:name=".functionrestriction.OnlyManagerActivity"
             android:theme="@style/AppTheme.NoActionBar.Translucent.Dialog" />
         <activity

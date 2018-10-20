@@ -116,8 +116,6 @@
     <string name="confirm_title">Are you sure?</string>
     <string name="manager_delete_liftim_code_warning">This action cannot be undone. This will delete following class including data stored in the class permanently.</string>
     <string name="liftim_code_delete_medium">Swipe downward to confirm deletion</string>
-    <string name="send_feedback">Send feedback</string>
-    <string name="feedback_edit_hint">Write your feedback here</string>
     <string name="send">Send</string>
     <string name="feedback_empty_message">Your feedback is seemed to be empty. Please write your feedback.</string>
     <string name="add_subject">Add subject</string>

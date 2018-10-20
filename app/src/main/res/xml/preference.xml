@@ -27,9 +27,6 @@
             android:key="@string/p_terms_of_service"
             android:title="@string/terms_of_service" />
         <Preference
-            android:key="@string/p_send_feedback"
-            android:title="@string/send_feedback" />
-        <Preference
             android:key="@string/p_oss_license"
             android:title="@string/open_source_license" />
         <Preference

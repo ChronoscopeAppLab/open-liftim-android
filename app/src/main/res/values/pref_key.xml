@@ -26,7 +26,6 @@
     <string name="p_app_info" translatable="false">app_info</string>
     <string name="p_oss_license" translatable="false">oss_license</string>
     <string name="p_last_used_version" translatable="false">last_used_version</string>
-    <string name="p_send_feedback" translatable="false">send_feedback</string>
     <string name="p_last_user_info_synced" translatable="false">last_user_info_synced</string>
     <string name="p_last_sync_status" translatable="false">last_sync_status</string>
     <string name="p_terms_of_service" translatable="false">terms_of_service</string>

@@ -113,8 +113,6 @@
     <string name="confirm_title">続行しますか？</string>
     <string name="manager_delete_liftim_code_warning">この操作を取り消すことはできません。\nこの操作によって次のクラスとそのクラスに保存されたデータはすべて削除されます。</string>
     <string name="liftim_code_delete_medium">下にスワイプして続行</string>
-    <string name="send_feedback">フィードバックを送信</string>
-    <string name="feedback_edit_hint">ここにフィードバックを入力してください</string>
     <string name="send">送信</string>
     <string name="feedback_empty_message">フィードバックが空です。フィードバックを入力してください。</string>
     <string name="add_subject">教科を追加</string>

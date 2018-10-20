@@ -162,4 +162,5 @@
     <string name="terms_description">ログインすると利用規約に同意したと見なされます。</string>
     <string name="notification_time_specified_title">まもなく予定の時間です</string>
     <string name="notification_title">Liftim の予定</string>
+    <string name="separater">、</string>
 </resources>

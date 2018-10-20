@@ -40,7 +40,6 @@ class CreateLiftimCodeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_liftim_code)
         initCookie()
-        webView.loadUrl(LiftimContext.getApiUrl("pages/create_liftim_code"))
         webView.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
@@ -57,6 +56,7 @@ class CreateLiftimCodeActivity : BaseActivity() {
             cacheMode = WebSettings.LOAD_NO_CACHE
         }
         webView.addJavascriptInterface(JSIAndroidNative(), "androidNative")
+        webView.loadUrl(LiftimContext.getApiUrl("pages/create_liftim_code"))
     }
 
     @Suppress("DEPRECATION")

@@ -15,30 +15,22 @@
  */
 package com.chronoscoper.android.classschedule2.service
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.app.Service
-import android.content.Context
-import android.content.Intent
-import android.os.IBinder
 import android.util.Log
 import com.chronoscoper.android.classschedule2.sync.Info
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.DateTimeUtils
+import com.evernote.android.job.Job
+import com.evernote.android.job.JobRequest
+import com.evernote.android.job.util.support.PersistableBundleCompat
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
-class NotificationRegistererService : Service() {
+class NotificationRegistererJob : Job() {
     companion object {
-        private const val TAG = "NotificationRegisterer"
+        const val TAG = "NotificationRegisterer"
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    override fun onRunJob(params: Params): Result {
         // Notification is published 7 o'clock by default.
         val baseDate = DateTime.now().withTime(7, 0, 0, 0)
 
@@ -49,22 +41,29 @@ class NotificationRegistererService : Service() {
                 .forEachIndexed { index, info ->
                     val registeredTime = info.time
                     var notificationDateTime = baseDate
+                    var timeSpecified = false
                     if (!registeredTime.isNullOrEmpty()) {
                         try {
                             val registered = DateTime.parse(registeredTime, DateTimeFormat.forPattern("HH:mm"))
                             notificationDateTime = notificationDateTime.withTime(
                                     registered.hourOfDay, registered.minuteOfHour, 0, 0)
+                            notificationDateTime.minusMinutes(15)
+                            timeSpecified = true
                         } catch (e: Exception) {
                             Log.e(TAG, "Error occurred while parsing date. Using default time(7:00).")
                         }
                     }
-                    val pendingIntent = PendingIntent.getService(this, index,
-                            NotificationPublishService.createPublisherIntent(this,
-                                    info.liftimCode, info.id),
-                            PendingIntent.FLAG_CANCEL_CURRENT)
-                    alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                            notificationDateTime.millis, pendingIntent)
+                    val misc = PersistableBundleCompat()
+                            .apply {
+                                putString(NotificationPublishJob.ID, info.id)
+                                putLong(NotificationPublishJob.LIFTIM_CODE, info.liftimCode)
+                                putBoolean(NotificationPublishJob.TIME_SPECIFIED, timeSpecified)
+                            }
+                    JobRequest.Builder(NotificationPublishJob.TAG)
+                            .setExact(notificationDateTime.millis - DateTime.now().millis)
+                            .setExtras(misc)
+                            .build()
                 }
-        return START_NOT_STICKY
+        return Result.SUCCESS
     }
 }

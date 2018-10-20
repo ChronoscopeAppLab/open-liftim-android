@@ -18,7 +18,7 @@ package com.chronoscoper.android.classschedule2
 import android.os.Build
 import android.preference.PreferenceManager
 import android.support.multidex.MultiDexApplication
-import com.chronoscoper.android.classschedule2.job.UpdateAccountInfoJobCreator
+import com.chronoscoper.android.classschedule2.job.LiftimJobCreator
 import com.chronoscoper.android.classschedule2.sync.LiftimContext
 import com.chronoscoper.android.classschedule2.util.NotificationChannel
 import com.chronoscoper.android.classschedule2.util.div
@@ -34,7 +34,7 @@ class LiftimApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 
-        JobManager.create(this).addJobCreator(UpdateAccountInfoJobCreator())
+        JobManager.create(this).addJobCreator(LiftimJobCreator())
         initEnvironment()
         migrateIfNeeded()
         registerNotificationChannelIfNeeded()

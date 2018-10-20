@@ -163,8 +163,6 @@
         </activity-alias>
 
         <service android:name=".task.RegisterInfoService" />
-        <service android:name=".service.NotificationRegistererService" />
-        <service android:name=".service.NotificationPublishService" />
         <service android:name=".task.RegisterWeeklyService" />
         <service android:name=".service.TokenLoadService" />
 

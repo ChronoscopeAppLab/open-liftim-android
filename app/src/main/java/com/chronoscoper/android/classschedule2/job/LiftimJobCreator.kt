@@ -15,12 +15,19 @@
  */
 package com.chronoscoper.android.classschedule2.job
 
+import com.chronoscoper.android.classschedule2.service.NotificationPublishJob
+import com.chronoscoper.android.classschedule2.service.NotificationRegistererJob
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobCreator
 
-class UpdateAccountInfoJobCreator : JobCreator {
+class LiftimJobCreator : JobCreator {
     override fun create(tag: String): Job? {
         if (tag != UpdateAccountInfoJob.TAG) return null
-        return UpdateAccountInfoJob()
+        return when (tag) {
+            UpdateAccountInfoJob.TAG -> UpdateAccountInfoJob()
+            NotificationPublishJob.TAG -> NotificationPublishJob()
+            NotificationRegistererJob.TAG -> NotificationRegistererJob()
+            else -> null
+        }
     }
 }

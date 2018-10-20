@@ -31,7 +31,6 @@ class UpdateAccountInfoJob : Job() {
         val db = LiftimContext.getOrmaDatabase()
         if (db.selectFromLiftimCodeInfo().count() > 0) {
             try {
-                Log.d(TAG, "STARTED!!!!")
                 TokenReloadTask(context).run()
                 FullSyncTask(context).run()
             } catch (e: IOException) {
